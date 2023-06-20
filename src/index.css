@@ -11,3 +11,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.black{
+  background-color: #0f0f0f;
+  color:white;
+}
+.photo{
+-webkit-filter: blur(12px);
+}
+
+.napis {
+  background-color:#0f0f0f;
+  font-family:'Brush Script MT';
+  font-size:100px;
+  padding:15px;
+  margin:15px;
+  border-radius: 15px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity:90%;
+}
+.napis1 {
+  color:white;
+  background-color:#0f0f0f;
+  font-family:'Trebuchet MS';
+  font-size:50px;
+  padding:15px;
+  margin:15px;
+  border-radius: 15px;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity:85%;
+}
+.napis1:hover{
+  background-color: grey;
+  border-style:solid;
+  border-color:white;
+border-width:4px;
+}

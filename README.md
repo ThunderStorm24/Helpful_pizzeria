@@ -45,6 +45,12 @@ In the **server** directory, you can run:
 
 ### `npm run dev`
 
+This command will start the server.\
+Open [http://localhost:5000](http://localhost:5000) to view the server in action.
+
+This is necessary to perform backend operations and interact with the database.\
+
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

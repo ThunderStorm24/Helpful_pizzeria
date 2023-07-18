@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
-import NavbarE from './../NavBar.js';
+import NavbarE from './../Components/NavBar.js';
 
 export default function Login() {
     const navigate = useNavigate();

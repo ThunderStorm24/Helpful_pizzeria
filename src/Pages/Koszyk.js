@@ -1,4 +1,4 @@
-import NavbarE from './../NavBar.js';
+import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
@@ -15,6 +15,12 @@ export default function Koszyk() {
     const [sizes, setSizes] = useState({});
 
     const [total, setTotal] = useState(0);
+
+    const [subtractItemsCart, setSubtractItemsCart] = useState(0);
+
+    const lowerItemsCount = () => {
+      setSubtractItemsCart(prevCount => prevCount - 1); // Zmniejszenie licznika o 1
+    };
 
     // funkcja do obliczania sumy cen
 
@@ -89,6 +95,7 @@ export default function Koszyk() {
             return rest;
         });
         // Dodajemy kod Axios tutaj
+        lowerItemsCount();
         Axios.post('/UsunZKoszyka', { pizzaId })
             .then((response) => {
                 // Opcjonalnie można dodać kod obsługi odpowiedzi z serwera
@@ -99,7 +106,7 @@ export default function Koszyk() {
     };
 
     return <div style={{ height: "1000px" }}>
-        <NavbarE />
+        <NavbarE subtractItemsCart={subtractItemsCart} />
         {loading ? (
         <p>Ładowanie...</p>
         ) : (

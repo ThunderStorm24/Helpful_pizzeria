@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Axios from 'axios';
-import NavbarE from './../NavBar.js';
+import NavbarE from './../Components/NavBar.js';
 
 export default function Login() {
 

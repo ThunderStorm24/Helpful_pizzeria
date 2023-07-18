@@ -1,5 +1,5 @@
-import NavbarE from './../NavBar.js';
-import HomeContent,{Mapa, Opis, Koniec, Kartki, Introduction, Stopka} from '../HomeContent.js';
+import NavbarE from './../Components/NavBar.js';
+import HomeContent,{Mapa, Opis, Koniec, Kartki, Introduction, Stopka} from '../Components/HomeContent.js';
 
 export default function Home() {
     return <div>

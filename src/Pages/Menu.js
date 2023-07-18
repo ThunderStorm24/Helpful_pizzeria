@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import NavbarE from './../NavBar.js';
-import Bookmarks from "./../MenuContent.js";
-import PizzaModal from "./../Components/AddModal";
-import CustomPizzaModal from "./../Components/AddCustomModal";
-import EditPizzaModal from "./../Components/EditModal";
+import NavbarE from './../Components/NavBar.js';
+import Bookmarks from "./../Components/MenuContent.js";
+import PizzaModal from "./../Components/WindowModal/AddModal";
+import CustomPizzaModal from "./../Components/WindowModal/AddCustomModal";
+import EditPizzaModal from "./../Components/WindowModal/EditModal";
 import Axios from 'axios';
 
 export default function Menu() {
@@ -12,6 +12,12 @@ export default function Menu() {
     const [editModal, setEditModal] = useState(false);
     const [idPizzy, setIdPizzy] = useState(0);
     const [custom, setCustom] = useState('');
+
+    const [addItemsCart, setAddItemsCart] = useState(0);
+
+  const increaseItemsCount = () => {
+    setAddItemsCart(prevCount => prevCount + 1); // Zwiększenie licznika o 1
+  };
 
     const handleCloseModal = () => {
         if (showButton) {
@@ -125,10 +131,10 @@ export default function Menu() {
     };
 
     return <div>
-        <NavbarE />
+        <NavbarE addItemsCart={addItemsCart} />
     <div className="black text-white d-flex" style={{marginTop: "10px", paddingBottom: "1000px"}}>
     <div className="w-100 m-2">
-    <Bookmarks showModal={() => setShowModal(true)} customShowModal={() => setCustomShowModal(true)} editModal={() => setEditModal(true)} idPizzy={setIdPizzy} custom={setCustom}/>
+    <Bookmarks updateItemsCount={increaseItemsCount} showModal={() => setShowModal(true)} customShowModal={() => setCustomShowModal(true)} editModal={() => setEditModal(true)} idPizzy={setIdPizzy} custom={setCustom}/>
       <PizzaModal
         show={showModal}
         onHide={handleCloseModal}

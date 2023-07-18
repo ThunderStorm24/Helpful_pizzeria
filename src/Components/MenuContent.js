@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./../App.css";
 import Axios from 'axios';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from 'react-paginate';
 
-function Bookmarks(props) {
+function Bookmarks({updateItemsCount , props}) {
 
   const [loading, setLoading] = useState(true);
 
@@ -243,13 +243,14 @@ function Bookmarks(props) {
   const handleChange = (pizza) => {
     console.log(`Zmieniam pizzę o ID ${pizza.ID_Pizzy}`);
   };
-
+  
   const handleOrder = (pizza) => {
     Axios.post('/DodajDoKoszyka', {
       ID: ID,
       ID_Pizzy: pizza.ID_Pizzy,
     }).then((response) => {
       console.log(response)
+      updateItemsCount();
     })
   };
 

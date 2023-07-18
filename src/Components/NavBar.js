@@ -15,18 +15,47 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
-const NavbarE = () => {
+const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const navigate = useNavigate();
 
   const [loginStatus, setLoginStatus] = useState ("");
+  const [loginID, setLoginID] = useState (0);
 
   const [isListening, setIsListening] = useState (false);
   const [message, setMessage] = useState('');
+
+  const [CountItemsCart, setCountItemsCart] = useState(0);
+  
+  useEffect(() => {
+    Axios.get(`/Koszyk/${loginID}`)
+      .then(response => { 
+        const data = response.data;
+        console.log("DANE:", data);
+        console.log("Login:", loginID);
+        setCountItemsCart(data.length);
+      })
+      .catch(error => {
+        console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
+      });
+  }, [loginStatus]);
+
+  if (typeof addItemsCart === 'undefined') {
+    addItemsCart=0;
+  }
+  if (typeof subtractItemsCart === 'undefined') {
+    subtractItemsCart=0;
+  }
+
+  const TotalItemsCart = CountItemsCart + addItemsCart + subtractItemsCart;
+
+  console.log("LICZBA DODAJ DO KOSZYKA:"+addItemsCart);
+  console.log("LICZBA ODEJMIJ DO KOSZYKA:"+subtractItemsCart);
   
   useEffect(() => {
     Axios.get("/login").then((response) => {
         if (response.data.loggedIn == true) {
         setLoginStatus(response.data.user[0].Login)
+        setLoginID(response.data.user[0].ID_Uzytkownika)
         }
     })
 }, [])
@@ -115,8 +144,8 @@ const NavbarE = () => {
       {loginStatus ? (
     <DropdownButton className="ms-2" variant="secondary" title={loginStatus} id="dropdown-item-button" align="end">
     <Dropdown.Item href="/Profil">Mój profil</Dropdown.Item>
-    <Dropdown.Item href="/koszyk">Koszyk</Dropdown.Item>
-    <Dropdown.Item href="/zamowienia">Moje zamówienia</Dropdown.Item>
+    <Dropdown.Item href="/koszyk">Koszyk ({TotalItemsCart})</Dropdown.Item>
+    <Dropdown.Item href="/zamowienia">Moje zamówienia ()</Dropdown.Item>
     <Dropdown.Divider />
     <Dropdown.Item onClick={handleLogout}>Wyloguj</Dropdown.Item>
     </DropdownButton>

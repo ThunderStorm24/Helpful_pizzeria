@@ -1,4 +1,4 @@
-import NavbarE from './../NavBar.js';
+import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';

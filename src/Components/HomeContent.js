@@ -8,7 +8,6 @@ function Introduction(){
     <div className="d-flex col-12" style={{width:'100%' , height:"950px"}}>
 
 
-
         <img
           className="col-12 col-md-12 d-block w-100"
          // className="d-block w-100"

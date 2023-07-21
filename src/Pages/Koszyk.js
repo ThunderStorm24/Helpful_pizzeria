@@ -11,6 +11,7 @@ export default function Koszyk() {
     const [loginID, setLoginID] = useState("");
     const [loginStatus, setLoginStatus] = useState("");
 
+    const [KoszykID, setKoszykID] = useState(null); // Początkowo ustawiamy na null, ponieważ ID_Koszyka może być null, jeśli koszyk jest pusty
     const [koszyk, setKoszyk] = useState([]);
     const [sizes, setSizes] = useState({});
 
@@ -57,16 +58,6 @@ export default function Koszyk() {
         setTotal(calculateTotal()); // obliczanie sumy cen po zmianie wielkości pizzy
     }, [koszyk, sizes])
 
-    const handleZamowienie = async () => {
-        try {
-            //  await axios.put('/aktualizujKoszyk', { wartosc_koszyka: sumaCen })
-
-            // wyświetl komunikat o powodzeniu aktualizacji koszyka
-        } catch (error) {
-            // obsłuż błąd aktualizacji koszyka
-        }
-    };
-
     useEffect(() => {
         Axios.get("/login").then((response) => {
             if (response.data.loggedIn == true) {
@@ -83,6 +74,7 @@ export default function Koszyk() {
             .then(response => {
                 setKoszyk(response.data);
                 setLoading(false); // zmiana stanu loading na false
+                setKoszykID(response.data[0].ID_Koszyka);
             })
             .catch(error => console.error(error));
     }, [loginStatus]);
@@ -104,6 +96,73 @@ export default function Koszyk() {
                 console.error(error);
             });
     };
+
+    // ZAMOWIENIE PIZZ WSZYSTKICH
+    const handleZamowienie = async () => {
+        // Gather the pizza data and order data from your front-end state
+        const pizzaData = koszyk.map((pizza) => {
+
+            const rozmiar = sizes[pizza.ID_Kombinacji] || 'Mala';
+            let cena;
+        
+            switch (rozmiar) {
+              case 'Mala':
+                cena = pizza.Cena_Mala;
+                break;
+              case 'Srednia':
+                cena = pizza.Cena_Srednia;
+                break;
+              case 'Duza':
+                cena = pizza.Cena_Duza;
+                break;
+              case 'Maksimum':
+                cena = pizza.Cena_Maksimum;
+                break;
+              default:
+                cena = pizza.Cena_Mala; // Default to the small size price if an invalid size is selected
+                break;
+            }
+
+          return {
+            ID_Pizzy: pizza.ID_Pizzy,
+            ID_Kombinacji: pizza.ID_Kombinacji,
+            Rozmiar_Pizzy: rozmiar,
+            Cena: cena,
+          };
+        });
+        
+        const orderData = {
+          ID_Uzytkownika: loginID,
+          Cena: total,
+          Dostawa: 'Do Domu',
+          Status: 'Zamówiono', // You can set the initial status to "Submitted" here
+          Data_Zlozenia: new Date(), // You can set the order submission date here
+        };
+
+        const koszykData = {
+            ID_Koszyka: KoszykID,
+        };
+      
+        try {
+          // Send the data to the server-side endpoint
+          const response = await fetch('/ZamowPizze', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ pizzas: pizzaData, orderData, koszykData }),
+          });
+          
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            // The order submission failed
+            // Handle the error, e.g., showing an error message, logging the error, etc.
+          }
+        } catch (error) {
+          // Handle fetch or other errors that may occur
+        }
+      };
 
     return <div style={{ height: "1000px" }}>
         <NavbarE subtractItemsCart={subtractItemsCart} />

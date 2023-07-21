@@ -11,6 +11,7 @@ const ingredientsRouter = require('./ingredients');
 const cartRouter = require('./cart');
 const addPizzaRouter = require('./addPizza');
 const userRouter = require('./user')
+const orderRouter = require('./orders')
 
 const app = express()
 
@@ -45,5 +46,6 @@ app.use(ingredientsRouter);
 app.use(cartRouter);
 app.use(addPizzaRouter);
 app.use(userRouter);
+app.use(orderRouter);
 
 app.listen(5000, () => { console.log("Server start on port 5000") })

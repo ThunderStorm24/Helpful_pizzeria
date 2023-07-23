@@ -134,7 +134,7 @@ export default function Koszyk() {
         const orderData = {
           ID_Uzytkownika: loginID,
           Cena: total,
-          Dostawa: 'Do Domu',
+          Dostawa: 'Tak',
           Status: 'Zamówiono', // You can set the initial status to "Submitted" here
           Data_Zlozenia: new Date(), // You can set the order submission date here
         };

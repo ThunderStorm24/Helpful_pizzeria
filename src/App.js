@@ -6,6 +6,7 @@ import Login from './Auth/Login.js';
 import Profil from './Pages/Profil.js'
 import Register from './Auth/Register.js';
 import Koszyk from './Pages/Koszyk.js';
+import Orders from './Pages/Orders.js';
 import { Route, Routes} from "react-router-dom";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/Register" element={<Register />}></Route>
         <Route path="/Profil" element={<Profil />}></Route>
         <Route path="/Koszyk" element={<Koszyk />}></Route>
+        <Route path="/Orders" element={<Orders />}></Route>
       </Routes>
 
     </div>

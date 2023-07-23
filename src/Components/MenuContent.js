@@ -5,10 +5,15 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from 'react-paginate';
+import { Toast } from 'react-bootstrap';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 function Bookmarks({updateItemsCount , props}) {
 
   const [loading, setLoading] = useState(true);
+
+  const [showToast, setShowToast] = useState(false);
+  const [pizzaName, setPizzaName] = useState('');
 
   //ELEMENTY Z API
   const [pizze, setPizze] = useState([]);
@@ -244,15 +249,20 @@ function Bookmarks({updateItemsCount , props}) {
     console.log(`Zmieniam pizzę o ID ${pizza.ID_Pizzy}`);
   };
   
+  //DODAWANIE PIZZY DO KOSZYKA
   const handleOrder = (pizza) => {
     Axios.post('/DodajDoKoszyka', {
       ID: ID,
       ID_Pizzy: pizza.ID_Pizzy,
     }).then((response) => {
+      setPizzaName(pizza.Nazwa);
+      setShowToast(true);
       console.log(response)
       updateItemsCount();
     })
   };
+
+  const handleToastClose = () => setShowToast(false);
 
   //OPERACJE dodawanie
   const handleAdd = (type) => {
@@ -629,7 +639,32 @@ function Bookmarks({updateItemsCount , props}) {
           </div>
         </fieldset>
       </div>
-      
+      <ToastContainer className="position-static">
+      <Toast
+        show={showToast}
+        onClose={handleToastClose}
+        delay={5000} // Duration for which the toast will be visible (in milliseconds)
+        autohide
+        bg="success"
+        style={{
+          position: 'fixed',
+          top: 'calc(70px)', // Adjust the position as needed
+          left: '10px', // Adjust the left position as needed
+          zIndex: 9, // Ensures the toast appears above other content
+        }}
+      >
+        <Toast.Header closeVariant="dark" className="d-flex justify-content-between"> {/* Use the bg prop to set the primary color */}
+        <img
+            src="PizzaIcon.png"
+            className="rounded me-2"
+            alt=""
+            style={{ width: '25px', height: '25px' }} // Set the width and height to 10px
+          />
+          <strong className="mr-auto">Dodano pizze do koszyka!</strong>
+        </Toast.Header>
+        <Toast.Body>{`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`}</Toast.Body>
+      </Toast>
+    </ToastContainer>
     </div>
 
   );

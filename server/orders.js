@@ -3,6 +3,7 @@ const connection = require('./db');
 
 const router = express.Router();
 
+//ZAMAWIANIE PIZZY W MENU
 router.post('/ZamowPizze', (req, res) => {
 
     const { pizzas, orderData, koszykData } = req.body;
@@ -47,6 +48,18 @@ router.post('/ZamowPizze', (req, res) => {
     });
   });
  
+//ZAMÓWIENIA DLA DANEGO UŻYTKOWNIKA
+router.get("/Zamowienia/:ID_Uzytkownika", (req, res) => {
+  const { ID_Uzytkownika } = req.params;
+  connection.query(
+      "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, zamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE zamowienia.ID_Uzytkownika = ? GROUP BY zamowienia.ID_Zamowienia;",
+      [ID_Uzytkownika],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
   
 
 module.exports = router;

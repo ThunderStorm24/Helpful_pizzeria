@@ -25,20 +25,33 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const [message, setMessage] = useState('');
 
   const [CountItemsCart, setCountItemsCart] = useState(0);
+
+  const [countOrders, setCountOrders] = useState(0);
   
+  //Pobranie informacji odnośnie liczby pizz w koszyku dla zalogowanego użytkownika
   useEffect(() => {
     Axios.get(`/Koszyk/${loginID}`)
       .then(response => { 
         const data = response.data;
-        console.log("DANE:", data);
-        console.log("Login:", loginID);
         setCountItemsCart(data.length);
       })
       .catch(error => {
         console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
       });
   }, [loginStatus]);
+    //Pobranie informacji odnośnie liczby zamówień dla zalogowanego użytkownika
+    useEffect(() => {
+      Axios.get(`/Zamowienia/${loginID}`)
+        .then(response => { 
+          const data = response.data;
+          setCountOrders(data.length);
+        })
+        .catch(error => {
+          console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
+        });
+    }, [loginStatus]);
 
+  //DODAWANIE I ODEJMOWANIE PRODUKTOW Z KOSZYKA (Jesli nic nie robilismy i sa dane undefined to niech je ustawi poprostu na 0)
   if (typeof addItemsCart === 'undefined') {
     addItemsCart=0;
   }
@@ -46,10 +59,10 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
     subtractItemsCart=0;
   }
 
+  //Liczba pizz w koszyku + liczba pizz dodanych w menu + liczba pizz odjętych w koszyku
   const TotalItemsCart = CountItemsCart + addItemsCart + subtractItemsCart;
-
-  console.log("LICZBA DODAJ DO KOSZYKA:"+addItemsCart);
-  console.log("LICZBA ODEJMIJ DO KOSZYKA:"+subtractItemsCart);
+  //Liczba zamówień 
+  const TotalOrders = countOrders;
   
   useEffect(() => {
     Axios.get("/login").then((response) => {
@@ -145,7 +158,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
     <DropdownButton className="ms-2" variant="secondary" title={loginStatus} id="dropdown-item-button" align="end">
     <Dropdown.Item href="/Profil">Mój profil</Dropdown.Item>
     <Dropdown.Item href="/koszyk">Koszyk ({TotalItemsCart})</Dropdown.Item>
-    <Dropdown.Item href="/zamowienia">Moje zamówienia ()</Dropdown.Item>
+    <Dropdown.Item href="/Orders">Moje zamówienia ({TotalOrders})</Dropdown.Item>
     <Dropdown.Divider />
     <Dropdown.Item onClick={handleLogout}>Wyloguj</Dropdown.Item>
     </DropdownButton>

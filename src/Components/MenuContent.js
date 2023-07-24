@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from 'react-paginate';
 import { Toast } from 'react-bootstrap';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import Spinner from 'react-bootstrap/Spinner';
 
 function Bookmarks({updateItemsCount , props}) {
 
@@ -295,7 +296,7 @@ function Bookmarks({updateItemsCount , props}) {
         <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
           {loading ? (
-        <p>Ładowanie...</p>
+        <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
       ) : (
             <div className="table-responsive mb-3">
               <table className="table text-white border">
@@ -371,7 +372,7 @@ function Bookmarks({updateItemsCount , props}) {
           </Tab>
           <Tab eventKey={2} title="Pizze Customowe">
           {loading ? (
-        <p>Ładowanie...</p>
+        <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
       ) : (
             <div className="table-responsive mb-3">
               <table className="table text-white">

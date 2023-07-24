@@ -60,6 +60,16 @@ router.get("/Zamowienia/:ID_Uzytkownika", (req, res) => {
       }
   );
 });
-  
+
+//Wszystie zamówienia dla pizzeri
+router.get("/Zamowienia", (req, res) => {
+  connection.query(
+      "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, zamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY zamowienia.ID_Zamowienia;",
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
 
 module.exports = router;

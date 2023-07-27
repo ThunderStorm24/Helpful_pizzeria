@@ -1,5 +1,7 @@
 import React from "react";
-import './App.css';
+import './style/App.css';
+import './style/UserProfile.css'
+import './style/Buttons.css'
 import Home from './Pages/Home.js';
 import Menu from './Pages/Menu.js';
 import Login from './Auth/Login.js';

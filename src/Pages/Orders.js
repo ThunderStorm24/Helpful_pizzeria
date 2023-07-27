@@ -41,13 +41,15 @@ export default function Orders() {
         <div>
           <NavbarE />
           {loading ? (
+            <div style={{height: "1000px"}}>
             <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
+            </div>
           ) : (
             <div style={{marginTop: "30px"}}>
               {/* Zamówione/Gotowe */}
               <div>
                 <h1>Zamówione/Gotowe</h1>
-                <div className="d-flex flex-wrap">
+                <div className="d-flex flex-wrap justify-content-center">
                 {orders.map((order) => {
                   if (order.Status === "Zamówiono" || order.Status === "Gotowe") {
                     return (
@@ -91,7 +93,7 @@ export default function Orders() {
               {/* Historia zamówień */}
               <div className="mt-3">
                 <h1>Historia zamówień</h1>
-                <div className="d-flex flex-wrap mt-3">
+                <div className="d-flex flex-wrap justify-content-center">
                 {orders.map((order) => {
                   if (order.Status === "Zakończone") {
                     return (

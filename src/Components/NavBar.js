@@ -179,7 +179,24 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
         <Form.Control type="search" placeholder="Search" value={message} className="me-2" aria-label="Search" />
         <Button type="submit" style={{margin: '5px'}}>Znajdź</Button>
       </Form>
-      {browser ? (<Button onClick={toggleListening} style={{margin: '5px'}}>{isListening ? 'Stop' : 'Start'}</Button>) : (<div><Button className="btn-danger">Browser doesn't support speech recognition.</Button></div>)}
+      <div className="ms-2 me-2">
+      {browser ? (
+          <img
+          className={`m-1 microphone ${isListening ? 'active-microphone' : ''}`}
+          src="Microphone.png"
+          alt="Microphone"
+          style={{ width: "40px", height: "40px", cursor: "pointer" }}
+          onClick={toggleListening}
+        />
+      ) : (
+        <div>
+          <Button className="btn-danger">
+            Browser doesn't support speech recognition.
+          </Button>
+        </div>
+      )}
+    </div>
+    
       
       
       {loginStatus ? (

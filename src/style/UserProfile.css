@@ -1,0 +1,41 @@
+.skladnik {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: all 0.2s ease-in-out;
+    margin: 5px;
+  }
+  
+  .skladnik:hover {
+    background-color: green;
+  }
+  
+  .ulubiony {
+    background-color: green;
+    color: white;
+    border: 2px solid green;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .ulubiony:hover {
+    background-color: red;
+  }
+  
+  .znienawidzony {
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .znienawidzony:hover {
+    background-color: transparent;
+  }
+  
+  

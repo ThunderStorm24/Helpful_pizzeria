@@ -76,7 +76,7 @@ export default function Login() {
 
           <p className="mt-3">
             Nie masz jeszcze konta? Przejdź do{" "}
-            <a href="/Register">rejestracji!</a>
+            <a href="/Rejestracja">rejestracji!</a>
           </p>
 
           {loginStatus && (

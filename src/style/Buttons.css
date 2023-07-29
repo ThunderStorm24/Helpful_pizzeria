@@ -1,5 +1,28 @@
-/* Style CSS */
-.microphone {
+  .loginButton {
+    transition: box-shadow 0.3s; /* Dodajemy efekt przejścia dla cienia */
+  }
+  
+  .loginButton:hover {
+    box-shadow: 0px 0px 25px rgb(108, 110, 110); /* Efekt większego cienia na najechanie */
+  }
+
+  .searchBar {
+    transition: box-shadow 0.3s; /* Dodajemy efekt przejścia dla cienia */
+  }
+  
+  .searchBar:hover {
+    box-shadow: 0px 0px 25px rgb(108, 110, 110); /* Efekt większego cienia na najechanie */
+  }
+
+  .blueButton {
+    transition: box-shadow 0.3s; /* Dodajemy efekt przejścia dla cienia */
+  }
+  
+  .blueButton:hover {
+    box-shadow: 0px 0px 25px rgb(18, 162, 245); /* Efekt większego cienia na najechanie */
+  }
+
+  .microphone {
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2); /* Dodajemy cień pod obrazkiem */
     border-radius: 50%; /* Zaokrąglamy rogów, aby uzyskać kształt okręgu */
     transition: box-shadow 0.3s; /* Dodajemy efekt przejścia dla cienia */
@@ -7,13 +30,12 @@
   
   .microphone:hover {
     box-shadow: 0px 0px 25px rgb(18, 162, 245); /* Efekt większego cienia na najechanie */
-    border: 2px solid;
   }
-  
+
   .active-microphone {
     animation: blink-animation 1s infinite; /* Dodajemy animację migania przy włączonym mówieniu */
   }
-  
+
   @keyframes blink-animation {
     0%, 100% {
       opacity: 0;

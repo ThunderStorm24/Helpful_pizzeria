@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactDOM } from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -26,6 +26,21 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
   const [isListening, setIsListening] = useState (false);
   const [message, setMessage] = useState('');
+
+  const dictionary = [
+    'Menu',
+    'Login',
+    'Rejestracja',
+    'Profil',
+    'Opis',
+    'Lokalizacja',
+    'Kontakt',
+    'slowo',
+    // Dodaj więcej słów do słownika w razie potrzeby
+  ];
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const blurTimeoutRef = useRef(null);
 
   const [CountItemsCart, setCountItemsCart] = useState(0); //Liczy ile zalogowany użytkownik ma produktów w koszyku
 
@@ -152,13 +167,95 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       setBrowser(false);
     }
   }, [browserSupportsSpeechRecognition]);
-  
+
+
+  const handleInputChange = (event) => {
+    const userInput = event.target.value;
+    setMessage(userInput);
+
+    // Wyszukaj pasujące sugestie do wprowadzonego tekstu
+    const suggestedWords = dictionary.filter((word) =>
+      word.toLowerCase().includes(userInput.toLowerCase())
+    );
+    setSuggestions(suggestedWords);
+    setShowDropdown(true);
+  };
+
+  const handleInputClick = (event) => {
+    const userInput = event.target.value;
+    setMessage(userInput);
+
+    // Wyszukaj pasujące sugestie do wprowadzonego tekstu
+    const suggestedWords = dictionary.filter((word) =>
+      word.toLowerCase().includes(userInput.toLowerCase())
+    );
+    setSuggestions(suggestedWords);
+    setShowDropdown(true);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setMessage(suggestion); // Ustaw wybraną sugestię jako wartość w polu wyszukiwania
+    setShowDropdown(false);
+    console.log('Aktualna wartość message:', message);
+  };
+
+  const handleInputBlur = () => {
+    // Obsługa zdarzenia onBlur z opóźnieniem (200ms)
+    blurTimeoutRef.current = setTimeout(() => {
+      setShowDropdown(false);
+    }, 200);
+  };
+
+  const handleInputFocus = () => {
+    // Obsługa zdarzenia onFocus
+    clearTimeout(blurTimeoutRef.current);
+    setShowDropdown(true);
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    // Sprawdzamy, czy wartość message znajduje się w sugestiach
+    const suggestedWords = dictionary.filter((word) =>
+      word.toLowerCase().includes(message.toLowerCase())
+    );
+// Jeśli wartość message jest zawarta w sugestiach, przekieruj na odpowiednią podstronę
+    if (suggestedWords.includes(message)) {
+
+      // Jeśli wartość message to Opis
+      if (message === "Opis") {
+        // Przekieruj użytkownika na daną sekcję z odpowiednim id (np. #about)
+        const aboutSection = document.getElementById("about");
+        if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: "smooth" });
+        // Jeśli wartość message to Lokalizacja
+    } 
+  } else if (message === "Lokalizacja") {
+      // Przekieruj użytkownika na daną sekcję z odpowiednim id (np. #Location)
+        const localizationSection = document.getElementById("Location");
+        if (localizationSection) {
+          localizationSection.scrollIntoView({ behavior: "smooth" });
+    } 
+  } else if (message === "Kontakt") {
+    // Przekieruj użytkownika na daną sekcję z odpowiednim id (np. #Contact)
+      const ContactSection = document.getElementById("Contact");
+      if (ContactSection) {
+        ContactSection.scrollIntoView({ behavior: "smooth" });
+    } 
+  } else {
+      navigate(`/${message}`);
+      }
+    } else {
+      // W przeciwnym razie przekieruj na stronę główną
+      alert('Nie ma takiej podstrony')
+      navigate('/');
+    }
+  };
 
     return (
       
        <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
   <Container fluid>
-    <Navbar.Brand href="#">Pizzeria La Thunderas</Navbar.Brand>
+    <Navbar.Brand  href="#">Pizzeria La Thunderas</Navbar.Brand>
     <Navbar.Toggle aria-controls="navbarScroll" />
     <Navbar.Collapse id="navbarScroll">
       <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px'}} navbarScroll sticky='top'>
@@ -175,10 +272,32 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           </NavDropdown.Item>
         </NavDropdown>
       </Nav>
-      <Form className="d-flex ms-3" action={message} method="GET">
-        <Form.Control type="search" placeholder="Search" value={message} className="me-2" aria-label="Search" />
-        <Button type="submit" style={{margin: '5px'}}>Znajdź</Button>
-      </Form>
+      <div className="mx-auto d-flex">
+        <Form onSubmit={handleFormSubmit}> 
+        <div className="d-flex">
+          <Form.Control variant="dark" className="searchBar" type="search" placeholder="Search" value={message} style={{width: "400px"}} aria-label="Search" 
+            onChange={handleInputChange}
+            onClick={handleInputClick}
+            onBlur={handleInputBlur}
+            onFocus={handleInputFocus} />
+          <Button className="ms-3 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
+          </div>
+        
+          <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">
+        <Dropdown.Menu variant="dark" style={{ maxHeight: '200px', overflowY: 'auto', width: "400px" }}>
+          {suggestions.map((suggestion) => (
+            <Dropdown.Item
+              key={suggestion}
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
+              {suggestion}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+
+        </Form>
+      </div>
       <div className="ms-2 me-2">
       {browser ? (
           <img
@@ -201,7 +320,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       
       {loginStatus ? (
         <Dropdown>
-        <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2">
+        <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2 loginButton">
           {loginStatus}
         </Dropdown.Toggle>
   
@@ -230,7 +349,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
         </Dropdown.Menu>
       </Dropdown>
     ) : (
-    <Button href="/Login" className="btn-secondary ms-2">{loading ? (<a> <Spinner animation="border" variant="primary" size="sm" /></a>) : (<a>Zaloguj</a>)}</Button>
+    <Button href="/Login" className="btn-secondary ms-3 me-3 loginButton">{loading ? (<div> <Spinner animation="border" variant="primary" size="sm" /></div>) : (<div>Zaloguj</div>)}</Button>
 )}
     </Navbar.Collapse>
   </Container>

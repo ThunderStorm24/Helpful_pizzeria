@@ -132,7 +132,7 @@ export default function Menu() {
 
     return <div>
         <NavbarE addItemsCart={addItemsCart} />
-    <div className="black text-white d-flex" style={{marginTop: "10px", paddingBottom: "1000px"}}>
+    <div className="black text-white d-flex" style={{marginTop: "10px", paddingBottom: "450px"}}>
     <div className="w-100 m-2">
     <Bookmarks updateItemsCount={increaseItemsCount} showModal={() => setShowModal(true)} customShowModal={() => setCustomShowModal(true)} editModal={() => setEditModal(true)} idPizzy={setIdPizzy} custom={setCustom}/>
       <PizzaModal

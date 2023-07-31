@@ -8,7 +8,7 @@ import { Toast } from 'react-bootstrap';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import Spinner from 'react-bootstrap/Spinner';
 
-function Bookmarks({updateItemsCount , props}) {
+function Bookmarks({props, updateItemsCount, actions}) {
 
   const [loading, setLoading] = useState(true);
 
@@ -219,14 +219,22 @@ function Bookmarks({updateItemsCount , props}) {
   //OPERACJE edytowanie
   const handleEdit = (pizza) => {
     console.log(`Edytuję pizzę o ID ${pizza.ID_Pizzy}`);
-    props.editModal();
-    props.idPizzy(pizza.ID_Pizzy);
-    props.custom(pizza.Custom);
+    actions.editModal();
+    actions.idPizzy(pizza.ID_Pizzy);
+    actions.custom(pizza.Custom);
   };
 
   //OPERACJE usuwanie
   const handleDelete = (pizza) => {
-    console.log(`Usuwam pizzę o ID ${pizza.ID_Pizzy}`);
+    const shouldDelete = window.confirm(`Czy na pewno chcesz usunąć pizzę o ID ${pizza.ID_Pizzy}?`);
+    
+    if (shouldDelete) {
+      // Kod do usunięcia pizzy o ID pizza.ID_Pizzy
+      console.log(`Usuwam pizzę o ID ${pizza.ID_Pizzy}`);
+    } else {
+      // Obsługa anulowania usunięcia
+      console.log('Anulowano usunięcie pizzy.');
+    }
   };
 
   //OPERACJA akceptacja stanu pizzy
@@ -267,11 +275,11 @@ function Bookmarks({updateItemsCount , props}) {
   //OPERACJE dodawanie
   const handleAdd = (type) => {
     if (type == "Oryginal") {
-      props.showModal();
+      actions.showModal();
       console.log(`Dodaję oryginalną pizzę o Nowym ID`);
     }
     if (type == "Custom") {
-      props.customShowModal();
+      actions.customShowModal();
       console.log(`Dodaję customową pizzę o Nowym ID`);
     }
   };

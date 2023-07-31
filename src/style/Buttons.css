@@ -36,6 +36,34 @@
     animation: blink-animation 1s infinite; /* Dodajemy animację migania przy włączonym mówieniu */
   }
 
+  .recognize {
+    height: 50px;
+    width: 400px;
+    margin-bottom:5px;
+    border: 2px solid darkred;
+    border-radius: 10px;
+    padding: 12px;
+    display: inline-block;
+    color: white;
+    background-color: darkred;
+    animation: glowingBackground 2s infinite; /* Dodajemy animację do klasy recognize */
+  }
+
+  @keyframes glowingBackground {
+    0% {
+      background-color: darkred;
+      box-shadow: none;
+    }
+    50% {
+      background-color: red;
+      box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5);
+    }
+    100% {
+      background-color: darkred;
+      box-shadow: none;
+    }
+  }
+
   @keyframes blink-animation {
     0%, 100% {
       opacity: 0;

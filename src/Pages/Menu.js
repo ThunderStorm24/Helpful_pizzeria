@@ -46,6 +46,9 @@ export default function Menu() {
     const [customShowButton, setCustomShowButton] = useState(1);
     const [editMessage, setEditMessage] = useState([]);
     const [editMessageAdd, setEditMessageAdd] = useState('Oczekuję na dodanie...');
+    const [editShowButton, setEditShowButton] = useState(1);
+
+    const [added,setAdded] = useState(false);
 
     //Sesja
     const [ID, setID] = useState("");
@@ -74,6 +77,7 @@ export default function Menu() {
             setMessageAdd(data.data)
             setMessage([])
             setShowButton(0)
+            setAdded(true);
         }).catch((error) => {
                 console.log('error', error);
                 setMessage(error.response.data.errors);
@@ -95,7 +99,7 @@ export default function Menu() {
             priceGiant: pizza.priceGiant
         }).then((data) => {
             console.log(data)
-            setCustomMessageAdd(data.data)
+            setCustomMessageAdd(data.data.message)
             setCustomMessage([])
             setCustomShowButton(0)
         }).catch((error) => {
@@ -109,32 +113,42 @@ export default function Menu() {
 
     const handleEditPizza = async (pizza) => {
         Axios.post('http://localhost:5000/EdytujPizze', {
-            ID: ID,
+            ID: idPizzy,
             name: pizza.name,
-            checkedItems: pizza.checkedItems,
+            checkedItems: pizza.checkedItemsWithPizza,
             priceSmall: pizza.priceSmall,
             priceMedium: pizza.priceMedium,
             priceLarge: pizza.priceLarge,
             priceGiant: pizza.priceGiant
         }).then((data) => {
             console.log(data)
-            setCustomMessageAdd(data.data)
-            setCustomMessage([])
-            setCustomShowButton(0) 
+            setEditMessageAdd(data.data.message)
+            setEditMessage([])
+            setShowButton(0) 
+            setAdded(true);
         }).catch((error) => {
                 console.log('error', error);
-                setCustomMessage(error.response.data.errors);
+                setEditMessage(error.response.data.errors);
             })
             console.log(pizza);
-            console.log("TRESC:"+customMessage);
-            console.log("TRESCDODANIA:"+customMessageAdd);
+            console.log("EDIT Blad:"+editMessage);
+            console.log("Edit Sukces:"+editMessageAdd);
     };
 
     return <div>
         <NavbarE addItemsCart={addItemsCart} />
     <div className="black text-white d-flex" style={{marginTop: "10px", paddingBottom: "450px"}}>
     <div className="w-100 m-2">
-    <Bookmarks updateItemsCount={increaseItemsCount} showModal={() => setShowModal(true)} customShowModal={() => setCustomShowModal(true)} editModal={() => setEditModal(true)} idPizzy={setIdPizzy} custom={setCustom}/>
+    <Bookmarks 
+    updateItemsCount={increaseItemsCount} 
+    actions={{
+      showModal: () => setShowModal(true),
+      customShowModal: () => setCustomShowModal(true),
+      editModal: () => setEditModal(true),
+      idPizzy: setIdPizzy,
+      custom: setCustom
+    }}
+    />
       <PizzaModal
         show={showModal}
         onHide={handleCloseModal}
@@ -142,6 +156,7 @@ export default function Menu() {
         message={message} // Przekazanie wartości "message" jako props
         messageAdd={messageAdd}
         showButton={showButton}
+        Added={added}
       />
       <CustomPizzaModal
         customShow={customShowModal}
@@ -160,6 +175,7 @@ export default function Menu() {
         showButton={showButton}
         idPizzy={idPizzy}
         custom={custom}
+        Added={added}
       />
     </div>
     </div>

@@ -4,7 +4,7 @@ import { Form, FormControl } from 'react-bootstrap';
 import Button from "react-bootstrap/Button";
 
 
-const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton }) => {
+const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, Added }) => {
 
   const [pizzaAdded, setPizzaAdded] = useState(false);
 
@@ -39,8 +39,8 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton })
   console.log(checkedItems);
   const handleSubmit = (event) => {
     if(pizzaAdded === false){
+      setPizzaAdded(Added);
     event.preventDefault();
-    setPizzaAdded(true);
     onSubmit({
       name,
       checkedItems,

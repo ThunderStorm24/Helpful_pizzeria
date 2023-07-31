@@ -309,9 +309,9 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
         />
       ) : (
         <div>
-          <Button className="btn-danger">
-            Browser doesn't support speech recognition.
-          </Button>
+        <div className="recognize">
+          Browser doesn't support speech recognition.
+        </div>
         </div>
       )}
     </div>

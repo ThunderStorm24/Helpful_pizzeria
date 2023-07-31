@@ -5,29 +5,32 @@ import Button from "react-bootstrap/Button";
 import Axios from 'axios';
 
 
-const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, idPizzy, custom }) => {
+const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, idPizzy, custom, Added }) => {
 
   const [pizzaAdded, setPizzaAdded] = useState(false);
   const [pizze, setPizze] = useState([]);
   const [index, setIndex] = useState(null);
 
   const [name, setName] = useState("");
-  const [priceSmall, setPriceSmall] = useState();
-  const [priceMedium, setPriceMedium] = useState();
-  const [priceLarge, setPriceLarge] = useState();
-  const [priceGiant, setPriceGiant] = useState();
+  const [priceSmall, setPriceSmall] = useState('');
+  const [priceMedium, setPriceMedium] = useState('');
+  const [priceLarge, setPriceLarge] = useState('');
+  const [priceGiant, setPriceGiant] = useState('');
   const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItemsWithPizza, setCheckedItemsWithPizza] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [skladniki, setSkladniki] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    const value = e.target.value;
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      setCheckedItems([...checkedItems, value]);
+  const handleCheckboxChange = (event) => {
+    const skladnikName = event.target.value;
+  
+    // Jeśli składnik jest zaznaczony, dodaj go do tablicy
+    // checkedItemsWithPizza. W przeciwnym razie usuń go z tablicy.
+    if (event.target.checked) {
+      setCheckedItemsWithPizza((prevCheckedItems) => [...prevCheckedItems, skladnikName]);
     } else {
-      setCheckedItems(checkedItems.filter((item) => item !== value));
+      setCheckedItemsWithPizza((prevCheckedItems) => prevCheckedItems.filter((skladnik) => skladnik !== skladnikName));
     }
   };
 
@@ -42,10 +45,10 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
   const handleSubmit = (event) => {
     if(pizzaAdded === false){
     event.preventDefault();
-    setPizzaAdded(true);
+    setPizzaAdded(Added);
     onSubmit({
       name,
-      checkedItems,
+      checkedItemsWithPizza,
       priceSmall,
       priceMedium,
       priceLarge,
@@ -71,14 +74,30 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
           
           setIndex(0);
       },[idPizzy]);
-      console.log(pizze)
+      
 
-      const checkedItemsWithPizza = [...checkedItems];
+      useEffect(() => {
         if (pizze.length > 0 && index !== null) {
-        const pizza = pizze[index];
-        const pizzaSkladniki = pizza.Skladniki.split(", ");
-        checkedItemsWithPizza.push(...pizzaSkladniki);
-}
+          const pizza = pizze[index];
+          setName(pizza.Nazwa);
+          const pizzaSkladniki = pizza.Skladniki.split(", ");
+          
+          // Tworzymy nową tablicę z aktualnymi składnikami i składnikami z wybranej pizzy
+          const updatedCheckedItemsWithPizza = [...checkedItems, ...pizzaSkladniki];
+        
+          // Podziel łańcuch cen na odpowiednie wartości
+          const [smallPrice, mediumPrice, largePrice, giantPrice] = pizza.Cena.split(' / ').map(price => parseInt(price.trim(), 10));
+        
+          // Zaktualizuj ceny składników na podstawie wybranej pizzy
+          setPriceSmall(smallPrice);
+          setPriceMedium(mediumPrice);
+          setPriceLarge(largePrice);
+          setPriceGiant(giantPrice);
+      
+          // Zaktualizuj checkedItemsWithPizza za pomocą nowej tablicy
+          setCheckedItemsWithPizza(updatedCheckedItemsWithPizza);
+        }
+      }, [index, pizze, checkedItems]);
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -92,7 +111,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
             <Form.Control
               type="text"
               placeholder="Wprowadź nazwę pizzy"
-              value={pizze[index] ? pizze[index].Nazwa : ''}
+              value={name}
               onChange={(event) => setName(event.target.value)}
             />
           </Form.Group>

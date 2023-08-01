@@ -2,6 +2,8 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Navbar from 'react-bootstrap/Navbar';
+import CardPhoto from './smallComponents/CardPhoto'
+import CardText from './smallComponents/CardText'
 
 function Introduction(){
   return(
@@ -38,38 +40,10 @@ function HomeContent() {
   return (
     <div className="d-flex justify-content-center flex-wrap col-12 col-md-12 mt-4">
 
-      <Card className="col-4 col-md-4" style={{ width: '20rem', margin: '15px', background: '#343434' }}>
-        <Card.Img  variant="top" src="Menu.jpg" />
-        <Card.Body>
-          <Card.Title>Menu</Card.Title>
-          <Card.Text>
-            Ponad 20 rodzajów pizzy dedykowanej przez nas
-          </Card.Text>
-          <Button variant="primary">Zobacz więcej!</Button>
-        </Card.Body>
-      </Card>
+      <CardPhoto photo="Menu.jpg" title="Menu" describe="Ponad 20 rodzajów pizzy dedykowanej przez nas" button="Zobacz więcej!" location="/Menu" />
+      <CardPhoto photo="Pracownicy.jpg" title="Customowe Pizze!" describe="Już dziś poczuj się jak kreator pizzy i dodaj swoją pizze ze swoimi składnikami i ze swoją nazwą do naszego menu!" button="Do customowych pizzy!" location="/Menu" />
+      <CardPhoto photo="XD.jpg" title="Zamów już teraz!" describe="Z dostawą lub odbiór w pizzeri, pizze użytkownika lub naszą, jedną pizze lub dwie, możliwości jest wiele!" button="Zamów" location="/Menu" />
 
-      <Card className="col-4 col-md-4" style={{ width: '20rem', margin: '15px', background: '#343434' }}>
-        <Card.Img variant="top" src="Pracownicy.jpg" />
-        <Card.Body>
-          <Card.Title>Customowe Pizze!</Card.Title>
-          <Card.Text>
-            Już dziś poczuj się jak kreator pizzy i dodaj swoją pizze ze swoimi składnikami i ze swoją nazwą do naszego menu!
-          </Card.Text>
-          <Button variant="primary">Do customowych pizzy!</Button>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-4 col-md-4" style={{ width: '20rem', margin: '15px', background: '#343434' }}>
-        <Card.Img variant="top" src="XD.jpg" />
-        <Card.Body>
-          <Card.Title>Zamów już teraz!</Card.Title>
-          <Card.Text>
-            Z dostawą lub odbiór w pizzeri, pizze użytkownika lub naszą, jedną pizze lub dwie, możliwości jest wiele!
-          </Card.Text>
-          <Button variant="primary">Zamów!</Button>
-        </Card.Body>
-      </Card>
     </div>
   );
 }
@@ -98,66 +72,12 @@ function Koniec() {
 function Kartki() {
   return (
     <div className="d-flex justify-content-center flex-wrap col-12 col-md-12 mt-4">
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Strona główna</Card.Title>
-          <Card.Text>
-            Czegoś jeszccze nie wyczytałeś? skocz na górę!
-          </Card.Text>
-          <Navbar.Brand href="#"><Button variant="primary">Wróć!</Button></Navbar.Brand>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Menu</Card.Title>
-          <Card.Text>
-            Zgłodniałeś? Spójrz na nasze oferty!
-          </Card.Text>
-          <Button variant="primary">Idź do Menu!</Button>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Customowe Menu</Card.Title>
-          <Card.Text>
-            Chcesz spróbować czegoś nowego? A może chcesz stworzyć pizze?
-          </Card.Text>
-          <Button variant="primary">Idź do Customowego Menu!</Button>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Centrum Pomocy</Card.Title>
-          <Card.Text>
-            Potrzebujesz pomocy? masz problem? Przejdź do zakładki Pomoc!
-          </Card.Text>
-          <Button variant="primary">Idź do Centrum Pomocy!</Button>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Lokalizacja</Card.Title>
-          <Card.Text>
-            Nie wiesz gdzie się znajdujemy? To nic pod spodem masz mapę!
-          </Card.Text>
-        </Card.Body>
-      </Card>
-
-      <Card className="col-6 col-md-6" style={{ width: '36rem', margin: '15px', background: '#343434' }}>
-        <Card.Body>
-          <Card.Title>Kontakt</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
-        </Card.Body>
-      </Card>
+      <CardText title="Strona główna" describe="Czegoś jeszccze nie wyczytałeś? skocz na górę!" button="Wróć!" location="#" />
+      <CardText title="Menu" describe="Zgłodniałeś? Spójrz na nasze oferty!" button="Idź do Menu!" location="/Menu" />
+      <CardText title="Customowe Menu" describe="Chcesz spróbować czegoś nowego? A może chcesz stworzyć pizze?" button="Idź do Customowego Menu!" location="/Menu" />
+      <CardText title="Centrum Pomocy" describe="Potrzebujesz pomocy? masz problem? Przejdź do zakładki Pomoc!" button="Idź do Centrum Pomocy!" location="#Pomoc" />
+      <CardText title="Lokalizacja" describe="Nie wiesz gdzie się znajdujemy? To nic pod spodem masz mapę!" button="Gdzie?" location="#Location" />
+      <CardText title="Kontakt" describe="Chcesz się z nami skontaktować? Zadzwoń!" button="Zadzwoń do nas!" location="#Contact" />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { Toast } from 'react-bootstrap';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import Spinner from 'react-bootstrap/Spinner';
+import ToastAddPizza from './smallComponents/ToastAddPizza'
 
 function Bookmarks({props, updateItemsCount, actions}) {
 
@@ -550,7 +551,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
             </Tab>
           ) : null}
           {Rola === "user" ? (
-            <Tab eventKey={4} title="Moje oczekujące pizze">
+            <Tab eventKey={4} title="Pizze">
               <div className="table-responsive mb-3">
                 <table className="table text-white">
                   <thead>
@@ -608,71 +609,58 @@ function Bookmarks({props, updateItemsCount, actions}) {
         </Tabs>
       </div>
       <div className="col-12 col-md-3 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px" }}>
-        <fieldset>
-          <legend className="mt-2">Wybierz Opcje Filtrowania</legend>
-          <div className="ms-4 mt-5 mb-4 d-flex">Opcje:</div>
-          <div className="d-flex flex-column">
-            <div className="d-flex ms-4 text-left">
-              <div className="ms-1"><input type="checkbox" id="ulubione" name="ulubione" onChange={(event) => setUlubioneChecked(event.target.checked)} /> <label htmlFor="ulubione">Moje ulubione składniki (
-                {skladniki
-                  .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Tak")
-                  .map(skladnik => skladnik.Nazwa)
-                  .join(", ")
-                }
-                )</label></div>
-            </div>
-            <div className="d-flex ms-4 text-left">
-              <div className="ms-1"><input type="checkbox" id="nieulubione" name="nieulubione" onChange={(event) => setNieUlubioneChecked(event.target.checked)} /> <label htmlFor="nieulubione">Moje znienawidzone składniki (
-                {skladniki
-                  .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Nie")
-                  .map(skladnik => skladnik.Nazwa)
-                  .join(", ")
-                }
-                )</label></div>
-            </div>
-            <div className="mt-3 d-flex">
-              <label className="ms-3">Nazwa:</label><input className="col-6" type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-            </div>
-            <div className="ms-3 mt-3 d-flex">
-              <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
-                <option value="">Sortuj według:</option>
-                <option value="IDAsc">ID rosnąco</option>
-                <option value="IDDesc">ID malejąco</option>
-                <option value="priceAsc">Cena rosnąco</option>
-                <option value="priceDesc">Cena malejąco</option>
-                <option value="nameAsc">Nazwa A-Z</option>
-                <option value="nameDesc">Nazwa Z-A</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
+  <fieldset>
+    <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
+    <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "#333", fontWeight: "bold" }}>Opcje:</div>
+    <div className="d-flex flex-column">
+      <div className="d-flex text-left me-2">
+        <div className="ms-3 d-flex">
+          <label htmlFor="ulubione" style={{ fontWeight: "normal" }}>
+          <input className="me-2" type="checkbox" id="ulubione" name="ulubione" onChange={(event) => setUlubioneChecked(event.target.checked)} />
+            Moje ulubione składniki (
+            {skladniki
+              .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Tak")
+              .map(skladnik => skladnik.Nazwa)
+              .join(", ")
+            }
+            )
+          </label>
+        </div>
       </div>
-      <ToastContainer className="position-static">
-      <Toast
-        show={showToast}
-        onClose={handleToastClose}
-        delay={5000} // Duration for which the toast will be visible (in milliseconds)
-        autohide
-        bg="success"
-        style={{
-          position: 'fixed',
-          top: 'calc(70px)', // Adjust the position as needed
-          left: '10px', // Adjust the left position as needed
-          zIndex: 9, // Ensures the toast appears above other content
-        }}
-      >
-        <Toast.Header closeVariant="dark" className="d-flex justify-content-between"> {/* Use the bg prop to set the primary color */}
-        <img
-            src="PizzaIcon.png"
-            className="rounded me-2"
-            alt=""
-            style={{ width: '25px', height: '25px' }} // Set the width and height to 10px
-          />
-          <strong className="mr-auto">Dodano pizze do koszyka!</strong>
-        </Toast.Header>
-        <Toast.Body>{`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`}</Toast.Body>
-      </Toast>
-    </ToastContainer>
+      <div className="d-flex text-left">
+        <div className="ms-3 d-flex">
+          <label htmlFor="nieulubione" style={{ fontWeight: "normal" }}>
+          <input className="me-2" type="checkbox" id="nieulubione" name="nieulubione" onChange={(event) => setNieUlubioneChecked(event.target.checked)} />
+            Moje znienawidzone składniki (
+            {skladniki
+              .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Nie")
+              .map(skladnik => skladnik.Nazwa)
+              .join(", ")
+            }
+            )
+          </label>
+        </div>
+      </div>
+      <div className="mt-3 d-flex">
+        <label className="ms-3" style={{ fontWeight: "bold" }}>Nazwa:</label>
+        <input className="col-6" type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ marginLeft: "5px", padding: "5px" }} />
+      </div>
+      <div className="ms-3 mt-3 d-flex flex-wrap">
+        <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
+        <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ marginLeft: "5px", padding: "5px" }}>
+          <option value="">-- Wybierz --</option>
+          <option value="IDAsc">ID rosnąco</option>
+          <option value="IDDesc">ID malejąco</option>
+          <option value="priceAsc">Cena rosnąco</option>
+          <option value="priceDesc">Cena malejąco</option>
+          <option value="nameAsc">Nazwa A-Z</option>
+          <option value="nameDesc">Nazwa Z-A</option>
+        </select>
+      </div>
+    </div>
+  </fieldset>
+</div>
+      <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>
 
   );

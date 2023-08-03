@@ -176,7 +176,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
               Edytuj
             </Button>
           ) : (
-            <button className="mt-2 btn btn-primary" onClick={() => onHide(false)}>OK</button>
+            <button type="button" className="mt-2 btn btn-primary" onClick={() => onHide(false)}>OK</button>
           )}
           <div className="" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
           {message && message.length > 0 ? (

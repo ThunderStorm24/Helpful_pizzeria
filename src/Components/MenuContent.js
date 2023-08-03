@@ -234,7 +234,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
       console.log(`Usuwam pizzę o ID ${pizza.ID_Pizzy}`);
     } else {
       // Obsługa anulowania usunięcia
-      console.log('Anulowano usunięcie pizzy.');
+      alert("Anulowano usunięcie pizzy");
     }
   };
 

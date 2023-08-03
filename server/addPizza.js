@@ -46,8 +46,8 @@ if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.
         res.send(message);
     }
 
-   /* try {
-         const ID_Uzytkownika = req.body.ID;
+    try {
+        const ID_Uzytkownika = req.body.ID;
         const name = req.body.name;
         const checkedItems = req.body.checkedItems;
         const priceSmall = req.body.priceSmall;
@@ -58,13 +58,14 @@ if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.
         console.log(name)
         console.log(checkedItems)
 
+
         connection.query('INSERT INTO pizze (Nazwa, Custom, Status) VALUES (?, ?, ?)', [name, 'Nie', 'Zatwierdzona'], (error, results, fields) => {
             if (error) throw error;
             const pizzaId = results.insertId;
           
             // dodanie relacji między pizzą a składnikami w tabeli pizze_skladniki
             checkedItems.forEach((itemName) => {
-              connection.query('SELECT ID_Skladnika FROM skladniki WHERE Nazwa = ?', [itemName], (error, results, fields) => {
+            connection.query('SELECT ID_Skladnika FROM skladniki WHERE Nazwa = ?', [itemName], (error, results, fields) => {
                 if (error) throw error;
                 const skladnikId = results[0].ID_Skladnika;
                 connection.query('INSERT INTO pizze_skladniki (ID_Pizzy, ID_Skladnika) VALUES (?, ?)', [pizzaId, skladnikId], (error, results, fields) => {
@@ -82,16 +83,12 @@ if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.
             connection.query('INSERT INTO rozmiar_pizze (ID_Rozmiar, ID_Pizzy, Cena) VALUES (?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?)', [1, pizzaId, priceSmall, 2, pizzaId, priceMedium, 3, pizzaId, priceLarge, 4, pizzaId, priceGiant], (error, results, fields) => {
               if (error) throw error;
             });
-          });
+        });
 
-          
-
-        res.status(201).send({ message: 'Pizza dodana pomyślnie!!!.' });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: 'Wystąpił błąd podczas dodawania pizzy.' });
+        console.error("Tresc errora:"+error);
     }
-    */
+    
 });
 
 router.post("/DodajPizzeCustomowa", async (req, res) => {

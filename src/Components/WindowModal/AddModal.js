@@ -138,7 +138,9 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
               Dodaj
             </Button>
           ) : (
-            <button className="mt-2 btn btn-primary" onClick={() => onHide(false)}>OK</button>
+            <button type="button" className="mt-2 btn btn-primary" onClick={() => onHide(false)}>
+              OK
+            </button>
           )}
           <div className="" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
           {message && message.length > 0 ? (

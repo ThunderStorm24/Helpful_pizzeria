@@ -227,15 +227,9 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //OPERACJE usuwanie
   const handleDelete = (pizza) => {
-    const shouldDelete = window.confirm(`Czy na pewno chcesz usunąć pizzę o ID ${pizza.ID_Pizzy}?`);
-    
-    if (shouldDelete) {
-      // Kod do usunięcia pizzy o ID pizza.ID_Pizzy
-      console.log(`Usuwam pizzę o ID ${pizza.ID_Pizzy}`);
-    } else {
-      // Obsługa anulowania usunięcia
-      alert("Anulowano usunięcie pizzy");
-    }
+    console.log(`Czy na pewno chcesz usunąć pizzę o ID ${pizza.ID_Pizzy}?`);
+    // actions.deleteModal();
+    // actions.idPizzy(pizza.ID_Pizzy);
   };
 
   //OPERACJA akceptacja stanu pizzy

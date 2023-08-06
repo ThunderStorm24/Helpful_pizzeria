@@ -11,6 +11,7 @@ const ingredientsRouter = require('./ingredients');
 const cartRouter = require('./cart');
 const addPizzaRouter = require('./addPizza');
 const editPizzaRouter = require('./editPizza')
+const deletePizza = require('./deletePizza')
 const userRouter = require('./user')
 const orderRouter = require('./orders')
 
@@ -47,6 +48,7 @@ app.use(ingredientsRouter);
 app.use(cartRouter);
 app.use(addPizzaRouter);
 app.use(editPizzaRouter);
+app.use(deletePizza);
 app.use(userRouter);
 app.use(orderRouter);
 

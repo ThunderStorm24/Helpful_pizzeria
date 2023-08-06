@@ -228,18 +228,22 @@ function Bookmarks({props, updateItemsCount, actions}) {
   //OPERACJE usuwanie
   const handleDelete = (pizza) => {
     console.log(`Czy na pewno chcesz usunąć pizzę o ID ${pizza.ID_Pizzy}?`);
-    // actions.deleteModal();
-    // actions.idPizzy(pizza.ID_Pizzy);
+    actions.deleteModal();
+    actions.pizza(pizza);
   };
 
   //OPERACJA akceptacja stanu pizzy
   const handleAccept = (pizza) => {
     console.log(`Akceptuje pizzę o ID ${pizza.ID_Pizzy}`);
+    actions.acceptModal();
+    actions.pizza(pizza);
   };
 
   //OPERACJA odrzucenie stanu pizzy
   const handleReject = (pizza) => {
     console.log(`Odrzucam pizzę o ID ${pizza.ID_Pizzy}`);
+    actions.deniedModal();
+    actions.pizza(pizza);
   };
 
   //OPERACJA Anulowania stanu pizzy
@@ -656,6 +660,9 @@ function Bookmarks({props, updateItemsCount, actions}) {
 </div>
       <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>
+
+      
+
 
   );
 }

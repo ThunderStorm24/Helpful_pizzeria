@@ -134,11 +134,11 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
             />
           </Form.Group>
           {showButton ? (
-            <Button variant="primary" type="submit" className="mt-2">
+            <Button variant="primary" type="submit" className="mt-2 blueButton">
               Dodaj
             </Button>
           ) : (
-            <button type="button" className="mt-2 btn btn-primary" onClick={() => onHide(false)}>
+            <button type="button" className="mt-2 btn btn-primary blueButton" onClick={() => onHide(false)}>
               OK
             </button>
           )}

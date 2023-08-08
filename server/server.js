@@ -5,15 +5,15 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-const authRouter = require('./auth');
-const pizzasRouter = require('./pizzas');
-const ingredientsRouter = require('./ingredients');
-const cartRouter = require('./cart');
-const addPizzaRouter = require('./addPizza');
-const editPizzaRouter = require('./editPizza')
-const deletePizza = require('./deletePizza')
-const userRouter = require('./user')
-const orderRouter = require('./orders')
+const authRouter = require('./Routes/LoginRegisterOperations/auth');
+const pizzasRouter = require('./Routes/PizzaOperations/pizzas');
+const ingredientsRouter = require('./Routes/UserOperations/ingredients');
+const cartRouter = require('./Routes/UserOperations/cart');
+const addPizzaRouter = require('./Routes/PizzaOperations/addPizza');
+const editPizzaRouter = require('./Routes/PizzaOperations/editPizza')
+const deletePizza = require('./Routes/PizzaOperations/deletePizza')
+const userRouter = require('./Routes/UserOperations/user')
+const orderRouter = require('./Routes/OrdersOperations/orders')
 
 const app = express()
 

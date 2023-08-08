@@ -5,10 +5,12 @@ import PizzaModal from "./../Components/WindowModal/AddModal";
 import CustomPizzaModal from "./../Components/WindowModal/AddCustomModal";
 import EditPizzaModal from "./../Components/WindowModal/EditModal";
 import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
+import ToastOperations from './../Components/smallComponents/ToastOperations'
 import Axios from 'axios';
 
 export default function Menu() {
     const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
     const [customShowModal, setCustomShowModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -48,6 +50,10 @@ export default function Menu() {
             window.location.reload();
           }
     };
+
+    const [toastTitle, setToastTitle] = useState('');
+
+    const handleToastClose = () => setShowToast(false);
 
     const [message, setMessage] = useState([]);
     const [messageAdd, setMessageAdd] = useState("Oczekuję na dodanie...");
@@ -89,6 +95,8 @@ export default function Menu() {
             setMessage([])
             setShowButton(0)
             setAdded(true);
+            setToastTitle("Pomyślnie Dodano Pizzę!")
+            setShowToast(true);
         }).catch((error) => {
                 console.log('error', error);
                 setMessage(error.response.data.errors);
@@ -256,6 +264,8 @@ export default function Menu() {
         description = {`Czy na pewno chcesz odrzucić pizzę ${pizza.Nazwa} [${pizza.ID_Pizzy}]`}
         title={`Odrzucenie pizzy [${pizza.ID_Pizzy}]`}
       />
+
+      <ToastOperations title={toastTitle} describe={messageAdd} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>
     </div>
     </div>

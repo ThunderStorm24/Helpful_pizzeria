@@ -24,6 +24,9 @@ Open [http://localhost:5000](http://localhost:5000) to view the server in action
 This is necessary to perform backend operations and interact with the database.\
 
 
+## How it works?
+
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

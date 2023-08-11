@@ -8,6 +8,7 @@ import { Toast } from 'react-bootstrap';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import Spinner from 'react-bootstrap/Spinner';
 import ToastAddPizza from './smallComponents/ToastAddPizza'
+import { Form, Overlay, Tooltip } from 'react-bootstrap';
 
 function Bookmarks({props, updateItemsCount, actions}) {
 
@@ -15,6 +16,8 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   const [showToast, setShowToast] = useState(false);
   const [pizzaName, setPizzaName] = useState('');
+  const [ulubioneTooltipVisible, setUlubioneTooltipVisible] = useState(false);
+  const [nieUlubioneTooltipVisible, setNieUlubioneTooltipVisible] = useState(false);
 
   //ELEMENTY Z API
   const [pizze, setPizze] = useState([]);
@@ -72,6 +75,15 @@ function Bookmarks({props, updateItemsCount, actions}) {
     }
     return false;
   };
+
+   const ulubioneSkladniki = skladniki
+    .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Tak")
+    .map(skladnik => skladnik.Nazwa);
+
+  const nieUlubioneSkladniki = skladniki
+    .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Nie")
+    .map(skladnik => skladnik.Nazwa);
+
 
   // funkcja, która przefiltrowuje pizze i zwróci tylko te, które zawierają ulubione lub nieulubione składniki użytkownika
   const filterPizze = () => {
@@ -607,56 +619,110 @@ function Bookmarks({props, updateItemsCount, actions}) {
         </Tabs>
       </div>
       <div className="col-12 col-md-3 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px" }}>
-  <fieldset>
-    <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
-    <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "#333", fontWeight: "bold" }}>Opcje:</div>
-    <div className="d-flex flex-column">
-      <div className="d-flex text-left me-2">
-        <div className="ms-3 d-flex">
-          <label htmlFor="ulubione" style={{ fontWeight: "normal" }}>
-          <input className="me-2" type="checkbox" id="ulubione" name="ulubione" onChange={(event) => setUlubioneChecked(event.target.checked)} />
-            Moje ulubione składniki (
-            {skladniki
-              .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Tak")
-              .map(skladnik => skladnik.Nazwa)
-              .join(", ")
-            }
-            )
-          </label>
+ <Form>
+      <fieldset>
+        <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
+        <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "#333", fontWeight: "bold" }}>Opcje:</div>
+        <div className="d-flex flex-column">
+          <div
+            className="d-flex text-left me-2"
+            onMouseEnter={() => setUlubioneTooltipVisible(true)}
+            onMouseLeave={() => setUlubioneTooltipVisible(false)}
+          >
+            <div className="ms-3 d-flex" id="ulubione">
+              <Form.Check
+                type="switch"
+                label={`Moje ulubione składniki`}
+                onChange={(event) => setUlubioneChecked(event.target.checked)}
+                checked={ulubioneChecked}
+              />
+            </div>
+          </div>
+          <Overlay target={document.getElementById("ulubione")} show={ulubioneTooltipVisible} placement="right">
+            {({ placement, arrowProps, show: _show, popper, ...props }) => (
+              <div 
+                {...props}
+                style={{
+                  backgroundColor: 'rgba(100, 100, 255, 1)',
+                  marginLeft: '10px',
+                  padding: '5px 10px',
+                  color: 'white',
+                  borderRadius: 10,
+                  ...props.style,
+                }}
+                onMouseEnter={() => setUlubioneTooltipVisible(true)}
+                onMouseLeave={() => setUlubioneTooltipVisible(false)}
+              >
+                {ulubioneSkladniki.map((skladnik, index) => (
+                  <div key={index}>{skladnik}</div>
+                ))}
+              </div>
+            )}
+          </Overlay>
+          <div
+            className="d-flex text-left"
+            onMouseEnter={() => setNieUlubioneTooltipVisible(true)}
+            onMouseLeave={() => setNieUlubioneTooltipVisible(false)}
+          >
+            <div className="ms-3 d-flex" id="nieulubione"> 
+              <Form.Check
+                type="switch"
+                label={`Moje znienawidzone składniki`}
+                onChange={(event) => setNieUlubioneChecked(event.target.checked)}
+                checked={nieUlubioneChecked}
+              />
+            </div>
+          </div>
+          <Overlay target={document.getElementById("nieulubione")} show={nieUlubioneTooltipVisible} placement="right">
+            {({ placement, arrowProps, show: _show, popper, ...props }) => (
+              <div
+                {...props}
+                style={{
+                  backgroundColor: 'rgba(255, 100, 100, 1)',
+                  marginLeft: '10px',
+                  padding: '5px 10px',
+                  color: 'white',
+                  borderRadius: 10,
+                  ...props.style,
+                }}
+                onMouseEnter={() => setNieUlubioneTooltipVisible(true)}
+                onMouseLeave={() => setNieUlubioneTooltipVisible(false)}
+              >
+                {nieUlubioneSkladniki.map((skladnik, index) => (
+                  <div key={index}>{skladnik}</div>
+                ))}
+              </div>
+            )}
+          </Overlay>
+          <div className="mt-3 d-flex">
+            <label className="ms-3" style={{ fontWeight: "bold" }}>Nazwa:</label>
+            <input
+              className="col-6"
+              type="text"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ marginLeft: "5px", padding: "5px" }}
+            />
+          </div>
+          <div className="ms-3 mt-3 d-flex flex-wrap">
+            <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value)}
+              style={{ marginLeft: "5px", padding: "5px" }}
+            >
+              <option value="">-- Wybierz --</option>
+              <option value="IDAsc">ID rosnąco</option>
+              <option value="IDDesc">ID malejąco</option>
+              <option value="priceAsc">Cena rosnąco</option>
+              <option value="priceDesc">Cena malejąco</option>
+              <option value="nameAsc">Nazwa A-Z</option>
+              <option value="nameDesc">Nazwa Z-A</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div className="d-flex text-left">
-        <div className="ms-3 d-flex">
-          <label htmlFor="nieulubione" style={{ fontWeight: "normal" }}>
-          <input className="me-2" type="checkbox" id="nieulubione" name="nieulubione" onChange={(event) => setNieUlubioneChecked(event.target.checked)} />
-            Moje znienawidzone składniki (
-            {skladniki
-              .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Nie")
-              .map(skladnik => skladnik.Nazwa)
-              .join(", ")
-            }
-            )
-          </label>
-        </div>
-      </div>
-      <div className="mt-3 d-flex">
-        <label className="ms-3" style={{ fontWeight: "bold" }}>Nazwa:</label>
-        <input className="col-6" type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ marginLeft: "5px", padding: "5px" }} />
-      </div>
-      <div className="ms-3 mt-3 d-flex flex-wrap">
-        <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
-        <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ marginLeft: "5px", padding: "5px" }}>
-          <option value="">-- Wybierz --</option>
-          <option value="IDAsc">ID rosnąco</option>
-          <option value="IDDesc">ID malejąco</option>
-          <option value="priceAsc">Cena rosnąco</option>
-          <option value="priceDesc">Cena malejąco</option>
-          <option value="nameAsc">Nazwa A-Z</option>
-          <option value="nameDesc">Nazwa Z-A</option>
-        </select>
-      </div>
-    </div>
-  </fieldset>
+      </fieldset>
+    </Form>
 </div>
       <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>

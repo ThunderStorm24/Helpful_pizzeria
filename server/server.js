@@ -11,7 +11,8 @@ const ingredientsRouter = require('./Routes/UserOperations/ingredients');
 const cartRouter = require('./Routes/UserOperations/cart');
 const addPizzaRouter = require('./Routes/PizzaOperations/addPizza');
 const editPizzaRouter = require('./Routes/PizzaOperations/editPizza')
-const deletePizza = require('./Routes/PizzaOperations/deletePizza')
+const deletePizzaRouter = require('./Routes/PizzaOperations/deletePizza')
+const confirmationPizzaRouter = require('./Routes/PizzaOperations/confirmationPizza')
 const userRouter = require('./Routes/UserOperations/user')
 const orderRouter = require('./Routes/OrdersOperations/orders')
 
@@ -48,7 +49,8 @@ app.use(ingredientsRouter);
 app.use(cartRouter);
 app.use(addPizzaRouter);
 app.use(editPizzaRouter);
-app.use(deletePizza);
+app.use(deletePizzaRouter);
+app.use(confirmationPizzaRouter);
 app.use(userRouter);
 app.use(orderRouter);
 

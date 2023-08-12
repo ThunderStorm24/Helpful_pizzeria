@@ -14,12 +14,21 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
         <Modal.Header closeButton style={{backgroundColor: '#444444' , color: 'white'}}>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{backgroundColor: '#141414' , color: 'white'}}>{description}</Modal.Body>
+        <Modal.Body style={{backgroundColor: '#141414' , color: 'white'}}>{description}?
+        <Form>
+        <Form.Control as="textarea"
+        className="col-6"
+        placeholder="Tu wpisz komentarz"
+        style={{ height: "150px", padding: "5px", marginTop: "15px", background: "white", color: "black" }}
+      />
+          </Form>
+          
+          </Modal.Body>
         <Modal.Footer style={{backgroundColor: '#141414' , color: 'white'}}>
-          <Button className="greenButton" variant="success" onClick={onHide}>
+          <Button className="greenButton" variant="success" onClick={operation}>
             {buttonSuccess}
           </Button>
-          <Button className="redButton" variant="danger" onClick={operation}>
+          <Button className="redButton" variant="danger" onClick={onHide}>
             {buttonDanger}
           </Button>
         </Modal.Footer>

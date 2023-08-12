@@ -7,7 +7,7 @@ router.post("/AkceptujPizze", async (req, res) => {
     const ID_Pizzy=req.body.ID;
     console.log(ID_Pizzy);
 
-    const acceptQuery = `UPDATE tabela_pizza SET Status = 'Zatwierdzona' WHERE ID_Pizzy = ${ID_Pizzy}`;
+    const acceptQuery = `UPDATE pizze SET Status = 'Zatwierdzona' WHERE ID_Pizzy = ${ID_Pizzy}`;
 
     connection.query(acceptQuery, (error, results) => {
         if (error) {
@@ -25,7 +25,7 @@ router.post("/OdrzucPizze", async (req, res) => {
     const ID_Pizzy=req.body.ID;
     console.log(ID_Pizzy);
 
-    const deniedQuery =  `UPDATE tabela_pizza SET Status = 'Odrzucono' WHERE ID_Pizzy = ${ID_Pizzy}`;
+    const deniedQuery =  `UPDATE pizze SET Status = 'Odrzucono' WHERE ID_Pizzy = ${ID_Pizzy}`;
 
     connection.query(deniedQuery, (error, results) => {
         if (error) {

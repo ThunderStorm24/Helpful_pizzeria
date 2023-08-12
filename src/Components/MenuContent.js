@@ -618,11 +618,11 @@ function Bookmarks({props, updateItemsCount, actions}) {
           
         </Tabs>
       </div>
-      <div className="col-12 col-md-3 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px" }}>
+      <div className="col-12 col-md-4 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px",  background: '#222', padding: '20px'  }}>
  <Form>
       <fieldset>
         <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
-        <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "#333", fontWeight: "bold" }}>Opcje:</div>
+        <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "white", fontWeight: "bold" }}>Opcje:</div>
         <div className="d-flex flex-column">
           <div
             className="d-flex text-left me-2"
@@ -694,31 +694,32 @@ function Bookmarks({props, updateItemsCount, actions}) {
               </div>
             )}
           </Overlay>
-          <div className="mt-3 d-flex">
-            <label className="ms-3" style={{ fontWeight: "bold" }}>Nazwa:</label>
-            <input
-              className="col-6"
-              type="text"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              style={{ marginLeft: "5px", padding: "5px" }}
-            />
+          <div className="ms-3 mt-3 d-flex flex-wrap">
+            <label style={{ fontWeight: "bold" }}>Nazwa:</label>
+            <Form.Control
+        className="col-6"
+        type="text"
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
+        placeholder="Tu wpisz nazwę pizzy"
+        style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "white", color: "black" }}
+      />
           </div>
           <div className="ms-3 mt-3 d-flex flex-wrap">
             <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
-            <select
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value)}
-              style={{ marginLeft: "5px", padding: "5px" }}
-            >
-              <option value="">-- Wybierz --</option>
-              <option value="IDAsc">ID rosnąco</option>
-              <option value="IDDesc">ID malejąco</option>
-              <option value="priceAsc">Cena rosnąco</option>
-              <option value="priceDesc">Cena malejąco</option>
-              <option value="nameAsc">Nazwa A-Z</option>
-              <option value="nameDesc">Nazwa Z-A</option>
-            </select>
+            <Form.Select
+        value={sortBy}
+        onChange={e => setSortBy(e.target.value)}
+        style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "#555", color: "white" }}
+      >
+        <option value="">-- Wybierz --</option>
+        <option value="IDAsc">ID rosnąco</option>
+        <option value="IDDesc">ID malejąco</option>
+        <option value="priceAsc">Cena rosnąco</option>
+        <option value="priceDesc">Cena malejąco</option>
+        <option value="nameAsc">Nazwa A-Z</option>
+        <option value="nameDesc">Nazwa Z-A</option>
+      </Form.Select>
           </div>
         </div>
       </fieldset>

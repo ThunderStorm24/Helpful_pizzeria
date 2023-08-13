@@ -15,6 +15,9 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{backgroundColor: '#141414' , color: 'white'}}>{description}?
+        <Button variant="primary" onClick={showComment}>
+            {buttonSuccess}
+          </Button>
         <Form>
         <Form.Control as="textarea"
         className="col-6"

@@ -166,9 +166,10 @@ export default function Menu() {
     })
   };
     //DO ZROBIENIA
-    const handleAcceptPizza = async () => {
+    const handleAcceptPizza = async (comment) => {
       Axios.post('http://localhost:5000/AkceptujPizze', {
         ID: pizza.ID_Pizzy,
+        Comment: comment,
     }).then((data)=> {
       console.log(data);
       setAcceptModal(false);
@@ -178,9 +179,10 @@ export default function Menu() {
     })
   };
     //DO ZROBIENIA
-    const handleDeniedPizza = async () => {
+    const handleDeniedPizza = async (comment) => {
       Axios.post('http://localhost:5000/OdrzucPizze', {
         ID: pizza.ID_Pizzy,
+        Comment: comment,
     }).then((data)=> {
       console.log(data);
       setDeniedModal(false);

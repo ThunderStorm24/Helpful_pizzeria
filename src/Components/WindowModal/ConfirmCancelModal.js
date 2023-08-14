@@ -10,12 +10,14 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
   const [showComment, setShowComment] = useState(false)
   const [buttonText, setButtonText] = useState("Dodaj Komentarz");
   const [buttonVariant, setButtonVariant] = useState("primary");
+  const [comment, setComment] = useState("");
 
   const handleButtonClick = () => {
     if (showComment) {
       setShowComment(false);
       setButtonText("Dodaj Komentarz");
       setButtonVariant("primary")
+      setComment("")
     } else {
       setShowComment(true);
       setButtonText("Anuluj dodanie komentarza");
@@ -27,40 +29,42 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
 
   return (
     <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton style={{backgroundColor: '#444444' , color: 'white'}}>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{backgroundColor: '#141414' , color: 'white'}}>{description}?
+      <Modal.Header closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>{description}?
         <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick}>
-        {buttonText}
+          {buttonText}
         </Button>
-          {showComment && (
-        <Form>
-          <Form.Control
-            as="textarea"
-            className="col-6"
-            placeholder="Tu wpisz komentarz"
-            style={{
-              height: "150px",
-              padding: "5px",
-              marginTop: "15px",
-              background: "white",
-              color: "black"
-            }}
-          />
-        </Form>
-      )}
-          
-          </Modal.Body>
-        <Modal.Footer style={{backgroundColor: '#141414' , color: 'white'}}>
-          <Button className="greenButton" variant="success" onClick={operation}>
-            {buttonSuccess}
-          </Button>
-          <Button className="redButton" variant="danger" onClick={onHide}>
-            {buttonDanger}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        {showComment && (
+          <Form>
+            <Form.Control
+              as="textarea"
+              className="col-6"
+              placeholder="Tu wpisz komentarz"
+              style={{
+                height: "150px",
+                padding: "5px",
+                marginTop: "15px",
+                background: "white",
+                color: "black"
+              }}
+              value={comment} 
+              onChange={(e) => setComment(e.target.value)} 
+            />
+          </Form>
+        )}
+
+      </Modal.Body>
+      <Modal.Footer style={{ backgroundColor: '#141414', color: 'white' }}>
+        <Button className="greenButton" variant="success" onClick={() => operation(comment)}>
+          {buttonSuccess}
+        </Button>
+        <Button className="redButton" variant="danger" onClick={onHide}>
+          {buttonDanger}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

@@ -8,7 +8,7 @@ import { Toast } from 'react-bootstrap';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import Spinner from 'react-bootstrap/Spinner';
 import ToastAddPizza from './smallComponents/ToastAddPizza'
-import { Form, Overlay, Tooltip } from 'react-bootstrap';
+import { Form, Overlay, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function Bookmarks({props, updateItemsCount, actions}) {
 
@@ -293,6 +293,10 @@ function Bookmarks({props, updateItemsCount, actions}) {
       actions.customShowModal();
       console.log(`Dodaję customową pizzę o Nowym ID`);
     }
+  };
+
+  const showComment = (pizza) => {
+    console.log(`Pokazuję komentarz pizzy o ID: ${pizza.ID_Pizzy}`);
   };
 
   //SESJA
@@ -605,6 +609,18 @@ function Bookmarks({props, updateItemsCount, actions}) {
                                 Zmień
                               </button>
                             ) : null}
+                            <OverlayTrigger
+                              trigger="hover"
+                              placement="right"
+                              overlay={<Tooltip id="overlay-tooltip">{pizza.komentarz_admina}</Tooltip>}
+                            >
+                              <img
+                                className=""
+                                src="Komentarz.png"
+                                alt="Komentarz"
+                                style={{ width: "40px", height: "40px", cursor: "pointer" }}
+                              />
+                            </OverlayTrigger>
                           </td>
                         )}
                       </tr>

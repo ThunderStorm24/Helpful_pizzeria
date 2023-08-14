@@ -5,9 +5,12 @@ const router = express.Router();
 
 router.post("/AkceptujPizze", async (req, res) => {
     const ID_Pizzy=req.body.ID;
-    console.log(ID_Pizzy);
-
-    const acceptQuery = `UPDATE pizze SET Status = 'Zatwierdzona' WHERE ID_Pizzy = ${ID_Pizzy}`;
+    let Comment=req.body.Comment;
+    if (Comment.trim() === "") {
+      Comment = "brak komentarza admina";
+    } 
+    
+    const acceptQuery = `UPDATE pizze SET Status = 'Zatwierdzona', Komentarz_admina = '${Comment}' WHERE ID_Pizzy = ${ID_Pizzy}`;
 
     connection.query(acceptQuery, (error, results) => {
         if (error) {
@@ -18,14 +21,18 @@ router.post("/AkceptujPizze", async (req, res) => {
           res.status(200).json({ message: `Pizza o ID ${ID_Pizzy} została pomyślnie zaakceptowana`});
         }
     })
+    
 
 })
 
 router.post("/OdrzucPizze", async (req, res) => {
     const ID_Pizzy=req.body.ID;
-    console.log(ID_Pizzy);
+    let Comment=req.body.Comment;
+    if (Comment.trim() === "") {
+      Comment = "brak komentarza admina";
+    } 
 
-    const deniedQuery =  `UPDATE pizze SET Status = 'Odrzucono' WHERE ID_Pizzy = ${ID_Pizzy}`;
+    const deniedQuery =  `UPDATE pizze SET Status = 'Odrzucono', Komentarz_admina = '${Comment}' WHERE ID_Pizzy = ${ID_Pizzy}`;
 
     connection.query(deniedQuery, (error, results) => {
         if (error) {

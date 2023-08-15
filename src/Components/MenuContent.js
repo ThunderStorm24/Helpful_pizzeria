@@ -617,7 +617,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
                               <img
                                 className=""
                                 src="Komentarz.png"
-                                alt="Komentarz"
+                                alt="Komentarzz"
                                 style={{ width: "40px", height: "40px", cursor: "pointer" }}
                               />
                             </OverlayTrigger>

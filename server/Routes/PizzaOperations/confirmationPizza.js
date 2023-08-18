@@ -46,4 +46,23 @@ router.post("/OdrzucPizze", async (req, res) => {
 
 })
 
+router.post("/AnulujPizze", async (req, res) => {
+  
+  const ID_Pizzy=req.body.ID;
+
+  const cancelQuery = `DELETE FROM pizze WHERE ID_Pizzy = ? AND Status = 'Oczekuje'`;
+
+
+  connection.query(cancelQuery,[ID_Pizzy], (error, results) => {
+      if (error) {
+      console.error("Błąd podczas anulowania pizzy:", error);
+      res.status(500).json({ message: "Błąd podczas anulowania pizzy." });
+      } else {
+        console.log("Pizza anulowana pomyślnie!");
+        res.status(200).json({ message: `Pizza o ID ${ID_Pizzy} została anulowana`});
+      }
+  })
+
+})
+
 module.exports = router;

@@ -260,7 +260,8 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //OPERACJA Anulowania stanu pizzy
   const handleCancel = (pizza) => {
-    console.log(`Anuluję pizzę o ID ${pizza.ID_Pizzy}`);
+    actions.cancelModal();
+    actions.pizza(pizza);
   };
 
   //OPERACJA Zmiana odrzuconej pizzy

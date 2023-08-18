@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Axios from 'axios';
 
 
-const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDanger, description, title }) => {
+const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDanger, description, title, disable }) => {
 
   const [showComment, setShowComment] = useState(false)
   const [buttonText, setButtonText] = useState("Dodaj Komentarz");
@@ -33,7 +33,7 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>{description}?
-        <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick}>
+        <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick} disabled={disable}>
           {buttonText}
         </Button>
         {showComment && (
@@ -57,11 +57,11 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
 
       </Modal.Body>
       <Modal.Footer style={{ backgroundColor: '#141414', color: 'white' }}>
-        <Button className="greenButton" variant="success" onClick={() => operation(comment)}>
-          {buttonSuccess}
-        </Button>
         <Button className="redButton" variant="danger" onClick={onHide}>
           {buttonDanger}
+        </Button>
+        <Button className="greenButton" variant="success" onClick={() => operation(comment)}>
+          {buttonSuccess}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -16,6 +16,8 @@ export default function Menu() {
     const [deleteModal, setDeleteModal] = useState(false);
     const [acceptModal, setAcceptModal] = useState(false);
     const [deniedModal, setDeniedModal] = useState(false);
+    const [cancelModal, setCancelModal] = useState(false);
+
     const [idPizzy, setIdPizzy] = useState(0);
     const [pizza, setPizza] = useState([]);
     const [custom, setCustom] = useState('');
@@ -33,12 +35,14 @@ export default function Menu() {
             setDeleteModal(false);
             setAcceptModal(false);
             setDeniedModal(false);
+            setCancelModal(false);
           } else {
             setShowModal(false);
             setEditModal(false);
             setDeleteModal(false);
             setAcceptModal(false);
             setDeniedModal(false);
+            setCancelModal(false);
             window.location.reload();
           }
     };
@@ -191,6 +195,18 @@ export default function Menu() {
       console.log('error', error);
     })
   };
+
+  const handleCancelModal = async () => {
+    Axios.post('http://localhost:5000/AnulujPizze', {
+      ID: pizza.ID_Pizzy,
+  }).then((data)=> {
+    console.log(data);
+    setDeniedModal(false);
+    window.location.reload();
+  }).catch((error) => {
+    console.log('error', error);
+  })
+};
     
 
     return <div>
@@ -206,6 +222,7 @@ export default function Menu() {
       deleteModal: () => setDeleteModal(true),
       acceptModal: () => setAcceptModal(true),
       deniedModal: () => setDeniedModal(true),
+      cancelModal: () => setCancelModal(true),
       pizza: setPizza,
       idPizzy: setIdPizzy,
       custom: setCustom
@@ -247,6 +264,7 @@ export default function Menu() {
         buttonDanger={"Usuń Pizzę"}
         description = {`Pizza "${pizza.Nazwa}" o ID: ${pizza.ID_Pizzy} ze składnikami: (${pizza.Skladniki}) zostanie usunięta na stałe. Czy na pewno chcesz to zrobić?`}
         title={`Czy chcesz usunąć pizzę [${pizza.ID_Pizzy}]`}
+        disable={false}
       />
       <ConfirmCancelModal
         show={acceptModal}
@@ -256,6 +274,7 @@ export default function Menu() {
         buttonSuccess={"Zaakceptuj"}
         description = {`Czy na pewno chcesz zaakceptować pizzę ${pizza.Nazwa} [${pizza.ID_Pizzy}]`}
         title={`Akceptacja pizzy [${pizza.ID_Pizzy}]`}
+        disable={false}
       />
       <ConfirmCancelModal
         show={deniedModal}
@@ -265,6 +284,17 @@ export default function Menu() {
         buttonSuccess={"Odrzuć"}
         description = {`Czy na pewno chcesz odrzucić pizzę ${pizza.Nazwa} [${pizza.ID_Pizzy}]`}
         title={`Odrzucenie pizzy [${pizza.ID_Pizzy}]`}
+        disable={false}
+      />
+      <ConfirmCancelModal
+        show={cancelModal}
+        onHide={handleCloseModal}
+        operation={handleCancelModal}
+        buttonDanger={"Nie"}
+        buttonSuccess={"Tak"}
+        description = {`Czy na pewno chcesz anulować pizzę ${pizza.Nazwa} [${pizza.ID_Pizzy}]`}
+        title={`Anulowanie pizzy [${pizza.ID_Pizzy}]`}
+        disable={true}
       />
 
       <ToastOperations title={toastTitle} describe={messageAdd} background="success" time="5000" show={showToast} hide={handleToastClose} />

@@ -264,6 +264,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
     actions.pizza(pizza);
   };
 
+  //DO ZROBIENIA
   //OPERACJA Zmiana odrzuconej pizzy
   const handleChange = (pizza) => {
     console.log(`Zmieniam pizzę o ID ${pizza.ID_Pizzy}`);

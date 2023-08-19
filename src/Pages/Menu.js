@@ -169,7 +169,7 @@ export default function Menu() {
       console.log('error', error);
     })
   };
-    //DO ZROBIENIA
+
     const handleAcceptPizza = async (comment) => {
       Axios.post('http://localhost:5000/AkceptujPizze', {
         ID: pizza.ID_Pizzy,
@@ -182,7 +182,7 @@ export default function Menu() {
       console.log('error', error);
     })
   };
-    //DO ZROBIENIA
+
     const handleDeniedPizza = async (comment) => {
       Axios.post('http://localhost:5000/OdrzucPizze', {
         ID: pizza.ID_Pizzy,

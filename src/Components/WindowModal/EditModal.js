@@ -16,6 +16,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
   const [priceMedium, setPriceMedium] = useState('');
   const [priceLarge, setPriceLarge] = useState('');
   const [priceGiant, setPriceGiant] = useState('');
+  const [pizzaStatus, setPizzaStatus] = useState('');
   const [checkedItems, setCheckedItems] = useState([]);
   const [checkedItemsWithPizza, setCheckedItemsWithPizza] = useState([]);
 
@@ -53,6 +54,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
       priceMedium,
       priceLarge,
       priceGiant,
+      pizzaStatus,
     });
   } else {
 
@@ -69,16 +71,18 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
     //WYŚWIETLANIE pizzy do zedytowania
     useEffect(() => {
         Axios.get(`/pizzeEdit/${idPizzy}`)
-          .then(response => setPizze(response.data))
+        .then(response => {
+          setPizze(response.data);
+        })
           .catch(error => console.error(error));
           
           setIndex(0);
       },[idPizzy]);
-      
 
       useEffect(() => {
         if (pizze.length > 0 && index !== null) {
           const pizza = pizze[index];
+          setPizzaStatus(pizza.Status);
           setName(pizza.Nazwa);
           const pizzaSkladniki = pizza.Skladniki.split(", ");
           

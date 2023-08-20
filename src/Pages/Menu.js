@@ -142,7 +142,8 @@ export default function Menu() {
             priceSmall: pizza.priceSmall,
             priceMedium: pizza.priceMedium,
             priceLarge: pizza.priceLarge,
-            priceGiant: pizza.priceGiant
+            priceGiant: pizza.priceGiant,
+            pizzaStatus: pizza.pizzaStatus
         }).then((data) => {
             console.log(data)
             setEditMessageAdd(data.data.message)

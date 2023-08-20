@@ -268,6 +268,9 @@ function Bookmarks({props, updateItemsCount, actions}) {
   //OPERACJA Zmiana odrzuconej pizzy
   const handleChange = (pizza) => {
     console.log(`Zmieniam pizzę o ID ${pizza.ID_Pizzy}`);
+    actions.editModal();
+    actions.idPizzy(pizza.ID_Pizzy);
+    actions.custom(pizza.Custom);
   };
   
   //DODAWANIE PIZZY DO KOSZYKA
@@ -612,7 +615,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
                               </button>
                             ) : null}
                             <OverlayTrigger
-                              trigger="hover"
+                              trigger={['hover', 'focus']}
                               placement="right"
                               overlay={<Tooltip id="overlay-tooltip">{pizza.komentarz_admina}</Tooltip>}
                             >

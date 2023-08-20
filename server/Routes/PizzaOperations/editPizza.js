@@ -4,7 +4,7 @@ const connection = require('./../db');
 const router = express.Router();
 
 router.post("/EdytujPizze", async (req, res) => {
-    const { ID, name, checkedItems, priceSmall, priceMedium, priceLarge, priceGiant } = req.body;
+    const { ID, name, checkedItems, priceSmall, priceMedium, priceLarge, priceGiant, pizzaStatus } = req.body;
     console.log("Received request:", req.body);
     let existingSkladniki = []; // Declare the variable here to make it accessible in the entire function
   
@@ -135,6 +135,21 @@ router.post("/EdytujPizze", async (req, res) => {
     } catch (error) {
       return res.status(500).json({ error: "Failed to update pizza prices." });
     }
+
+    console.log(pizzaStatus)
+
+    if (pizzaStatus === "Odrzucono") {
+      console.log("Pizza jest odrzucona, update na oczekuje")
+      try {
+          const updateStatusQuery = "UPDATE pizze SET Status = 'Oczekuje' WHERE ID_Pizzy = ?";
+          await connection.query(updateStatusQuery, [ID]);
+      } catch (error) {
+          console.error("Error updating pizza status:", error);
+          return res.status(500).json({ error: "Failed to update pizza status." });
+      }
+  } else {
+    console.log("Pizza jest zaakceptowana/oczekujaca wszystko jest git")
+  }
 
     console.log("DZIALAAA");
     res.status(201).send({ message: 'Pizza zedytowana pomyślnie!!!.' });

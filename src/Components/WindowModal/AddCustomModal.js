@@ -64,7 +64,7 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
   return (
     <Modal show={customShow} onHide={customOnHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Dodaj ową pizzę</Modal.Title>
+        <Modal.Title>Dodaj nową pizzę</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="mb-2 mt-2">Pizza zostanie najpierw sprawdzona przez administrację, obserwuj Moje oczekujące pizze lub Moje pizze czy twoja pizza została dodana i ciesz się dodaną pizzą!</div>

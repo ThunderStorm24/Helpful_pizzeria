@@ -306,6 +306,13 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           alt="Microphone"
           style={{ width: "40px", height: "40px", cursor: "pointer" }}
           onClick={toggleListening}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              toggleListening();
+            }
+          }}  
+          tabIndex={0}
+          role="button"
         />
       ) : (
         <div>

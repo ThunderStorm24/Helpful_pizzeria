@@ -28,7 +28,7 @@ export default function Login() {
         })
     }
 
-    return <div>
+    return <div style={{ minHeight: "100vh" }}>
     <NavbarE />
     <div className="d-flex justify-content-center">
       <div className="d-flex flex-column col-12 col-md-9 col-xl-6">

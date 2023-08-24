@@ -27,7 +27,7 @@ export default function Login() {
             console.log(response)
         })
     }
-
+    //Rejestracja do zrobienia, od strony serwera i frontendu
     return <div style={{ minHeight: "100vh" }}>
     <NavbarE />
     <div className="d-flex justify-content-center">

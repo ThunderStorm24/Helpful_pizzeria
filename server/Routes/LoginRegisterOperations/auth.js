@@ -7,6 +7,93 @@ const router = express.Router();
 
 router.post("/register", (req, res) => {
 
+    const errors = {};
+
+// Sprawdzenie czy Login jest podane
+if (!req.body.Login) {
+    errors.login = "Login jest wymagany";
+} else if (req.body.Login.length > 50 || req.body.Login.length <= 3) {
+    errors.login = "Login nie może być dłuższy niż 50 znaków oraz krótszy niż 4 znaki";
+}
+
+// Sprawdzenie czy Login jest unikalny
+connection.query("SELECT * FROM uzytkownicy WHERE Login = ?", [req.body.Login], (err, results) => {
+    if (err) {
+        console.error(err);
+        return res.status(500).send("Error occurred while checking Login uniqueness");
+    }
+
+    if (results.length > 0) {
+        errors.login = "Login: "+req.body.Login+", już istnieje w naszej bazie danych";
+    }
+
+// Sprawdzenie czy Password jest podane
+if (!req.body.Password) {
+    errors.haslo = "Hasło jest wymagane";
+} else if (req.body.Password.length > 150 || req.body.Password.length <= 4) {
+    errors.haslo = "Hasło nie może być dłuższe niż 150 znaków oraz krótsze niż 5 znaków";
+}
+
+// Sprawdzenie czy Imie jest podane
+if (!req.body.Name) {
+    errors.imie = "Imie jest wymagane";
+} else if (req.body.Name.length > 50 || req.body.Name.length <= 2) {
+    errors.imie = "Imie nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
+}
+
+// Sprawdzenie czy Nazwisko jest podane
+if (!req.body.Surname) {
+    errors.nazwisko = "Nazwisko jest wymagane";
+} else if (req.body.Surname.length > 50 || req.body.Surname.length <= 2) {
+    errors.nazwisko = "Nazwisko nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
+}
+
+// Sprawdzenie czy Adres jest podane
+if (!req.body.Adress) {
+    errors.adres = "Adres jest wymagany";
+} else if (!/^([a-zA-Z0-9\s]+)\s(\d+\/\d+[A-Za-z]*)\s([a-zA-Z\s]+)$/.test(req.body.Adress)) {
+    errors.adres = "Adres musi być w formacie: ulica numer/mieszkanie miasto";
+} else if (req.body.Adress.length > 70) {
+    errors.adres = "Adres nie może być dłuższy niż 70 znaków";
+}
+
+// Sprawdzenie czy Zipcode jest podane
+if (!req.body.Zipcode) {
+    errors.kodpocztowy = "Kod pocztowy jest wymagany";
+} else if (!/^\d{2}-\d{3}$/.test(req.body.Zipcode)) {
+    errors.kodpocztowy = "Kod pocztowy musi być w formacie XX-XXX";
+}
+
+// Sprawdzenie czy Phone jest podane
+if (!req.body.Phone) {
+    errors.telefon = "Telefon jest wymagany";
+} else if (!/^\+48\d{9}$/.test(req.body.Phone)) {
+    errors.telefon = "Telefon musi być w formacie +48XXXXXXXXX";
+}
+
+// Sprawdzenie czy Numer Telefonu jest unikalny
+connection.query("SELECT * FROM uzytkownicy WHERE Telefon = ?", [req.body.Phone], (err, phoneResults) => {
+    if (err) {
+        console.error(err);
+        return res.status(500).send("Error occurred while checking Phone uniqueness");
+    }
+
+    if (phoneResults.length > 0) {
+        errors.telefon = "Numer telefonu: "+req.body.Phone+", już istnieje w naszej bazie danych";
+    }
+
+    // Jeśli są jakieś błędy to zwróć je w odpowiedzi
+    if (Object.keys(errors).length > 0) {
+        res.status(400).send({ errors: Object.values(errors) });
+        console.log(errors)
+        return;
+    } else {
+        const message = "Dodano użytkownika o loginie:"+req.body.Login;
+        res.send(message);
+    }
+})
+})
+    /*
     const Name = req.body.Name;
     const Surname = req.body.Surname;
     const Adress = req.body.Adress;
@@ -16,14 +103,39 @@ router.post("/register", (req, res) => {
     const Password = req.body.Password;
 
     bcrypt.hash(Password, saltRounds, (err, hash) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error occurred while hashing password");
+            return;
+        }
+
         connection.query("INSERT INTO uzytkownicy (Imie, Nazwisko, Rola, Adres, Kod_Pocztowy, Telefon, Login, Haslo) VALUES(?,?,'user',?,?,?,?,?)",
             [Name, Surname, Adress, Zipcode, Phone, Login, hash],
             (err, result) => {
-                console.log(err);
-            })
-    })
+                if (err) {
+                    console.error(err);
+                    res.status(500).send("Error occurred while inserting user");
+                    return;
+                }
 
-})
+                const userId = result.insertId; // ID of the newly inserted user
+                connection.query("INSERT INTO koszyk (ID_Uzytkownika) VALUES(?)",
+                    [userId],
+                    (err, cartResult) => {
+                        if (err) {
+                            console.error(err);
+                            res.status(500).send("Error occurred while creating user's cart");
+                            return;
+                        }
+
+                        res.status(200).send("User registered successfully");
+                    }
+                );
+            }
+        );
+    });
+    */
+});
 
 router.get("/login", (req, res) => {
     if (req.session.user) {

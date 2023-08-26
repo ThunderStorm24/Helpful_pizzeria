@@ -9,7 +9,7 @@ router.post("/register", (req, res) => {
 
     const errors = {};
 
-// Sprawdzenie czy Login jest podane
+// Sprawdzenie czy Login jest podany
 if (!req.body.Login) {
     errors.login = "Login jest wymagany";
 } else if (req.body.Login.length > 50 || req.body.Login.length <= 3) {
@@ -27,28 +27,28 @@ connection.query("SELECT * FROM uzytkownicy WHERE Login = ?", [req.body.Login], 
         errors.login = "Login: "+req.body.Login+", już istnieje w naszej bazie danych";
     }
 
-// Sprawdzenie czy Password jest podane
+// Sprawdzenie czy Password jest podany
 if (!req.body.Password) {
     errors.haslo = "Hasło jest wymagane";
 } else if (req.body.Password.length > 150 || req.body.Password.length <= 4) {
     errors.haslo = "Hasło nie może być dłuższe niż 150 znaków oraz krótsze niż 5 znaków";
 }
 
-// Sprawdzenie czy Imie jest podane
+// Sprawdzenie czy Imie jest podany
 if (!req.body.Name) {
     errors.imie = "Imie jest wymagane";
 } else if (req.body.Name.length > 50 || req.body.Name.length <= 2) {
     errors.imie = "Imie nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
 }
 
-// Sprawdzenie czy Nazwisko jest podane
+// Sprawdzenie czy Nazwisko jest podany
 if (!req.body.Surname) {
     errors.nazwisko = "Nazwisko jest wymagane";
 } else if (req.body.Surname.length > 50 || req.body.Surname.length <= 2) {
     errors.nazwisko = "Nazwisko nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
 }
 
-// Sprawdzenie czy Adres jest podane
+// Sprawdzenie czy Adres jest podany
 if (!req.body.Adress) {
     errors.adres = "Adres jest wymagany";
 } else if (!/^([a-zA-Z0-9\s]+)\s(\d+\/\d+[A-Za-z]*)\s([a-zA-Z\s]+)$/.test(req.body.Adress)) {
@@ -57,14 +57,14 @@ if (!req.body.Adress) {
     errors.adres = "Adres nie może być dłuższy niż 70 znaków";
 }
 
-// Sprawdzenie czy Zipcode jest podane
+// Sprawdzenie czy Zipcode jest podany
 if (!req.body.Zipcode) {
     errors.kodpocztowy = "Kod pocztowy jest wymagany";
 } else if (!/^\d{2}-\d{3}$/.test(req.body.Zipcode)) {
     errors.kodpocztowy = "Kod pocztowy musi być w formacie XX-XXX";
 }
 
-// Sprawdzenie czy Phone jest podane
+// Sprawdzenie czy Phone jest podany
 if (!req.body.Phone) {
     errors.telefon = "Telefon jest wymagany";
 } else if (!/^\+48\d{9}$/.test(req.body.Phone)) {

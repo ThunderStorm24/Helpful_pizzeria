@@ -24,7 +24,7 @@ connection.query("SELECT * FROM uzytkownicy WHERE Login = ?", [req.body.Login], 
     }
 
     if (results.length > 0) {
-        errors.login = "Login: "+req.body.Login+", już istnieje w naszej bazie danych";
+        errors.login = "Login: "+req.body.Login+", już istnieje w naszej bazie danych, spróbuj innego loginu";
     }
 
 // Sprawdzenie czy Password jest podany
@@ -39,6 +39,8 @@ if (!req.body.Name) {
     errors.imie = "Imie jest wymagane";
 } else if (req.body.Name.length > 50 || req.body.Name.length <= 2) {
     errors.imie = "Imie nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
+} else if (!/^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(req.body.Name)) {
+    errors.imie = "Imie musi zaczynać się z dużej litery i nie może zawierać żadnych znaków specjalnych"
 }
 
 // Sprawdzenie czy Nazwisko jest podany
@@ -46,12 +48,14 @@ if (!req.body.Surname) {
     errors.nazwisko = "Nazwisko jest wymagane";
 } else if (req.body.Surname.length > 50 || req.body.Surname.length <= 2) {
     errors.nazwisko = "Nazwisko nie może być dłuższe niż 50 znaków oraz krótsze niż 3 znaki";
+} else if (!/^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(req.body.Surname)) {
+    errors.nazwisko = "Nazwisko musi zaczynać się z dużej litery i nie może zawierać żadnych znaków specjalnych"
 }
 
 // Sprawdzenie czy Adres jest podany
 if (!req.body.Adress) {
     errors.adres = "Adres jest wymagany";
-} else if (!/^([a-zA-Z0-9\s]+)\s(\d+\/\d+[A-Za-z]*)\s([a-zA-Z\s]+)$/.test(req.body.Adress)) {
+} else if (!/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\s]+)\s(\d+\/\d+[A-Za-z]*)\s([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+)$/.test(req.body.Adress)) {
     errors.adres = "Adres musi być w formacie: ulica numer/mieszkanie miasto";
 } else if (req.body.Adress.length > 70) {
     errors.adres = "Adres nie może być dłuższy niż 70 znaków";

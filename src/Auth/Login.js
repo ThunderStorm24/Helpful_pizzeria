@@ -41,10 +41,10 @@ export default function Login() {
     return   <div style={{ minHeight: "100vh" }}>
     <NavbarE />
     <div className="d-flex justify-content-center">
-      <div className="d-flex flex-wrap">
+      <div className="d-flex flex-wrap" style={{width:"700px"}}>
       <Container
-      className="d-flex flex-column m-5 p-5 border border-5 rounded col-10 col-md-12"
-      style={{ margin: "auto" }}
+      className="d-flex flex-column mt-5 mb-5 p-5 border border-5 rounded"
+      style={{width: "75%"}}
     >
       <h1 className="text-center">LOGOWANIE</h1>
 

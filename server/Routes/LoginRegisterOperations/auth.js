@@ -95,9 +95,8 @@ connection.query("SELECT * FROM uzytkownicy WHERE Telefon = ?", [req.body.Phone]
         const message = "Dodano użytkownika o loginie:"+req.body.Login;
         res.send(message);
     }
-})
-})
-    /*
+
+
     const Name = req.body.Name;
     const Surname = req.body.Surname;
     const Adress = req.body.Adress;
@@ -109,7 +108,6 @@ connection.query("SELECT * FROM uzytkownicy WHERE Telefon = ?", [req.body.Phone]
     bcrypt.hash(Password, saltRounds, (err, hash) => {
         if (err) {
             console.error(err);
-            res.status(500).send("Error occurred while hashing password");
             return;
         }
 
@@ -118,7 +116,6 @@ connection.query("SELECT * FROM uzytkownicy WHERE Telefon = ?", [req.body.Phone]
             (err, result) => {
                 if (err) {
                     console.error(err);
-                    res.status(500).send("Error occurred while inserting user");
                     return;
                 }
 
@@ -128,17 +125,15 @@ connection.query("SELECT * FROM uzytkownicy WHERE Telefon = ?", [req.body.Phone]
                     (err, cartResult) => {
                         if (err) {
                             console.error(err);
-                            res.status(500).send("Error occurred while creating user's cart");
                             return;
                         }
-
-                        res.status(200).send("User registered successfully");
                     }
                 );
             }
         );
     });
-    */
+})
+})
 });
 
 router.get("/login", (req, res) => {

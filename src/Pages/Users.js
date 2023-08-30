@@ -23,7 +23,7 @@ function Users() {
             if (response.data.loggedIn == true) {
                 setLoginStatus(response.data.user[0].Login)
                 setLoginID(response.data.user[0].ID_Uzytkownika)
-                setLoading(false); // zmiana stanu loading na falsee
+                setLoading(false); // zmiana stanu loading na false
             } else {
                 navigate("/");
             }

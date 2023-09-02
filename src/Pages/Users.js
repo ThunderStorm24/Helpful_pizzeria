@@ -5,19 +5,36 @@ import Table from 'react-bootstrap/Table';
 import Button from "react-bootstrap/Button";
 import { Navigate, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
-
+import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
+import EditModal from "../Components/WindowModal/EditUserModal.js"
 
 function Users() {
 
     const navigate = useNavigate();
 
+    const [cancelModal, setCancelModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [added, setAdded] = useState(false);
+
     const [admins, setAdmins] = useState([]);
+
     const [users, setUsers] = useState([]);
+    const [userID, setUserID] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userSurname, setUserSurname] = useState('');
+
+
     const [loading, setLoading] = useState(true);
 
     const [loginID, setLoginID] = useState("");
     const [loginStatus, setLoginStatus] = useState("");
     
+    const handleCloseModal = () => {
+            setCancelModal(false);
+            setEditModal(false);
+          
+    };
+
     useEffect(() => {
         Axios.get("/login").then((response) => {
             if (response.data.loggedIn == true) {
@@ -47,13 +64,28 @@ function Users() {
       }, []);
 
       const handleChange = (user) => {
-        console.log(`Zmieniam użytkownika o ID ${user.ID_Uzytkownika}`);
+        setUserID(user.ID_Uzytkownika)
+        setUserName(user.Imie);
+        setUserSurname(user.Nazwisko);
+        setEditModal(true);
+      };
+
+      const handleEditModal = async (user) => {
+        console.log(`Zmieniam użytkownika o ID ${user.userID} ${user.name} ${user.surname}`);
       };
 
       const handleDelete = (user) => {
-        console.log(`Usuwam użytkownika o ID ${user.ID_Uzytkownika}`);
+        setUserID(user.ID_Uzytkownika)
+        setUserName(user.Imie);
+        setUserSurname(user.Nazwisko);
+        setCancelModal(true);
       };
 
+      const handleDeleteModal = () => {
+        console.log(`Usuwam użytkownika o ID: ${userID}`)
+        setCancelModal(false);
+      };
+      
       const handleAdd = (user) => {
         console.log(`Dodaje użytkownika o roli: ${user}`);
       };
@@ -92,8 +124,17 @@ function Users() {
                                 <td>{admin.Telefon}</td>
                                 <td>{admin.Login}</td>
                                 <td>
-                                    <Button onClick={() => handleDelete(admin)} className="me-2" variant="danger">Usuń</Button>
-                                    <Button onClick={() => handleChange(admin)} variant="warning">Edytuj</Button>
+                                {loginID === admin.ID_Uzytkownika ? (
+                                    <>
+                                        <Button className="me-2" variant="danger" disabled>Usuń</Button>
+                                        <Button variant="warning" disabled>Edytuj</Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button onClick={() => handleDelete(admin)} className="me-2" variant="danger">Usuń</Button>
+                                        <Button onClick={() => handleChange(admin)} variant="warning">Edytuj</Button>
+                                    </>
+                                )}
                                 </td>
                             </tr>
                         ))}
@@ -136,6 +177,27 @@ function Users() {
                 <Button onClick={() => handleAdd("user")} className="mb-4" variant="primary">Dodaj użytkownika</Button>
             </div>
           )}
+
+        <ConfirmCancelModal
+        show={cancelModal}
+        onHide={handleCloseModal}
+        operation={handleDeleteModal}
+        buttonDanger={"Nie"}
+        buttonSuccess={"Tak"}
+        description = {`Czy na pewno chcesz usunąć użytkownika ${userName} ${userSurname} [${userID}]`}
+        title={`Usuwanie użytkownika ${userName} [${userID}]`}
+        disable={true}
+      />
+        <EditModal 
+        show={editModal}
+        onHide={handleCloseModal}
+        onSubmit={handleEditModal}
+        title={`Edytowanie użytkownika: ${userName} ${userSurname} [${userID}]`}
+        userID={userID}
+        button={`Edytuj`}
+        Added={added}
+        />
+
         </div>
 }
 

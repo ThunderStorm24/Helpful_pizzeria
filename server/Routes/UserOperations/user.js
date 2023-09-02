@@ -39,4 +39,14 @@ router.get("/Users", (req, res) => {
     );
 });
 
+router.get("/userEdit/:userID", (req, res) => {
+    const userID = req.params.userID;
+    connection.query("SELECT * FROM Uzytkownicy WHERE ID_Uzytkownika=?",
+    [userID], 
+    (error, results, fields) => {
+            if (error) throw error;
+            res.json(results);
+        });
+})
+
 module.exports = router;

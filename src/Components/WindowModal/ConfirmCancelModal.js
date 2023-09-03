@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Form, FormControl } from 'react-bootstrap';
+import { Form, FormControl, Alert } from 'react-bootstrap';
 import Button from "react-bootstrap/Button";
 import Axios from 'axios';
 
 
-const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDanger, description, title, disable }) => {
+const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDanger, description, title, disable, message, errors }) => {
 
   const [showComment, setShowComment] = useState(false)
   const [buttonText, setButtonText] = useState("Dodaj Komentarz");
@@ -57,6 +57,17 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
             />
           </Form>
         )}
+        {errors && errors.length > 0 ? (  
+        <Alert variant="danger" className="mt-4">
+        <ul className="text-danger" style={{ margin: "0px", textAlign: "left" }}>
+          {errors.map((err, index) => (
+            <li key={index}>{err}</li>
+          ))}
+        </ul>
+      </Alert>
+          ) : (
+            <p className="mt-4 text-success">{message}</p>  
+          )}
 
       </Modal.Body>
       <Modal.Footer style={{ backgroundColor: '#141414', color: 'white' }}>

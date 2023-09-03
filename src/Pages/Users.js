@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
 import EditModal from "../Components/WindowModal/EditUserModal.js"
+import AddUser from "../Components/WindowModal/AddUser.js"
 
 function Users() {
 
@@ -14,7 +15,10 @@ function Users() {
 
     const [cancelModal, setCancelModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
+    const [addModal, setAddModal] = useState(false);
     const [added, setAdded] = useState(false);
+
+    const [role,setRole] = useState('');
 
     const [admins, setAdmins] = useState([]);
 
@@ -23,6 +27,8 @@ function Users() {
     const [userName, setUserName] = useState('');
     const [userSurname, setUserSurname] = useState('');
 
+    const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +38,7 @@ function Users() {
     const handleCloseModal = () => {
             setCancelModal(false);
             setEditModal(false);
-          
+            setAddModal(false);
     };
 
     useEffect(() => {
@@ -47,7 +53,8 @@ function Users() {
         })
     }, [])
 
-    useEffect(() => {
+      //wyświetlanie użytkowników o roli ADMIN
+      useEffect(() => {
         Axios.get(`/Admins`)
         .then(response => {
           setAdmins(response.data);
@@ -55,6 +62,7 @@ function Users() {
           .catch(error => console.error(error));
       }, []);
     
+      //wyświetlanie użytkowników o roli USER
       useEffect(() => {
         Axios.get(`/Users`)
         .then(response => {
@@ -63,6 +71,7 @@ function Users() {
           .catch(error => console.error(error));
       }, []);
 
+      //EDYTOWANIE użytkownika
       const handleChange = (user) => {
         setUserID(user.ID_Uzytkownika)
         setUserName(user.Imie);
@@ -72,8 +81,28 @@ function Users() {
 
       const handleEditModal = async (user) => {
         console.log(`Zmieniam użytkownika o ID ${user.userID} ${user.name} ${user.surname}`);
+        Axios.post('http://localhost:5000/EdytujUzytkownika', {
+            UserID: user.userID,
+            Name: user.name,
+            Surname: user.surname,
+            Adress: user.adress,
+            Zipcode: user.zipcode,
+            Phone: user.phone,
+            Login: user.login,
+          //Password: user.password,
+        }).then((data) => {
+          console.log(data)
+          setMessage(data.data);
+          setErrors([]);
+          window.location.reload();
+        }).catch((error) => {
+          console.log('error', error);
+          setErrors(error.response.data.errors);
+        })
       };
 
+
+      //USUWANIE użytkownika
       const handleDelete = (user) => {
         setUserID(user.ID_Uzytkownika)
         setUserName(user.Imie);
@@ -83,24 +112,62 @@ function Users() {
 
       const handleDeleteModal = () => {
         console.log(`Usuwam użytkownika o ID: ${userID}`)
-        setCancelModal(false);
+        Axios.post('http://localhost:5000/UsunUzytkownika', {
+            UserID: userID,
+            NowLoggedInUserID: loginID,
+        }).then((data) => {
+          console.log(data)
+          setMessage(data.data);
+          setErrors([]);
+          setCancelModal(false);
+          window.location.reload();
+        }).catch((error) => {
+          console.log('error', error);
+          setErrors(error.response.data.errors);
+        })
       };
       
+      //DODAWANIE użytkownika
       const handleAdd = (user) => {
-        console.log(`Dodaje użytkownika o roli: ${user}`);
+        setRole(user)
+        setAddModal(true);
       };
 
-    return <div style={{ minHeight: "100vh" }}>
+      const handleAddModal = async (user) => {
+        console.log(`Dodaje użytkownika o roli: ${user.role} ${user.name} ${user.surname}`);
+        Axios.post('http://localhost:5000/DodajUzytkownika', {
+            Role: user.role,
+            Name: user.name,
+            Surname: user.surname,
+            Adress: user.adress,
+            Zipcode: user.zipcode,
+            Phone: user.phone,
+            Login: user.login,
+            Password: user.password,
+        }).then((data) => {
+          console.log(data)
+          setMessage(data.data);
+          setErrors([]);
+          window.location.reload();
+        }).catch((error) => {
+          console.log('error', error);
+          setErrors(error.response.data.errors);
+        })
+
+    };
+
+    return <div style={{ minHeight: "140vh" }}>
             <NavbarE />
             {loading ? (
-            <div style={{height: "1000px"}}>
+            <div style={{ minHeight: "100vh"}}>
             <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
             </div>
           ) : (
             <div className="container mt-4">
                 
-            <h2>Admins:</h2>
-                <Table striped bordered hover variant="dark">
+                <div className="p-5 rounded-5" style={{background: '#050505'}}>
+            <h2 className="">Admins:</h2>
+                <Table responsive striped bordered hover variant="dark">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -140,10 +207,12 @@ function Users() {
                         ))}
                     </tbody>
                 </Table>
-                <Button onClick={() => handleAdd("admin")} className="mb-4" variant="primary">Dodaj admina</Button>
+                <Button onClick={() => handleAdd("admin")} className="mb-1 mt-2" variant="primary">Dodaj admina</Button>
+                </div>
 
+                <div className="p-5 rounded-5 mt-4" style={{background: '#050505'}}>
                 <h2>Users:</h2>
-                <Table striped bordered hover variant="dark">
+                <Table responsive striped bordered hover variant="dark">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -174,7 +243,8 @@ function Users() {
                         ))}
                     </tbody>
                 </Table>
-                <Button onClick={() => handleAdd("user")} className="mb-4" variant="primary">Dodaj użytkownika</Button>
+                <Button onClick={() => handleAdd("user")} className="mb-1 mt-2" variant="primary">Dodaj użytkownika</Button>
+                </div>
             </div>
           )}
 
@@ -187,6 +257,8 @@ function Users() {
         description = {`Czy na pewno chcesz usunąć użytkownika ${userName} ${userSurname} [${userID}]`}
         title={`Usuwanie użytkownika ${userName} [${userID}]`}
         disable={true}
+        message={message}
+        errors={errors}
       />
         <EditModal 
         show={editModal}
@@ -196,6 +268,20 @@ function Users() {
         userID={userID}
         button={`Edytuj`}
         Added={added}
+        message={message}
+        errors={errors}
+        />
+        <AddUser 
+        show={addModal}
+        onHide={handleCloseModal}
+        onSubmit={handleAddModal}
+        title={`Dodawanie nowego ${role}a`}
+        userID={userID}
+        button={`Dodaj ${role}a`}
+        Added={added}
+        Role={role}
+        message={message}
+        errors={errors}
         />
 
         </div>

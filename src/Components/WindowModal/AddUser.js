@@ -5,11 +5,9 @@ import Button from "react-bootstrap/Button";
 import Axios from 'axios';
 
 
-const EditModal = ({ show, onHide, onSubmit, title, userID, button, Added, message, errors }) => {
+const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Role, message, errors }) => {
 
     const [userAdded, setUserAdded] = useState(false);
-    const [user, setUser] = useState([]);
-    const [index, setIndex] = useState(null);
 
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
@@ -17,6 +15,8 @@ const EditModal = ({ show, onHide, onSubmit, title, userID, button, Added, messa
     const [zipcode, setZipcode] = useState("");
     const [phone, setPhone] = useState("");
     const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
 
     const handleSubmit = (event) => {
         if(userAdded === false){
@@ -30,32 +30,16 @@ const EditModal = ({ show, onHide, onSubmit, title, userID, button, Added, messa
               zipcode,
               phone,
               login,
+              password,
+              role,
             });
     };
 }
 
-//WYŚWIETLANIE użytkownika do zedytowania
-useEffect(() => {
-    Axios.get(`/userEdit/${userID}`)
-    .then(response => {
-      setUser(response.data);
-    })
-      .catch(error => console.error(error));
-      
-      setIndex(0);
-  },[userID]);
+    useEffect(() => {
+          setRole(Role)
+    },[Role]);
 
-  useEffect(() => {
-    if (user.length > 0 && index !== null) {
-      const users = user[index];
-      setName(users.Imie)
-      setSurname(users.Nazwisko)
-      setAdress(users.Adres)
-      setZipcode(users.Kod_Pocztowy)
-      setPhone(users.Telefon)
-      setLogin(users.Login)
-    }
-  }, [index, user]);
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -64,6 +48,18 @@ useEffect(() => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
+
+           <Form.Group>
+            <Form.Label style={{ fontWeight: "bold" }}>Rola:</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Wprowadź Rolę"
+              value={Role}
+              onChange={(event) => setRole(event.target.value)}
+              disabled
+            />
+          </Form.Group>
+
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Imię:</Form.Label>
             <Form.Control
@@ -124,6 +120,16 @@ useEffect(() => {
             />
           </Form.Group>
 
+          <Form.Group>
+            <Form.Label style={{ fontWeight: "bold" }}>Hasło:</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Wprowadź hasło"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Form.Group>
+
           {errors && errors.length > 0 ? (  
         <Alert variant="danger" className="mt-4">
         <ul className="text-danger" style={{ margin: "0px", textAlign: "left" }}>
@@ -145,4 +151,4 @@ useEffect(() => {
   );
 };
 
-export default EditModal;
+export default AddUserModal;

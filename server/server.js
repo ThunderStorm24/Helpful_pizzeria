@@ -9,6 +9,9 @@ const authRouter = require('./Routes/LoginRegisterOperations/auth');
 const pizzasRouter = require('./Routes/PizzaOperations/pizzas');
 const ingredientsRouter = require('./Routes/UserOperations/ingredients');
 const cartRouter = require('./Routes/UserOperations/cart');
+const addUser = require('./Routes/UserOperations/addUser');
+const editUser = require('./Routes/UserOperations/editUser');
+const deleteUser = require('./Routes/UserOperations/deleteUser');
 const addPizzaRouter = require('./Routes/PizzaOperations/addPizza');
 const editPizzaRouter = require('./Routes/PizzaOperations/editPizza')
 const deletePizzaRouter = require('./Routes/PizzaOperations/deletePizza')
@@ -47,6 +50,9 @@ app.use(authRouter);
 app.use(pizzasRouter);
 app.use(ingredientsRouter);
 app.use(cartRouter);
+app.use(addUser);
+app.use(editUser);
+app.use(deleteUser);
 app.use(addPizzaRouter);
 app.use(editPizzaRouter);
 app.use(deletePizzaRouter);

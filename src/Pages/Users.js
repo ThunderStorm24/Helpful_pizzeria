@@ -41,7 +41,7 @@ function Users() {
             setAddModal(false);
     };
 
-    //Sesja czy Admin jest zalogowany, narazie jest i user i admin
+    //Sesja czy Admin jest zalogowany, narazie jest i user i admin, a ma być tylko admin
     useEffect(() => {
         Axios.get("/login").then((response) => {
             if (response.data.loggedIn == true) {

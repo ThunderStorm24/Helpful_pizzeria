@@ -67,6 +67,7 @@ export default function Profil() {
     })
   }, [])
 
+  //Wyświetlanie zalogowanego użytkownika, trzeba jeszcze zrobić edycję zalogowanego użytkownika
   useEffect(() => {
     Axios.get(`/uzytkownicy/${loginID}`)
     .then(response => {

@@ -67,7 +67,7 @@ export default function Profil() {
     })
   }, [])
 
-  //Jeszcze ikonki jakies dodac do składników
+  //Jeszcze ikonki jakies dodac do składnikóww
   //Wyświetlanie zalogowanego użytkownika, trzeba jeszcze zrobić edycję zalogowanego użytkownika
   useEffect(() => {
     Axios.get(`/uzytkownicy/${loginID}`)

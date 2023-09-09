@@ -2,19 +2,29 @@ import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
+import EditModal from "../Components/WindowModal/EditUserModal.js"
 
 export default function Profil() {
 
   const [loading, setLoading] = useState(true);
+
+  const [editModal, setEditModal] = useState(false);
+  const [added, setAdded] = useState(false);
 
   const navigate = useNavigate();
   const [loginID, setLoginID] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [user, setUser] = useState({});
 
+  const [message, setMessage] = useState('');
+  const [errors, setErrors] = useState([]);
+
   const [skladniki, setSkladniki] = useState([]);
   const [ulubione, setUlubione] = useState([]);
 
+  const handleCloseModal = () => {
+    setEditModal(false);
+};
 
   const handleSkladnikClick = (skladnik, skladnikId) => {
     Axios.post('/ZmienUlubione', {
@@ -27,6 +37,7 @@ export default function Profil() {
     window.location.reload();
   }
 
+  //Jeszcze ikonki jakies dodac do składnikóww
   useEffect(() => {
     fetch('/skladniki')
       .then(response => response.json())
@@ -67,8 +78,8 @@ export default function Profil() {
     })
   }, [])
 
-  //Jeszcze ikonki jakies dodac do składnikóww
-  //Wyświetlanie zalogowanego użytkownika, trzeba jeszcze zrobić edycję zalogowanego użytkownika
+  
+  //WYŚWIETLANIE zalogowanego użytkownika
   useEffect(() => {
     Axios.get(`/uzytkownicy/${loginID}`)
     .then(response => {
@@ -81,6 +92,34 @@ export default function Profil() {
   function handleEdytujClick() {
     console.log("Edytuj profil")
   }
+
+  //EDYTOWANIE zalogowanego użytkownika
+  const handleChange = () => {
+    
+    setEditModal(true);
+  };
+
+  const handleEditModal = async (user) => {
+    console.log(`Zmieniam użytkownika o ID ${user.userID} ${user.name} ${user.surname}`);
+    Axios.post('http://localhost:5000/EdytujUzytkownika', {
+        UserID: user.userID,
+        Name: user.name,
+        Surname: user.surname,
+        Adress: user.adress,
+        Zipcode: user.zipcode,
+        Phone: user.phone,
+        Login: user.login,
+      //Password: user.password,
+    }).then((data) => {
+      console.log(data)
+      setMessage(data.data);
+      setErrors([]);
+      window.location.reload();
+    }).catch((error) => {
+      console.log('error', error);
+      setErrors(error.response.data.errors);
+    })
+  };
   
   return <div style={{ height: "1000px" }}>
 
@@ -147,7 +186,7 @@ export default function Profil() {
                   </div>
                 </div>
                 <div className="text-center mt-4">
-                  <button className="btn btn-primary" style={{ textAlign: "left" }}>Edytuj</button>
+                  <button onClick={() => handleChange()} className="btn btn-primary" style={{ textAlign: "left" }}>Edytuj</button>
                 </div>
               </div>
             </div>
@@ -172,6 +211,18 @@ export default function Profil() {
      
     </div>
         )}
+
+        <EditModal 
+        show={editModal}
+        onHide={handleCloseModal}
+        onSubmit={handleEditModal}
+        title={`Edytowanie twoich danych`}
+        userID={loginID}
+        button={`Edytuj`}
+        Added={added}
+        message={message}
+        errors={errors}
+        />
   </div>
 
 

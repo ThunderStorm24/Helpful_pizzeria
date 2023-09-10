@@ -204,9 +204,15 @@ export default function Profil() {
               onClick={() => handleSkladnikClick(isUlubiony(skladnik), skladnik.ID_Skladnika)}
             >
               {skladnik.Nazwa}
+              {skladnik.ikona !== null && (
+              <img className="ms-1" style={{width:"30px", height:"30px"}} src={skladnik.ikona} />
+              )}
             </button>
           ))}
         </div>
+      </div>
+      <div className="mt-5" >
+      <a href="https://www.flaticon.com/free-icons/vegetable" title="vegetable icons">Vegetable icons created by SA Family - Flaticon</a>
       </div>
      
     </div>

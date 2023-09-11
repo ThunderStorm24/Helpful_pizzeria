@@ -196,7 +196,7 @@ export default function Profil() {
 
       <div className="d-flex justify-content-center">
         <div className="col-md-5">
-          <h1 className="mt-5">ULUBIONE/ZNIENAWIDZONE SKŁADNIKI</h1>
+          <h1 className="mt-5">ULUBIONE/NIEULUBIONE SKŁADNIKI</h1>
           {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
             <button
               key={skladnik.ID_Skladnika}

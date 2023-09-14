@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import EditModal from "../Components/WindowModal/EditUserModal.js"
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function Profil() {
 
@@ -81,12 +82,14 @@ export default function Profil() {
   
   //WYŚWIETLANIE zalogowanego użytkownika
   useEffect(() => {
+    if (loginID) { // Sprawdź, czy userID nie jest pusty
     Axios.get(`/uzytkownicy/${loginID}`)
     .then(response => {
       setUser(response.data);
       setLoading(false); // zmiana stanu loading na false
     })
       .catch(error => console.error(error));
+  }
   }, [loginStatus]);
 
   function handleEdytujClick() {
@@ -121,11 +124,11 @@ export default function Profil() {
     })
   };
   
-  return <div style={{ height: "1000px" }}>
+  return <div style={{ height: "1200px" }}>
 
     <NavbarE />
     {loading ? (
-        <p>Ładowanie...</p>
+        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
         ) : (
     <div>
         

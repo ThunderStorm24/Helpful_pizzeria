@@ -36,6 +36,7 @@ const EditModal = ({ show, onHide, onSubmit, title, userID, button, Added, messa
 
 //WYŚWIETLANIE użytkownika do zedytowania
 useEffect(() => {
+  if (userID) { // Sprawdź, czy userID nie jest pusty
     Axios.get(`/userEdit/${userID}`)
     .then(response => {
       setUser(response.data);
@@ -43,6 +44,7 @@ useEffect(() => {
       .catch(error => console.error(error));
       
       setIndex(0);
+    }
   },[userID]);
 
   useEffect(() => {

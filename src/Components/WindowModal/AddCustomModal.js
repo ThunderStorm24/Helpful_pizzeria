@@ -36,7 +36,6 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
     skladnik.Nazwa.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  console.log(checkedItems);
   const handleSubmit = (event) => {
     if(pizzaAdded === false){
     event.preventDefault();

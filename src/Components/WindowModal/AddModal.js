@@ -36,7 +36,6 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
     skladnik.Nazwa.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  console.log(checkedItems);
   const handleSubmit = (event) => {
     if(pizzaAdded === false){
       setPizzaAdded(Added);

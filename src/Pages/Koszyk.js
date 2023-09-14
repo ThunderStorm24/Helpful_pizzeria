@@ -2,6 +2,7 @@ import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function Koszyk() {
 
@@ -167,7 +168,7 @@ export default function Koszyk() {
     return <div style={{ height: "1000px" }}>
         <NavbarE subtractItemsCart={subtractItemsCart} />
         {loading ? (
-        <p>Ładowanie...</p>
+        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
         ) : (
         <div className="mt-5">
             <h3>Koszyk:</h3>

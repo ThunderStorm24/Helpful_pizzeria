@@ -25,7 +25,7 @@ export default function AdminOrders() {
     return ( <div style={{ height: "1500px" }}>
     <NavbarE />
     {loading ? (
-      <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
+      <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
     ) : (
       <div style={{marginTop: "30px"}}>
         {/* Zamówione*/}

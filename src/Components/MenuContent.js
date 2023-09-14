@@ -198,10 +198,11 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //WYŚWIETLANIE pizz danego użytkownika
   useEffect(() => {
+    if (ID) { // Sprawdź, czy ID nie jest puste
     Axios.get(`/pizzeM/${ID}`)
       .then(response => setPizzeM(response.data))
       .catch(error => console.error(error));
-    console.log(pizzeM)
+    }
   }, [ID]);
 
   //WYŚWIETLANIE pizz do zatwierdzenia
@@ -215,10 +216,11 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //WYŚWIETLANIE pizz oczekujących
   useEffect(() => {
+    if (ID) { // Sprawdź, czy ID nie jest puste
     Axios.get(`/pizzeO/${ID}`)
       .then(response => setPizzeO(response.data))
       .catch(error => console.error(error));
-    console.log(pizzeO)
+    }
   }, [ID]);
 
   //WYŚWIETLANIE ulubionych składników 
@@ -231,7 +233,6 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //OPERACJE edytowanie
   const handleEdit = (pizza) => {
-    console.log(`Edytuję pizzę o ID ${pizza.ID_Pizzy}`);
     actions.editModal();
     actions.idPizzy(pizza.ID_Pizzy);
     actions.custom(pizza.Custom);
@@ -239,21 +240,18 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   //OPERACJE usuwanie
   const handleDelete = (pizza) => {
-    console.log(`Czy na pewno chcesz usunąć pizzę o ID ${pizza.ID_Pizzy}?`);
     actions.deleteModal();
     actions.pizza(pizza);
   };
 
   //OPERACJA akceptacja stanu pizzy
   const handleAccept = (pizza) => {
-    console.log(`Akceptuje pizzę o ID ${pizza.ID_Pizzy}`);
     actions.acceptModal();
     actions.pizza(pizza);
   };
 
   //OPERACJA odrzucenie stanu pizzy
   const handleReject = (pizza) => {
-    console.log(`Odrzucam pizzę o ID ${pizza.ID_Pizzy}`);
     actions.deniedModal();
     actions.pizza(pizza);
   };
@@ -267,7 +265,6 @@ function Bookmarks({props, updateItemsCount, actions}) {
   //DO ZROBIENIA
   //OPERACJA Zmiana odrzuconej pizzy
   const handleChange = (pizza) => {
-    console.log(`Zmieniam pizzę o ID ${pizza.ID_Pizzy}`);
     actions.editModal();
     actions.idPizzy(pizza.ID_Pizzy);
     actions.custom(pizza.Custom);
@@ -281,7 +278,6 @@ function Bookmarks({props, updateItemsCount, actions}) {
     }).then((response) => {
       setPizzaName(pizza.Nazwa);
       setShowToast(true);
-      console.log(response)
       updateItemsCount();
     })
   };
@@ -292,16 +288,10 @@ function Bookmarks({props, updateItemsCount, actions}) {
   const handleAdd = (type) => {
     if (type == "Oryginal") {
       actions.showModal();
-      console.log(`Dodaję oryginalną pizzę o Nowym ID`);
     }
     if (type == "Custom") {
       actions.customShowModal();
-      console.log(`Dodaję customową pizzę o Nowym ID`);
     }
-  };
-
-  const showComment = (pizza) => {
-    console.log(`Pokazuję komentarz pizzy o ID: ${pizza.ID_Pizzy}`);
   };
 
   //SESJA
@@ -319,11 +309,11 @@ function Bookmarks({props, updateItemsCount, actions}) {
 
   return (
     <div className="d-flex flex-wrap">
-      <div class="col-12 col-md-8 ">
+      <div className="col-12 col-md-8 ">
         <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
           {loading ? (
-        <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
+        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
       ) : (
             <div className="table-responsive mb-3">
               <table className="table text-white border">
@@ -399,7 +389,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
           </Tab>
           <Tab eventKey={2} title="Pizze Customowe">
           {loading ? (
-        <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
+        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
       ) : (
             <div className="table-responsive mb-3">
               <table className="table text-white">

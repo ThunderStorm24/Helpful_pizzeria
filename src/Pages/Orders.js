@@ -42,7 +42,7 @@ export default function Orders() {
           <NavbarE />
           {loading ? (
             <div style={{height: "1000px"}}>
-            <p>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></p>
+            <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             </div>
           ) : (
             <div style={{marginTop: "30px"}}>

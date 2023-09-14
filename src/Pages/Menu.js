@@ -82,7 +82,6 @@ export default function Menu() {
             }
         })
     }, [])
-    console.log(ID);
 
     const handleAddPizza = async (pizza) => {
         Axios.post('http://localhost:5000/DodajPizzeOryginalna', {
@@ -94,7 +93,6 @@ export default function Menu() {
             priceLarge: pizza.priceLarge,
             priceGiant: pizza.priceGiant
         }).then((data) => {
-            console.log(data)
             setMessageAdd(data.data)
             setMessage([])
             setShowButton(0)
@@ -105,9 +103,6 @@ export default function Menu() {
                 console.log('error', error);
                 setMessage(error.response.data.errors);
         })
-        console.log(pizza);
-        console.log("TRESC:"+message);
-        console.log("TRESCDODANIA:"+messageAdd);
     };
 
 
@@ -121,7 +116,6 @@ export default function Menu() {
             priceLarge: pizza.priceLarge,
             priceGiant: pizza.priceGiant
         }).then((data) => {
-            console.log(data)
             setCustomMessageAdd(data.data.message)
             setCustomMessage([])
             setCustomShowButton(0)
@@ -129,9 +123,6 @@ export default function Menu() {
                 console.log('error', error);
                 setCustomMessage(error.response.data.errors);
             })
-            console.log(pizza);
-            console.log("TRESC:"+customMessage);
-            console.log("TRESCDODANIA:"+customMessageAdd);
     };
 
     const handleEditPizza = async (pizza) => {
@@ -145,7 +136,6 @@ export default function Menu() {
             priceGiant: pizza.priceGiant,
             pizzaStatus: pizza.pizzaStatus
         }).then((data) => {
-            console.log(data)
             setEditMessageAdd(data.data.message)
             setEditMessage([])
             setShowButton(0) 
@@ -154,16 +144,12 @@ export default function Menu() {
                 console.log('error', error);
                 setEditMessage(error.response.data.errors);
             })
-            console.log(pizza);
-            console.log("EDIT Blad:"+editMessage);
-            console.log("Edit Sukces:"+editMessageAdd);
     };
 
     const handleDeletePizza = async () => {
       Axios.post('http://localhost:5000/UsunPizze', {
         ID: pizza.ID_Pizzy,
     }).then((data)=> {
-      console.log(data);
       setDeleteModal(false);
       window.location.reload();
     }).catch((error) => {
@@ -176,7 +162,6 @@ export default function Menu() {
         ID: pizza.ID_Pizzy,
         Comment: comment,
     }).then((data)=> {
-      console.log(data);
       setAcceptModal(false);
       window.location.reload();
     }).catch((error) => {
@@ -189,7 +174,6 @@ export default function Menu() {
         ID: pizza.ID_Pizzy,
         Comment: comment,
     }).then((data)=> {
-      console.log(data);
       setDeniedModal(false);
       window.location.reload();
     }).catch((error) => {
@@ -201,7 +185,6 @@ export default function Menu() {
     Axios.post('http://localhost:5000/AnulujPizze', {
       ID: pizza.ID_Pizzy,
   }).then((data)=> {
-    console.log(data);
     setDeniedModal(false);
     window.location.reload();
   }).catch((error) => {

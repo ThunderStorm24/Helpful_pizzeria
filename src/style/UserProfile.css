@@ -10,6 +10,7 @@
   
   .skladnik:hover {
     background-color: green;
+    border: 2px solid white;
   }
   
   .ulubiony {
@@ -23,6 +24,7 @@
   
   .ulubiony:hover {
     background-color: red;
+    border: 2px solid green;
   }
   
   .znienawidzony {
@@ -35,7 +37,8 @@
   }
   
   .znienawidzony:hover {
-    background-color: transparent;
+    background-color: #303030;
+    border: 2px solid red;
   }
   
   

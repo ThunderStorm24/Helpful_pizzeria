@@ -97,7 +97,13 @@ function Bookmarks({props, updateItemsCount, actions}) {
     }
 
     if (searchTerm) {
-      filteredPizze = filteredPizze.filter(pizza => pizza.Nazwa.toLowerCase().includes(searchTerm.toLowerCase()));
+      const keywords = searchTerm.toLowerCase().split(" ");
+      filteredPizze = filteredPizze.filter(pizza => {
+        const pizzaInfo = `${pizza.Nazwa} ${pizza.Skladniki} ${pizza.ID} ${pizza.Cena}`;
+        const lowercasePizzaInfo = pizzaInfo.toLowerCase();
+        // Sprawdzamy, czy każde słowo kluczowe występuje w informacjach o pizzy
+        return keywords.every(keyword => lowercasePizzaInfo.includes(keyword));
+      });
     }
 
     // Sortuj pizzę po cenie - od najwyższej do najniższej
@@ -712,7 +718,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
         type="text"
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
-        placeholder="Tu wpisz nazwę pizzy"
+        placeholder="Tu wpisz id/nazwę/składniki/cene w dowolnej kolejności"
         style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "white", color: "black" }}
       />
           </div>

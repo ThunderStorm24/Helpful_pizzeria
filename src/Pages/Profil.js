@@ -92,10 +92,6 @@ export default function Profil() {
   }
   }, [loginStatus]);
 
-  function handleEdytujClick() {
-    console.log("Edytuj profil")
-  }
-
   //EDYTOWANIE zalogowanego użytkownika
   const handleChange = () => {
     
@@ -137,7 +133,7 @@ export default function Profil() {
           <div className="col-md-6">
             <div className="card bg-dark text-white">
               <div className="card-header text-center border-secondary">
-                <h4>Profil użytkownika</h4>
+                <h4>Profil użytkownika [ID: {user.ID_Uzytkownika}]</h4>
               </div>
               <div className="card-body">
                 <div className="row">
@@ -199,7 +195,12 @@ export default function Profil() {
 
       <div className="d-flex justify-content-center">
         <div className="col-md-5">
-          <h1 className="mt-5">ULUBIONE green/NIEULUBIONE red/OBOJĘTNE szary SKŁADNIKI</h1>
+    <h1 className="mt-3">SKŁADNIKI</h1>
+    <div className="text-center mt-2 mb-3">
+      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "green"}}>ULUBIONE</div>
+      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "red"}}>NIEULUBIONE</div>
+      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "#303030"}}>OBOJĘTNE</div>
+    </div>
           {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
             <button
               key={skladnik.ID_Skladnika}

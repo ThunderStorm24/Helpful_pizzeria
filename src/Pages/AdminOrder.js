@@ -14,7 +14,7 @@ export default function AdminOrders() {
     
 
     useEffect(() => {
-        Axios.get(`/Zamowienia`)
+        Axios.get(`/ZamowieniaAdmin`)
             .then(response => {
                 setOrders(response.data);
                 setLoading(false); // zmiana stanu loading na false

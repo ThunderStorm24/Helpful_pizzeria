@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 import Axios from 'axios';
+import { Button } from "react-bootstrap";
 
 
 
@@ -31,14 +32,14 @@ export default function Orders() {
         Axios.get(`/Zamowienia/${loginID}`)
             .then(response => {
                 setOrders(response.data);
-                setLoading(false); // zmiana stanu loading na false
                 console.log(orders);
+                setLoading(false); // zmiana stanu loading na false
             })
             .catch(error => console.error(error));
-    }, [loginStatus]);
+    }, [loginID]);
 
     return (
-        <div>
+        <div style={{ minHeight: "140vh" }}>
           <NavbarE />
           {loading ? (
             <div style={{height: "1000px"}}>
@@ -48,9 +49,17 @@ export default function Orders() {
             <div style={{marginTop: "30px"}}>
               {/* Zamówione/Gotowe */}
               <div>
-                <h1>Zamówione/Gotowe</h1>
+              <div className="d-flex justify-content-center flex-wrap">
+                <h1 className="col-10 col-md-3 border border-5 m-2 p-3">Zamówione/Gotowe</h1>
+                </div>
                 <div className="d-flex flex-wrap justify-content-center">
-                {orders.map((order) => {
+                {orders.length === 0 ? (
+        <div className="alert alert-info m-3">
+          Nie masz żadnych aktywnych zamówień. Aby złożyć zamówienie, zerknij do naszego menu:
+          <div><Button className="mt-2" href="/menu">Chodźmy!</Button></div>
+        </div>
+      ) : (
+        orders.map((order) => {
                   if (order.Status === "Zamówiono" || order.Status === "Gotowe") {
                     return (
                       <div key={order.ID_Zamowienia} className="border rounded p-3 ms-3 mt-3" style={{ backgroundColor: 'black', color: 'white', height: "500px", width: "400px" }}>
@@ -84,17 +93,24 @@ export default function Orders() {
                       
                     );
                   } else {
-                    return null; // Skip this order for "Historia zamówień" section
+                    return <div></div>; // Skip this order for "Historia zamówień" section
                   }
-                })}
+                }))}
                 </div>
               </div>
       
               {/* Historia zamówień */}
-              <div className="mt-3">
-                <h1>Historia zamówień</h1>
+              <div>
+              <div className="d-flex justify-content-center flex-wrap">
+                <h1 className="col-10 col-md-3 border border-5 m-2 p-3">Historia zamówień</h1>
+                </div>
                 <div className="d-flex flex-wrap justify-content-center">
-                {orders.map((order) => {
+                {orders.length === 0 ? (
+        <div className="alert alert-info m-3">
+          Nie masz żadnych dokonanych zamówień. Złóż zamówienie, a historia twojego zamówienia się tu pokaże, gdy zostanie ono wykonane! 
+        </div>
+      ) : (
+        orders.map((order) => {
                   if (order.Status === "Zakończone") {
                     return (
                       <div key={order.ID_Zamowienia} className="border rounded p-3 ms-3 mt-3 mb-3" style={{ backgroundColor: 'black', color: 'white', height: "500px", width: "400px" }}>
@@ -121,7 +137,7 @@ export default function Orders() {
                   } else {
                     return null; // Skip this order for "Zamówione/Gotowe" section
                   }
-                })}
+                }))}
                 </div>
               </div>
             </div>

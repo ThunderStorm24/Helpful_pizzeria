@@ -32,7 +32,7 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
       <Modal.Header closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>{description}?
+      <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>{description}
         {disable ? null : (
           <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick}>
             {buttonText}

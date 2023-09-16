@@ -63,6 +63,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   }, [loginStatus]);
     //Pobranie informacji odnośnie liczby zamówień dla zalogowanego użytkownika
     useEffect(() => {
+      if (loginID) { // Sprawdź, czy userID nie jest pusty
       Axios.get(`/Zamowienia/${loginID}`)
         .then(response => { 
           const data = response.data;
@@ -71,10 +72,11 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
         .catch(error => {
           console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
         });
+      }
     }, [loginStatus]);
         //Pobranie informacji odnośnie liczby zamówień dla pracowników pizzeri
         useEffect(() => {
-          Axios.get(`/Zamowienia`)
+          Axios.get(`/ZamowieniaAdmin`)
             .then(response => { 
               const data = response.data;
               const orderedOrders = data.filter(order => order.Status === "Zamówiono");

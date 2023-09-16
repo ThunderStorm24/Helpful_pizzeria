@@ -29,6 +29,7 @@ export default function Orders() {
     }, [])
 
     useEffect(() => {
+      if (loginID) { // Sprawdź, czy userID nie jest pusty
         Axios.get(`/Zamowienia/${loginID}`)
             .then(response => {
                 setOrders(response.data);
@@ -36,6 +37,7 @@ export default function Orders() {
                 setLoading(false); // zmiana stanu loading na false
             })
             .catch(error => console.error(error));
+          }
     }, [loginID]);
 
     return (

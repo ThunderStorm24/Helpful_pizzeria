@@ -43,6 +43,7 @@ function Users() {
 
     const [loading, setLoading] = useState(true);
 
+    const [rola,setRola]=useState("");
     const [loginID, setLoginID] = useState("");
     const [loginStatus, setLoginStatus] = useState("");
     
@@ -55,7 +56,8 @@ function Users() {
     //Sesja czy Admin jest zalogowany, narazie jest i user i admin, a ma być tylko admin
     useEffect(() => {
         Axios.get("/login").then((response) => {
-            if (response.data.loggedIn == true) {
+          if (response.data.user[0].Rola == "admin" && response.data.loggedIn == true) {
+                setRola(response.data.user[0].Rola);
                 setLoginStatus(response.data.user[0].Login)
                 setLoginID(response.data.user[0].ID_Uzytkownika)
                 setLoading(false); // zmiana stanu loading na falsee
@@ -240,7 +242,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
             <div style={{ minHeight: "100vh"}}>
             <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             </div>
-          ) : (
+          ) : (rola === "admin" ? ( 
             <div className="container mt-4">
                 
                 <div className="p-5 rounded-5" style={{background: '#050505'}}>
@@ -388,7 +390,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                 <Button onClick={() => handleAdd("user")} className="mb-1 mt-2" variant="primary">Dodaj użytkownika</Button>
                 </div>
             </div>
-          )}
+          ):(<div>Nieuprawniony dostęp</div>))}
 
         <ConfirmCancelModal
         show={cancelModal}

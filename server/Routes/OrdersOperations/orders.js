@@ -72,4 +72,41 @@ router.get("/ZamowieniaAdmin", (req, res) => {
   );
 });
 
+router.post("/GotoweZamowienie", (req, res) => {
+  const orderID  = req.body.orderID;
+  console.log(orderID)
+  connection.query(
+    "UPDATE Zamowienia SET Status = 'Gotowe' WHERE ID_Zamowienia = ?;",
+    [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
+router.post("/ZakonczoneZamowienie", (req, res) => {
+  const orderID  = req.body.orderID;
+  connection.query(
+      "UPDATE Zamowienia SET Status = 'Zakończone' WHERE ID_Zamowienia = ?;",
+      [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
+router.post("/UsuwaneZamowienie", (req, res) => {
+  const orderID  = req.body.orderID;
+  connection.query(
+    "DELETE FROM Zamowienia WHERE ID_Zamowienia = ?;",
+    [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
 module.exports = router;

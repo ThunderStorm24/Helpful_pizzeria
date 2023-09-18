@@ -71,6 +71,7 @@ export default function Koszyk() {
     }, [])
 
     useEffect(() => {
+        if (loginID) { // Sprawdź, czy userID nie jest pusty
         Axios.get(`/Koszyk/${loginID}`)
             .then(response => {
                 setKoszyk(response.data);
@@ -78,6 +79,7 @@ export default function Koszyk() {
                 setKoszykID(response.data[0].ID_Koszyka);
             })
             .catch(error => console.error(error));
+        }
     }, [loginStatus]);
 
     const handleRemove = (pizzaId) => {

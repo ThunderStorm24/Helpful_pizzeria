@@ -20,7 +20,7 @@ export default function ToastAddPizza({title, describe, background, time, show, 
       zIndex: 9, // Ensures the toast appears above other content
     }}
   >
-    <Toast.Header closeVariant="dark" className="d-flex justify-content-between"> {/* Use the bg prop to set the primary color */}
+    <Toast.Header variant="dark" className="d-flex justify-content-between"> {/* Use the bg prop to set the primary color */}
     <img
         src="PizzaIcon.png"
         className="rounded me-2"

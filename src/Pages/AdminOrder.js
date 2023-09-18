@@ -165,7 +165,7 @@ export default function AdminOrders() {
           <div className="d-flex justify-content-center">
             <h1 className="col-10 col-md-4 border border-3 mt-4 p-3 rounded" style={{background: "#287745"}}>Gotowe</h1>
           </div>
-          <div className="d-flex">
+          <div className="d-flex flex-wrap">
             {orders.map((order) => {
               if (order.Status === "Gotowe") {
                 return (

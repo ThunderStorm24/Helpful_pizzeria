@@ -25,28 +25,46 @@ function Bookmarks({props, updateItemsCount, actions}) {
   const [pizzeM, setPizzeM] = useState([]);
   const [pizzeZ, setPizzeZ] = useState([]);
   const [pizzeO, setPizzeO] = useState([]);
+  const [pizzeU, setPizzeU] = useState([]);
   const [skladniki, setSkladniki] = useState([]);
 
   //SESJA
   const [Rola, setRola] = useState("");
   const [ID, setID] = useState("");
+  const [ulubione,setUlubione] = useState([])
 
-  //PAGINACJA
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageC, setCurrentPageC] = useState(1);
-  const [pizzasPerPage, setPizzasPerPage] = useState(9);
+// Paginacja
+const [currentPage, setCurrentPage] = useState(1);
+const [currentPageC, setCurrentPageC] = useState(1);
+const [currentPageM, setCurrentPageM] = useState(1); // Dodane
+const [currentPageU, setCurrentPageU] = useState(1); // Dodane
+const [pizzasPerPage, setPizzasPerPage] = useState(9);
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected + 1);
-  };
-  const handlePageChangeC = ({ selected }) => {
-    setCurrentPageC(selected + 1);
-  };
+const handlePageChange = ({ selected }) => {
+  setCurrentPage(selected + 1);
+};
+
+const handlePageChangeC = ({ selected }) => {
+  setCurrentPageC(selected + 1);
+};
+
+const handlePageChangeM = ({ selected }) => { // Dodane
+  setCurrentPageM(selected + 1);
+};
+
+const handlePageChangeU = ({ selected }) => { // Dodane
+  setCurrentPageU(selected + 1);
+};
 
   const indexOfLastPizza = currentPage * pizzasPerPage;
   const indexOfLastPizzaC = currentPageC * pizzasPerPage;
+  const indexOfLastPizzaM = currentPageM * pizzasPerPage;
+  const indexOfLastPizzaU = currentPageU * pizzasPerPage;
+  
   const indexOfFirstPizza = indexOfLastPizza - pizzasPerPage;
   const indexOfFirstPizzaC = indexOfLastPizzaC - pizzasPerPage;
+  const indexOfFirstPizzaM = indexOfLastPizzaM - pizzasPerPage;
+  const indexOfFirstPizzaU = indexOfLastPizzaU - pizzasPerPage;
 
   //FILTR - ULUBIONY SKLADNIK Z API
   const [ulubioneChecked, setUlubioneChecked] = useState(false);
@@ -85,104 +103,105 @@ function Bookmarks({props, updateItemsCount, actions}) {
     .map(skladnik => skladnik.Nazwa);
 
 
-  // funkcja, która przefiltrowuje pizze i zwróci tylko te, które zawierają ulubione lub nieulubione składniki użytkownika
-  const filterPizze = () => {
-    let filteredPizze = pizze;
-    if (ulubioneChecked && nieUlubioneChecked) {
-      filteredPizze = pizze.filter(pizza => containsUlubioneSkladniki(pizza) && !containsNieUlubioneSkladniki(pizza));
-    } else if (ulubioneChecked) {
-      filteredPizze = pizze.filter(pizza => containsUlubioneSkladniki(pizza));
-    } else if (nieUlubioneChecked) {
-      filteredPizze = pizze.filter(pizza => !containsNieUlubioneSkladniki(pizza));
-    }
+    // funkcja, która przefiltrowuje pizze i zwróci tylko te, które zawierają ulubione lub nieulubione składniki użytkownika
+    const filterPizze = (pizzeArray, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy) => {
+      let filteredPizze = [...pizzeArray]; // Tworzymy kopię tablicy, aby uniknąć modyfikowania oryginalnej tablicy
+    
+      if (ulubioneChecked && nieUlubioneChecked) {
+        filteredPizze = filteredPizze.filter(pizza => containsUlubioneSkladniki(pizza) && !containsNieUlubioneSkladniki(pizza));
+      } else if (ulubioneChecked) {
+        filteredPizze = filteredPizze.filter(pizza => containsUlubioneSkladniki(pizza));
+      } else if (nieUlubioneChecked) {
+        filteredPizze = filteredPizze.filter(pizza => !containsNieUlubioneSkladniki(pizza));
+      }
+    
+      if (searchTerm) {
+        const keywords = searchTerm.toLowerCase().split(" ");
+        filteredPizze = filteredPizze.filter(pizza => {
+          const pizzaInfo = `${pizza.Nazwa} ${pizza.Skladniki} ${pizza.ID} ${pizza.Cena}`;
+          const lowercasePizzaInfo = pizzaInfo.toLowerCase();
+          // Sprawdzamy, czy każde słowo kluczowe występuje w informacjach o pizzy
+          return keywords.every(keyword => lowercasePizzaInfo.includes(keyword));
+        });
+      }
+    
+      // Sortowanie
+      if (sortBy === 'priceDesc') {
+        filteredPizze.sort((a, b) => {
+          const aPriceSmall = a.Cena.split('/')[0].trim();
+          const bPriceSmall = b.Cena.split('/')[0].trim();
+          return bPriceSmall - aPriceSmall;
+        });
+      } else if (sortBy === 'priceAsc') {
+        filteredPizze.sort((a, b) => {
+          const aPriceSmall = a.Cena.split('/')[0].trim();
+          const bPriceSmall = b.Cena.split('/')[0].trim();
+          return aPriceSmall - bPriceSmall;
+        });
+      } else if (sortBy === 'nameAsc') {
+        filteredPizze.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa));
+      } else if (sortBy === 'nameDesc') {
+        filteredPizze.sort((a, b) => b.Nazwa.localeCompare(a.Nazwa));
+      } else if (sortBy === 'IDAsc') {
+        filteredPizze.sort((a, b) => a.ID_Pizzy - b.ID_Pizzy);
+      } else if (sortBy === 'IDDesc') {
+        filteredPizze.sort((a, b) => b.ID_Pizzy - a.ID_Pizzy);
+      }
+    
+      return filteredPizze;
+    };
+    
+// Użycie funkcji do filtrowania standardowych pizz
+const filteredPizze = filterPizze(pizze, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
 
-    if (searchTerm) {
-      const keywords = searchTerm.toLowerCase().split(" ");
-      filteredPizze = filteredPizze.filter(pizza => {
-        const pizzaInfo = `${pizza.Nazwa} ${pizza.Skladniki} ${pizza.ID} ${pizza.Cena}`;
-        const lowercasePizzaInfo = pizzaInfo.toLowerCase();
-        // Sprawdzamy, czy każde słowo kluczowe występuje w informacjach o pizzy
-        return keywords.every(keyword => lowercasePizzaInfo.includes(keyword));
-      });
-    }
+// Użycie funkcji do filtrowania pizz customowych
+const filteredPizzeC = filterPizze(pizzeC, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
 
-    // Sortuj pizzę po cenie - od najwyższej do najniższej
-    if (sortBy === 'priceDesc') {
-      filteredPizze.sort((a, b) => {
-        const aPriceSmall = a.Cena.split('/')[0].trim(); // pobierz cenę małej pizzy dla a
-        const bPriceSmall = b.Cena.split('/')[0].trim(); // pobierz cenę małej pizzy dla b
-        return bPriceSmall - aPriceSmall; // porównaj tylko ceny małych pizz
-      });
-    }
-    // Sortuj pizzę po cenie - od najniższej do najwyższej
-    else if (sortBy === 'priceAsc') {
-      filteredPizze.sort((a, b) => {
-        const aPriceSmall = a.Cena.split('/')[0].trim(); // pobierz cenę małej pizzy dla a
-        const bPriceSmall = b.Cena.split('/')[0].trim(); // pobierz cenę małej pizzy dla b
-        return aPriceSmall - bPriceSmall; // porównaj tylko ceny małych pizz
-      });
-    }
-    else if (sortBy === 'nameAsc') {
-      filteredPizze.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa));
-    }
-    else if (sortBy === 'nameDesc') {
-      filteredPizze.sort((a, b) => b.Nazwa.localeCompare(a.Nazwa));
-    }
-    else if (sortBy == "IDAsc") {
-      filteredPizze.sort((a, b) => a.ID_Pizzy - b.ID_Pizzy)
-    }
-    else if (sortBy == "IDDesc") {
-      filteredPizze.sort((a, b) => b.ID_Pizzy - a.ID_Pizzy)
-    }
+// Użycie funkcji do filtrowania pizz serii M
+const filteredPizzeM = filterPizze(pizzeM, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
 
-    return filteredPizze;
-  };
+// Użycie funkcji do filtrowania pizz serii U
+const filteredPizzeU = filterPizze(pizzeU, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
 
-  // funkcja, która przefiltrowuje pizze customowe i zwróci tylko te, które zawierają ulubione lub nieulubione składniki użytkownika
-  const filterPizzeC = () => {
-    let filteredPizzeC = pizzeC;
-    if (ulubioneChecked && nieUlubioneChecked) {
-      filteredPizzeC = pizzeC.filter(pizza => containsUlubioneSkladniki(pizza) && !containsNieUlubioneSkladniki(pizza));
-    } else if (ulubioneChecked) {
-      filteredPizzeC = pizzeC.filter(pizza => containsUlubioneSkladniki(pizza));
-    } else if (nieUlubioneChecked) {
-      filteredPizzeC = pizzeC.filter(pizza => !containsNieUlubioneSkladniki(pizza));
-    }
+const currentPizzas = filteredPizze.slice(indexOfFirstPizza, indexOfLastPizza);
+const currentPizzasC = filteredPizzeC.slice(indexOfFirstPizzaC, indexOfLastPizza);
+const currentPizzasM = filteredPizzeM.slice(indexOfFirstPizzaM, indexOfLastPizzaM);
+const currentPizzasU = filteredPizzeU.slice(indexOfFirstPizzaU, indexOfLastPizzaU);
 
-    if (searchTerm) {
-      filteredPizzeC = filteredPizzeC.filter(pizza => pizza.Nazwa.toLowerCase().includes(searchTerm.toLowerCase()));
+  //WYŚWIETLANIE ulubionych
+  useEffect(() => {
+    if (ID) { // Sprawdź, czy ID nie jest puste
+    Axios.get(`/pizzeUlubione/${ID}`)
+      .then(response => setUlubione(response.data))
+      .catch(error => console.error(error));
     }
+  }, [ID]);
 
-    // Sortuj pizzę po cenie - od najwyższej do najniższej
-    if (sortBy === 'priceDesc') {
-      filteredPizzeC.sort((a, b) => b.price - a.price);
-    }
-    // Sortuj pizzę po cenie - od najniższej do najwyższej
-    else if (sortBy === 'priceAsc') {
-      filteredPizzeC.sort((a, b) => a.price - b.price);
-    }
-    else if (sortBy === 'nameAsc') {
-      filteredPizzeC.sort((a, b) => a.name.localeCompare(b.name));
-    }
-    else if (sortBy === 'nameDesc') {
-      filteredPizzeC.sort((a, b) => b.name.localeCompare(a.name));
-    }
-    else if (sortBy == "IDAsc") {
-      filteredPizzeC.sort((a, b) => a.ID_Pizzy - b.ID_Pizzy)
-    }
-    else if (sortBy == "IDDesc") {
-      filteredPizzeC.sort((a, b) => b.ID_Pizzy - a.ID_Pizzy)
-    }
+const handleCheckboxChange = (pizzaID) => {
+  const isChecked = ulubione.some(item => item.ID_Pizzy === pizzaID);
 
-    return filteredPizzeC;
-  };
-
-
-  //PIZZE PRZEFILTROWANE Z PAGINACJĄ
-  const filteredPizze = filterPizze();
-  const filteredPizzeC = filterPizzeC();
-  const currentPizzas = filteredPizze.slice(indexOfFirstPizza, indexOfLastPizza);
-  const currentPizzasC = filteredPizzeC.slice(indexOfFirstPizzaC, indexOfLastPizza);
+  if (!isChecked) {
+    // Usuń relację z bazy danych
+    Axios.delete(`/usunRelacje/${ID}/${pizzaID}`)
+      .then(response => {
+        // Po udanym usunięciu odśwież stan lub inne odpowiednie działania
+        if (response.status === 200) {
+          setUlubione(prevUlubione => [...prevUlubione, { ID_Pizzy: pizzaID }]);
+        }
+      })
+      .catch(error => console.error(error));
+  } else {
+    // Dodaj relację do bazy danych
+    Axios.post(`/dodajRelacje/${ID}/${pizzaID}`)
+      .then(response => {
+        // Po udanym dodaniu odśwież stan lub inne odpowiednie działania
+        if (response.status === 200) {
+          setUlubione(prevUlubione => prevUlubione.filter(item => item.ID_Pizzy !== pizzaID));
+        }
+      })
+      .catch(error => console.error(error));
+  }
+};
 
   //WYŚWIETLANIE pizzy oryginalnych
   useEffect(() => {
@@ -190,7 +209,6 @@ function Bookmarks({props, updateItemsCount, actions}) {
       .then(response => response.json())
       .then(data => setPizze(data))
       .catch(error => console.error(error));
-
   }, []);
 
   //WYŚWIETLANIE pizzy customowych
@@ -225,6 +243,15 @@ function Bookmarks({props, updateItemsCount, actions}) {
     if (ID) { // Sprawdź, czy ID nie jest puste
     Axios.get(`/pizzeO/${ID}`)
       .then(response => setPizzeO(response.data))
+      .catch(error => console.error(error));
+    }
+  }, [ID]);
+
+  //WYŚWIETLANIE pizz ulubionych
+  useEffect(() => {
+    if (ID) { // Sprawdź, czy ID nie jest puste
+    Axios.get(`/pizzeU/${ID}`)
+      .then(response => setPizzeU(response.data))
       .catch(error => console.error(error));
     }
   }, [ID]);
@@ -318,68 +345,97 @@ function Bookmarks({props, updateItemsCount, actions}) {
       <div className="col-12 col-md-8 ">
         <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
-          {loading ? (
-        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
-      ) : (
-            <div className="table-responsive mb-3">
-              <table className="table text-white border">
-                <thead>
-                  <tr>
-                    <th className="col-1" scope="col">
-                      #
-                    </th>
-                    <th className="col-2" scope="col">
-                      Nazwa
-                    </th>
-                    <th className="col-4" scope="col">
-                      Składniki
-                    </th>
-                    <th className="col-3" scope="col">
-                      Cena (M/Ś/D/G)
-                    </th>
-                    {Rola == 'admin' && (
-                      <th className="col-2">Opcje</th>
-                    )}
-                    {Rola == 'user' && (
-                      <th className="col-2">Opcje</th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="m-1">
-                  {currentPizzas.map(pizza => (
-                    <tr key={pizza.ID_Pizzy}>
-                      <td className="col-1">{pizza.ID_Pizzy}</td>
-                      <td className="col-2">{pizza.Nazwa}</td>
-                      <td className="col-4">{pizza.Skladniki}</td>
-                      <td className="col-3">{pizza.Cena} zł</td>
-                      {Rola == 'admin' && (
-                        <td className="col-2">
-                          <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
-                            Edytuj
-                          </button>
-                          <button className="btn btn-warning" onClick={() => handleDelete(pizza)}>
-                            Usuń
-                          </button>
-                        </td>
+            {loading ? (
+              <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
+            ) : (
+              <div className="table-responsive mb-3">
+                <table className="table text-white border">
+                  <thead>
+                    <tr>
+                      {Rola !== 'admin' && (
+                        <th className="col-1">Ulubiona</th>
                       )}
-                      {Rola == "user" && (
-                        <td className="col-2">
-                          <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
-                            Zamów 
-                          </button>
-                        </td>
+                      <th className="col-1" scope="col">
+                        #
+                      </th>
+                      <th className="col-2" scope="col">
+                        Nazwa
+                      </th>
+                      <th className="col-4" scope="col">
+                        Składniki
+                      </th>
+                      <th className="col-3" scope="col">
+                        Cena (M/Ś/D/G)
+                      </th>
+                      {Rola == 'admin' && (
+                        <th className="col-2">Opcje</th>
+                      )}
+                      {Rola == 'user' && (
+                        <th className="col-2">Opcje</th>
                       )}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {Rola == 'admin' && (
-                <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Oryginal")}>
-                  Dodaj pizze Oryginalną
-                </button>
-              )}
-            </div>
-             )}
+                  </thead>
+                  <tbody className="m-1">
+                    {currentPizzas.map(pizza => (
+                      <tr key={pizza.ID_Pizzy}>
+                        {(Rola === 'user' && (
+                          <td className="rate col-1">
+                            <input
+                              type="checkbox"
+                              id={`star${pizza.ID_Pizzy}`}
+                              name={`rate${pizza.ID_Pizzy}`}
+                              value="1"
+                              checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
+                              onClick={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                            />
+                            <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
+                          </td>
+                        )) || (
+                            (!Rola && (
+                              <td className="rate col-1">
+                                <input
+                                  type="checkbox"
+                                  id={`star${pizza.ID_Pizzy}`}
+                                  name={`rate${pizza.ID_Pizzy}`}
+                                  value="1"
+                                  disabled
+                                />
+                                <label htmlFor={`star${pizza.ID_Pizzy}`} title="musisz być zalogowany aby dodać pizze do ulubionych!">stars</label>
+                              </td>
+                            ))
+                          )}
+                        <td className="col-1">{pizza.ID_Pizzy}</td>
+                        <td className="col-2">{pizza.Nazwa}</td>
+                        <td className="col-4">{pizza.Skladniki}</td>
+                        <td className="col-3">{pizza.Cena} zł</td>
+                        {Rola == 'admin' && (
+                          <td className="col-2">
+                            <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
+                              Edytuj
+                            </button>
+                            <button className="btn btn-warning" onClick={() => handleDelete(pizza)}>
+                              Usuń
+                            </button>
+                          </td>
+                        )}
+                        {Rola == "user" && (
+                          <td className="col-2">
+                            <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
+                              Zamów
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {Rola == 'admin' && (
+                  <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Oryginal")}>
+                    Dodaj pizze Oryginalną
+                  </button>
+                )}
+              </div>
+            )}
             <ReactPaginate
               pageCount={Math.ceil(pizze.length / pizzasPerPage)}
               onPageChange={handlePageChange}
@@ -394,71 +450,100 @@ function Bookmarks({props, updateItemsCount, actions}) {
             />
           </Tab>
           <Tab eventKey={2} title="Pizze Customowe">
-          {loading ? (
-        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
-      ) : (
-            <div className="table-responsive mb-3">
-              <table className="table text-white">
-                <thead>
-                  <tr>
-                    <th className="col-1" scope="col">
-                      #
-                    </th>
-                    <th className="col-2" scope="col">
-                      Nazwa
-                    </th>
-                    <th className="col-4" scope="col">
-                      Składniki
-                    </th>
-                    <th className="col-3" scope="col">
-                      Cena (M/Ś/D/G)
-                    </th>
-                    {Rola == "admin" && (
-                      <th className="col-2">Opcje</th>
-                    )}
-                    {Rola == 'user' && (
-                      <th className="col-2">Opcje</th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentPizzasC.map(pizza => (
-                    <tr key={pizza.ID_Pizzy}>
-                      <td className="col-1">{pizza.ID_Pizzy}</td>
-                      <td className="col-2">{pizza.Nazwa}</td>
-                      <td className="col-4">{pizza.Skladniki}</td>
-                      <td className="col-3">{pizza.Cena} zł</td>
-                      {Rola == "admin" && (
-                        <td className="col-2">
-                          <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
-                            Edytuj
-                          </button>
-                          <button className="btn btn-warning" onClick={() => handleDelete(pizza)}>
-                            Usuń
-                          </button>
-                        </td>
+            {loading ? (
+              <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
+            ) : (
+              <div className="table-responsive mb-3">
+                <table className="table text-white">
+                  <thead>
+                    <tr>
+                      {Rola !== 'admin' && (
+                        <th className="col-1">Ulubiona</th>
                       )}
-                      {Rola == "user" && (
-                        <td className="col-2">
-                          <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
-                            Zamów 
-                          </button>
-                        </td>
+                      <th className="col-1" scope="col">
+                        #
+                      </th>
+                      <th className="col-2" scope="col">
+                        Nazwa
+                      </th>
+                      <th className="col-4" scope="col">
+                        Składniki
+                      </th>
+                      <th className="col-3" scope="col">
+                        Cena (M/Ś/D/G)
+                      </th>
+                      {Rola == "admin" && (
+                        <th className="col-2">Opcje</th>
+                      )}
+                      {Rola == 'user' && (
+                        <th className="col-2">Opcje</th>
                       )}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {Rola == 'user' && (
-                <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Custom")}>
-                  Dodaj pizze Customową
-                </button>
-              )}
-            </div>
-             )}
+                  </thead>
+                  <tbody>
+                    {currentPizzasC.map(pizza => (
+                      <tr key={pizza.ID_Pizzy}>
+                        {(Rola === 'user' && (
+                          <td className="rate col-1">
+                            <input
+                              type="checkbox"
+                              id={`star${pizza.ID_Pizzy}`}
+                              name={`rate${pizza.ID_Pizzy}`}
+                              value="1"
+                              checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
+                              onClick={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                            />
+                            <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
+                          </td>
+                        )) || (
+                            (!Rola && (
+                              <td className="rate col-1">
+                                <input
+                                  type="checkbox"
+                                  id={`star${pizza.ID_Pizzy}`}
+                                  name={`rate${pizza.ID_Pizzy}`}
+                                  value="1"
+                                  disabled
+                                />
+                                <label htmlFor={`star${pizza.ID_Pizzy}`} title="musisz być zalogowany aby dodać pizze do ulubionych!">stars</label>
+                              </td>
+                            ))
+                          )}
+                        <td className="col-1">{pizza.ID_Pizzy}</td>
+                        <td className="col-2">{pizza.Nazwa}</td>
+                        <td className="col-4">{pizza.Skladniki}</td>
+                        <td className="col-3">{pizza.Cena} zł</td>
+                        {Rola == "admin" && (
+                          <td className="col-2">
+                            <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
+                              Edytuj
+                            </button>
+                            <button className="btn btn-warning" onClick={() => handleDelete(pizza)}>
+                              Usuń
+                            </button>
+                          </td>
+                        )}
+                        {Rola == "user" && (
+                          <td className="col-2">
+                            <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
+                              Zamów
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {Rola == 'user' && (
+                  <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Custom")}>
+                    Dodaj pizze Customową
+                  </button>
+                )}
+              </div>
+            )}
             <ReactPaginate
               pageCount={Math.ceil(pizzeC.length / pizzasPerPage)}
-              onPageChange={handlePageChangeC}
+              onPageChange={handlePageChangeM}
               containerClassName="pagination"
               activeClassName="active"
               pageClassName="page-item"
@@ -475,6 +560,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
                 <table className="table text-white">
                   <thead>
                     <tr>
+                      <th className="col-1">Ulubiona</th>
                       <th className="col-1" scope="col">
                         #
                       </th>
@@ -493,8 +579,19 @@ function Bookmarks({props, updateItemsCount, actions}) {
                     </tr>
                   </thead>
                   <tbody>
-                    {pizzeM.map(pizza => (
+                    {currentPizzasM.map(pizza => (
                       <tr key={pizza.ID_Pizzy}>
+                        <td className="rate col-1">
+                          <input
+                            type="checkbox"
+                            id={`star${pizza.ID_Pizzy}`}
+                            name={`rate${pizza.ID_Pizzy}`}
+                            value="1"
+                            checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
+                            onClick={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                          />
+                          <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
+                        </td>
                         <td className="col-1">{pizza.ID_Pizzy}</td>
                         <td className="col-2">{pizza.Nazwa}</td>
                         <td className="col-4">{pizza.Skladniki}</td>
@@ -502,7 +599,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
                         {Rola == "user" && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
-                              Zamów <img className="col-4 col-md-2" src="Koszyk.png"></img>
+                              Zamów
                             </button>
                           </td>
                         )}
@@ -516,6 +613,18 @@ function Bookmarks({props, updateItemsCount, actions}) {
                   </button>
                 )}
               </div>
+              <ReactPaginate
+                pageCount={Math.ceil(pizzeM.length / pizzasPerPage)}
+                onPageChange={handlePageChange}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+              />
             </Tab>
 
           ) : Rola === "admin" ? (
@@ -566,7 +675,7 @@ function Bookmarks({props, updateItemsCount, actions}) {
             </Tab>
           ) : null}
           {Rola === "user" ? (
-            <Tab eventKey={4} title="Pizze">
+            <Tab eventKey={4} title="Pizze oczekujące na dodanie">
               <div className="table-responsive mb-3">
                 <table className="table text-white">
                   <thead>
@@ -632,120 +741,190 @@ function Bookmarks({props, updateItemsCount, actions}) {
             </Tab>
 
           ) : null}
-          
+          {Rola === "user" ? (
+            <Tab eventKey={5} title="Moje ulubione pizze">
+              <div className="table-responsive mb-3">
+                <table className="table text-white">
+                  <thead>
+                    <tr>
+                      <th className="col-1">Ulubiona</th>
+                      <th className="col-1" scope="col">
+                        #
+                      </th>
+                      <th className="col-2" scope="col">
+                        Nazwa
+                      </th>
+                      <th className="col-4" scope="col">
+                        Składniki
+                      </th>
+                      <th className="col-3" scope="col">
+                        Cena (M/Ś/D/G)
+                      </th>
+                      {Rola == 'user' && (
+                        <th className="col-2">Opcje</th>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentPizzasU.map(pizza => (
+                      <tr key={pizza.ID_Pizzy}>
+                        <td className="rate col-1">
+                          <input
+                            type="checkbox"
+                            id={`star${pizza.ID_Pizzy}`}
+                            name={`rate${pizza.ID_Pizzy}`}
+                            value="1"
+                            checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
+                            onClick={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                          />
+                          <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
+                        </td>
+                        <td className="col-1">{pizza.ID_Pizzy}</td>
+                        <td className="col-2">{pizza.Nazwa}</td>
+                        <td className="col-4">{pizza.Skladniki}</td>
+                        <td className="col-3">{pizza.Cena} zł</td>
+                        {Rola == "user" && (
+                          <td className="col-2">
+                            <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
+                              Zamów
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ReactPaginate
+                pageCount={Math.ceil(pizzeU.length / pizzasPerPage)}
+                onPageChange={handlePageChangeU}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+              />
+            </Tab>
+
+          ) : null}
+
+
         </Tabs>
       </div>
-      <div className="col-12 col-md-4 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px",  background: '#222', padding: '20px'  }}>
- <Form>
-      <fieldset>
-        <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
-        <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "white", fontWeight: "bold" }}>Opcje:</div>
-        <div className="d-flex flex-column">
-          <div
-            className="d-flex text-left me-2"
-            onMouseEnter={() => setUlubioneTooltipVisible(true)}
-            onMouseLeave={() => setUlubioneTooltipVisible(false)}
-          >
-            <div className="ms-3 d-flex" id="ulubione">
-              <Form.Check
-                type="switch"
-                label={`Moje ulubione składniki`}
-                onChange={(event) => setUlubioneChecked(event.target.checked)}
-                checked={ulubioneChecked}
-              />
-            </div>
-          </div>
-          <Overlay target={document.getElementById("ulubione")} show={ulubioneTooltipVisible} placement="right">
-            {({ placement, arrowProps, show: _show, popper, ...props }) => (
-              <div 
-                {...props}
-                style={{
-                  backgroundColor: 'rgba(100, 100, 255, 1)',
-                  marginLeft: '10px',
-                  padding: '5px 10px',
-                  color: 'white',
-                  borderRadius: 10,
-                  ...props.style,
-                }}
+      <div className="col-12 col-md-4 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px", background: '#222', padding: '20px' }}>
+        <Form>
+          <fieldset>
+            <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
+            <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "white", fontWeight: "bold" }}>Opcje:</div>
+            <div className="d-flex flex-column">
+              <div
+                className="d-flex text-left me-2"
                 onMouseEnter={() => setUlubioneTooltipVisible(true)}
                 onMouseLeave={() => setUlubioneTooltipVisible(false)}
               >
-                {ulubioneSkladniki.map((skladnik, index) => (
-                  <div key={index}>{skladnik}</div>
-                ))}
+                <div className="ms-3 d-flex" id="ulubione">
+                  <Form.Check
+                    type="switch"
+                    label={`Moje ulubione składniki`}
+                    onChange={(event) => setUlubioneChecked(event.target.checked)}
+                    checked={ulubioneChecked}
+                  />
+                </div>
               </div>
-            )}
-          </Overlay>
-          <div
-            className="d-flex text-left"
-            onMouseEnter={() => setNieUlubioneTooltipVisible(true)}
-            onMouseLeave={() => setNieUlubioneTooltipVisible(false)}
-          >
-            <div className="ms-3 d-flex" id="nieulubione"> 
-              <Form.Check
-                type="switch"
-                label={`Moje znienawidzone składniki`}
-                onChange={(event) => setNieUlubioneChecked(event.target.checked)}
-                checked={nieUlubioneChecked}
-              />
-            </div>
-          </div>
-          <Overlay target={document.getElementById("nieulubione")} show={nieUlubioneTooltipVisible} placement="right">
-            {({ placement, arrowProps, show: _show, popper, ...props }) => (
+              <Overlay target={document.getElementById("ulubione")} show={ulubioneTooltipVisible} placement="right">
+                {({ placement, arrowProps, show: _show, popper, ...props }) => (
+                  <div
+                    {...props}
+                    style={{
+                      backgroundColor: 'rgba(100, 100, 255, 1)',
+                      marginLeft: '10px',
+                      padding: '5px 10px',
+                      color: 'white',
+                      borderRadius: 10,
+                      ...props.style,
+                    }}
+                    onMouseEnter={() => setUlubioneTooltipVisible(true)}
+                    onMouseLeave={() => setUlubioneTooltipVisible(false)}
+                  >
+                    {ulubioneSkladniki.map((skladnik, index) => (
+                      <div key={index}>{skladnik}</div>
+                    ))}
+                  </div>
+                )}
+              </Overlay>
               <div
-                {...props}
-                style={{
-                  backgroundColor: 'rgba(255, 100, 100, 1)',
-                  marginLeft: '10px',
-                  padding: '5px 10px',
-                  color: 'white',
-                  borderRadius: 10,
-                  ...props.style,
-                }}
+                className="d-flex text-left"
                 onMouseEnter={() => setNieUlubioneTooltipVisible(true)}
                 onMouseLeave={() => setNieUlubioneTooltipVisible(false)}
               >
-                {nieUlubioneSkladniki.map((skladnik, index) => (
-                  <div key={index}>{skladnik}</div>
-                ))}
+                <div className="ms-3 d-flex" id="nieulubione">
+                  <Form.Check
+                    type="switch"
+                    label={`Moje znienawidzone składniki`}
+                    onChange={(event) => setNieUlubioneChecked(event.target.checked)}
+                    checked={nieUlubioneChecked}
+                  />
+                </div>
               </div>
-            )}
-          </Overlay>
-          <div className="ms-3 mt-3 d-flex flex-wrap">
-            <label style={{ fontWeight: "bold" }}>Nazwa:</label>
-            <Form.Control
-        className="col-6"
-        type="text"
-        value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
-        placeholder="Tu wpisz id/nazwę/składniki/cene w dowolnej kolejności"
-        style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "white", color: "black" }}
-      />
-          </div>
-          <div className="ms-3 mt-3 d-flex flex-wrap">
-            <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
-            <Form.Select
-        value={sortBy}
-        onChange={e => setSortBy(e.target.value)}
-        style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "#555", color: "white" }}
-      >
-        <option value="">-- Wybierz --</option>
-        <option value="IDAsc">ID rosnąco</option>
-        <option value="IDDesc">ID malejąco</option>
-        <option value="priceAsc">Cena rosnąco</option>
-        <option value="priceDesc">Cena malejąco</option>
-        <option value="nameAsc">Nazwa A-Z</option>
-        <option value="nameDesc">Nazwa Z-A</option>
-      </Form.Select>
-          </div>
-        </div>
-      </fieldset>
-    </Form>
-</div>
+              <Overlay target={document.getElementById("nieulubione")} show={nieUlubioneTooltipVisible} placement="right">
+                {({ placement, arrowProps, show: _show, popper, ...props }) => (
+                  <div
+                    {...props}
+                    style={{
+                      backgroundColor: 'rgba(255, 100, 100, 1)',
+                      marginLeft: '10px',
+                      padding: '5px 10px',
+                      color: 'white',
+                      borderRadius: 10,
+                      ...props.style,
+                    }}
+                    onMouseEnter={() => setNieUlubioneTooltipVisible(true)}
+                    onMouseLeave={() => setNieUlubioneTooltipVisible(false)}
+                  >
+                    {nieUlubioneSkladniki.map((skladnik, index) => (
+                      <div key={index}>{skladnik}</div>
+                    ))}
+                  </div>
+                )}
+              </Overlay>
+              <div className="ms-3 mt-3 d-flex flex-wrap">
+                <label style={{ fontWeight: "bold" }}>Nazwa:</label>
+                <Form.Control
+                  className="col-6"
+                  type="text"
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  placeholder="Tu wpisz id/nazwę/składniki/cene w dowolnej kolejności"
+                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "white", color: "black" }}
+                />
+              </div>
+              <div className="ms-3 mt-3 d-flex flex-wrap">
+                <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
+                <Form.Select
+                  value={sortBy}
+                  onChange={e => setSortBy(e.target.value)}
+                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "#555", color: "white" }}
+                >
+                  <option value="">-- Wybierz --</option>
+                  <option value="IDAsc">ID rosnąco</option>
+                  <option value="IDDesc">ID malejąco</option>
+                  <option value="priceAsc">Cena rosnąco</option>
+                  <option value="priceDesc">Cena malejąco</option>
+                  <option value="nameAsc">Nazwa A-Z</option>
+                  <option value="nameDesc">Nazwa Z-A</option>
+                </Form.Select>
+              </div>
+            </div>
+          </fieldset>
+        </Form>
+      </div>
       <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>
 
-      
+
 
 
   );

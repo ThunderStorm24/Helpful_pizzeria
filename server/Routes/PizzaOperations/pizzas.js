@@ -49,10 +49,30 @@ router.get("/pizzeO/:ID_Uzytkownika", (req, res) => {
         });
 })
 
+router.get("/pizzeU/:ID_Uzytkownika", (req, res) => {
+    const ID_Uzytkownika = req.params.ID_Uzytkownika;
+    connection.query("SELECT pizze.ID_Pizzy, pizze.Nazwa, GROUP_CONCAT(DISTINCT skladniki.Nazwa SEPARATOR ', ') AS Skladniki, GROUP_CONCAT(DISTINCT rozmiar_pizze.Cena SEPARATOR ' / ') AS Cena FROM Pizze pizze JOIN pizze_ulubione ON pizze.ID_Pizzy = pizze_ulubione.ID_Pizzy JOIN pizze_skladniki ON pizze.ID_Pizzy = pizze_skladniki.ID_Pizzy JOIN skladniki ON pizze_skladniki.ID_Skladnika = skladniki.ID_Skladnika JOIN rozmiar_pizze ON pizze.ID_Pizzy = rozmiar_pizze.ID_Pizzy WHERE pizze_ulubione.ID_Uzytkownika = ? GROUP BY pizze.ID_Pizzy, pizze.Nazwa",
+    [ID_Uzytkownika],
+    (error, results, fields) => {
+            if (error) throw error;
+            res.json(results);
+        });
+})
+
 router.get("/pizzeEdit/:idPizzy", (req, res) => {
     const idPizzy = req.params.idPizzy;
     connection.query("SELECT pizze.ID_Pizzy, pizze.Status, pizze.Nazwa, pizze.Custom, GROUP_CONCAT(DISTINCT skladniki.Nazwa SEPARATOR ', ') AS Skladniki, GROUP_CONCAT(DISTINCT rozmiar_pizze.Cena SEPARATOR '  / ') AS Cena FROM Pizze pizze JOIN pizze_skladniki ON pizze.ID_Pizzy = pizze_skladniki.ID_Pizzy JOIN skladniki ON pizze_skladniki.ID_Skladnika = skladniki.ID_Skladnika JOIN rozmiar_pizze rozmiar_pizze ON pizze.ID_Pizzy = rozmiar_pizze.ID_Pizzy JOIN Rozmiary ON rozmiar_pizze.ID_Rozmiar = rozmiary.ID_Rozmiar WHERE pizze.ID_Pizzy = ? GROUP BY ID_Pizzy",
     [idPizzy], 
+    (error, results, fields) => {
+            if (error) throw error;
+            res.json(results);
+        });
+})
+
+router.get("/pizzeUlubione/:ID_Uzytkownika", (req, res) => {
+    const ID_Uzytkownika = req.params.ID_Uzytkownika;
+    connection.query("SELECT ID_Pizzy FROM pizze_ulubione WHERE ID_Uzytkownika=?",
+    [ID_Uzytkownika],
     (error, results, fields) => {
             if (error) throw error;
             res.json(results);

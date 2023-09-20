@@ -31,8 +31,20 @@
   background-color: #555; /* Kolor paska przewijania po najechaniu myszką */
 }
 
+@media (max-width: 768px) {
+  .col-1-ulub {
+    display: none; /* Ukryj kolumnę "Ulubiona" na małym ekranie */
+  }
+}
 
+.moja-tabela {
+  width: 100%;
+}
 
-
-
+/* Dla ekranów o szerokości mniejszej niż col-md-12 */
+@media (max-width: 767px) {
+  .moja-tabela {
+    width: 1500px;
+  }
+}
 

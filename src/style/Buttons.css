@@ -98,6 +98,22 @@
     color: #c59b08;
 } 
 
+.button-container {
+  display: flex;
+  align-items: center;
+  background-color:rgb(168, 168, 168);
+}
+
+.like-btn:hover i,
+.like-btn:hover span {
+  color: lightgreen;
+}
+
+.dislike-btn:hover i,
+.dislike-btn:hover span {
+  color: lightcoral;
+}
+
   @keyframes glowingBackground {
     0% {
       background-color: darkred;

@@ -4,11 +4,10 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from 'react-paginate';
-import { Toast } from 'react-bootstrap';
-import ToastContainer from 'react-bootstrap/ToastContainer';
 import Spinner from 'react-bootstrap/Spinner';
 import ToastAddPizza from './smallComponents/ToastAddPizza'
-import { Form, Overlay, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table, Form, Overlay, OverlayTrigger, Tooltip, Toast, ToastContainer } from 'react-bootstrap';
+import 'font-awesome/css/font-awesome.min.css';
 
 function Bookmarks({props, updateItemsCount, actions}) {
 
@@ -340,38 +339,76 @@ const handleCheckboxChange = (pizzaID) => {
     })
   }, [])
 
+  const [tableWidth, setTableWidth] = useState('100%');
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 1500) {
+        setTableWidth('1500px');
+      } else {
+        setTableWidth('100%');
+      }
+    }
+
+    // Dodaj nasłuchiwanie zmiany rozmiaru ekranu
+    window.addEventListener('resize', handleResize);
+
+    // Wywołaj handleResize po pierwszym renderowaniu
+    handleResize();
+
+    // Usuń nasłuchiwanie po odmontowaniu komponentu
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState(0);
+
+  useEffect(() => {
+    fetch('/pizzeLike')
+      .then(response => response.json())
+      .then(data => setLikes(data))
+      .catch(error => console.error(error));
+  }, []);
+
+  console.log(likes);
+
   return (
     <div className="d-flex flex-wrap">
-      <div className="col-12 col-md-8 ">
-        <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-          <Tab eventKey={1} title="Pizze Oryginalne">
+      <div className="ms-3 col-12 col-md-8 ">
+        <Tabs fill defaultActiveKey={1} id="uncontrolled-tab-example">
+          <Tab  eventKey={1} title="Pizze Oryginalne">
             {loading ? (
               <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             ) : (
-              <div className="table-responsive mb-3">
-                <table className="table text-white border">
+              <div className="mb-3">
+                <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
                   <thead>
                     <tr>
                       {Rola !== 'admin' && (
-                        <th className="col-1">Ulubiona</th>
+                        <th className="col-1">Ulubione</th>
                       )}
-                      <th className="col-1" scope="col">
+                      <th scope="col">
                         #
                       </th>
-                      <th className="col-2" scope="col">
+                      <th scope="col">
                         Nazwa
                       </th>
-                      <th className="col-4" scope="col">
+                      <th scope="col">
                         Składniki
                       </th>
-                      <th className="col-3" scope="col">
-                        Cena (M/Ś/D/G)
+                      <th scope="col">
+                        Cena (Mała/Średnia/Duża/Gigant)
+                      </th>
+                      <th scope="col">
+                        Ocena
                       </th>
                       {Rola == 'admin' && (
                         <th className="col-2">Opcje</th>
                       )}
                       {Rola == 'user' && (
-                        <th className="col-2">Opcje</th>
+                        <th>Opcje</th>
                       )}
                     </tr>
                   </thead>
@@ -404,10 +441,34 @@ const handleCheckboxChange = (pizzaID) => {
                               </td>
                             ))
                           )}
-                        <td className="col-1">{pizza.ID_Pizzy}</td>
-                        <td className="col-2">{pizza.Nazwa}</td>
-                        <td className="col-4">{pizza.Skladniki}</td>
-                        <td className="col-3">{pizza.Cena} zł</td>
+                        <td>{pizza.ID_Pizzy}</td>
+                        <td>{pizza.Nazwa}</td>
+                        <td>{pizza.Skladniki}</td>
+                        <td>{pizza.Cena} zł</td>
+                        <td>
+  <div className="button-container">
+    <button className="btn like-btn" id="green">
+      <i className="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+      <span>
+        {likes.some(like => like.ID_Pizzy === pizza.ID_Pizzy) ? (
+          likes.find(like => like.ID_Pizzy === pizza.ID_Pizzy).PolubieniaTak
+        ) : (
+          0
+        )}
+      </span>
+    </button>
+    <button className="btn dislike-btn" id="red">
+      <i className="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+      <span>
+        {likes.some(like => like.ID_Pizzy === pizza.ID_Pizzy) ? (
+          likes.find(like => like.ID_Pizzy === pizza.ID_Pizzy).PolubieniaNie
+        ) : (
+          0
+        )}
+      </span>
+    </button>
+  </div>
+</td>
                         {Rola == 'admin' && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
@@ -419,7 +480,7 @@ const handleCheckboxChange = (pizzaID) => {
                           </td>
                         )}
                         {Rola == "user" && (
-                          <td className="col-2">
+                          <td className="col-1">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
                               Zamów
                             </button>
@@ -428,7 +489,7 @@ const handleCheckboxChange = (pizzaID) => {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </Table>
                 {Rola == 'admin' && (
                   <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Oryginal")}>
                     Dodaj pizze Oryginalną
@@ -814,7 +875,8 @@ const handleCheckboxChange = (pizzaID) => {
 
         </Tabs>
       </div>
-      <div className="col-12 col-md-4 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px", background: '#222', padding: '20px' }}>
+      <div className="d-flex justify-content-center col-12 col-md-3">
+      <div className="col-11 col-md-11 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px", background: '#222', padding: '20px' }}>
         <Form>
           <fieldset>
             <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
@@ -920,6 +982,7 @@ const handleCheckboxChange = (pizzaID) => {
             </div>
           </fieldset>
         </Form>
+      </div>
       </div>
       <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
     </div>

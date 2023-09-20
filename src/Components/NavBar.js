@@ -274,19 +274,19 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           </NavDropdown.Item>
         </NavDropdown>
       </Nav>
-      <div className="mx-auto d-flex">
+      <div className="mx-auto d-flex col-4">
         <Form onSubmit={handleFormSubmit}> 
         <div className="d-flex">
-          <Form.Control variant="dark" className="searchBar" type="search" placeholder="Search" value={message} style={{width: "400px"}} aria-label="Search" 
+          <Form.Control variant="dark" className="searchBar col-12 col-md-12" type="search" placeholder="Search" value={message} aria-label="Search" 
             onChange={handleInputChange}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputFocus} />
-          <Button className="ms-3 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
+          <Button className="col-6 col-md-3 ms-3 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
           </div>
         
           <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">
-        <Dropdown.Menu variant="dark" style={{ maxHeight: '200px', overflowY: 'auto', width: "400px" }}>
+        <Dropdown.Menu className="col-12 col-md-12" variant="dark" style={{ maxHeight: '200px', overflowY: 'auto'}}>
           {suggestions.map((suggestion) => (
             <Dropdown.Item
               key={suggestion}

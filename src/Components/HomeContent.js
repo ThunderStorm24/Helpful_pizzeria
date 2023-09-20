@@ -71,13 +71,15 @@ function Koniec() {
 
 function Kartki() {
   return (
-    <div className="d-flex justify-content-center flex-wrap col-12 col-md-12 mt-4">
+    <div className="d-flex justify-content-center col-md-12">
+    <div className="d-flex justify-content-center flex-wrap col-11 col-md-11 ms-3 mt-4">
       <CardText title="Strona główna" describe="Czegoś jeszccze nie wyczytałeś? skocz na górę!" button="Wróć!" location="#" />
       <CardText title="Menu" describe="Zgłodniałeś? Spójrz na nasze oferty!" button="Idź do Menu!" location="/Menu" />
       <CardText title="Customowe Menu" describe="Chcesz spróbować czegoś nowego? A może chcesz stworzyć pizze?" button="Idź do Customowego Menu!" location="/Menu" />
       <CardText title="Centrum Pomocy" describe="Potrzebujesz pomocy? masz problem? Przejdź do zakładki Pomoc!" button="Idź do Centrum Pomocy!" location="#Pomoc" />
       <CardText title="Lokalizacja" describe="Nie wiesz gdzie się znajdujemy? To nic pod spodem masz mapę!" button="Gdzie?" location="#Location" />
       <CardText title="Kontakt" describe="Chcesz się z nami skontaktować? Zadzwoń!" button="Zadzwoń do nas!" location="#Contact" />
+    </div>
     </div>
   );
 }

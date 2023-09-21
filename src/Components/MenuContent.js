@@ -364,6 +364,7 @@ const handleCheckboxChange = (pizzaID) => {
 
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState(0);
+  const [userLikes, setUserLikes] = useState([]);
 
   useEffect(() => {
     fetch('/pizzeLike')
@@ -372,7 +373,79 @@ const handleCheckboxChange = (pizzaID) => {
       .catch(error => console.error(error));
   }, []);
 
-  console.log(likes);
+  useEffect(() => {
+    fetch('/Likes')
+      .then(response => response.json())
+      .then(data => setUserLikes(data))
+      .catch(error => console.error(error));
+  }, []);
+
+  const [likeButtonStates, setLikeButtonStates] = useState({});
+
+  const handleLikeClick = (ID_Pizzy) => {
+    const existingLikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Tak');
+
+    if (existingLikeIndex !== -1) {
+      // Jeśli polubienie istnieje, usuń je z userLikes
+      const updatedLikes = [...userLikes];
+      updatedLikes.splice(existingLikeIndex, 1);
+      setUserLikes(updatedLikes);
+    }else{
+      const newLike = {
+        ID_Pizzy: ID_Pizzy,
+        ID_Uzytkownika: ID,
+        Polubienie: 'Tak'
+      };
+      setUserLikes([...userLikes, newLike]);
+    }
+      // Jeśli polubienie nie istnieje, dodaj je
+      Axios.post('/UserLike', {
+        ID_Pizzy: ID_Pizzy,
+        ID_Uzytkownika: ID
+      })
+      .then(response => {
+        console.log('Pomyślnie wykonano żądanie do /UserLike', response.data);
+        if (response.data.Polubienie === 'Tak') {
+          // Tutaj kod, który ma być wykonany, gdy Polubienie === 'Tak'
+          setLikeButtonStates(prevState => ({
+            ...prevState,
+            [ID_Pizzy]: true,
+          }));
+        } else {
+          // Tutaj kod, który ma być wykonany, gdy Polubienie !== 'Tak'
+          // Możesz np. ustawić stan na false lub wykonać inne działania
+          setLikeButtonStates(prevState => ({
+            ...prevState,
+            [ID_Pizzy]: false,
+          }));
+        }
+      })
+      .catch(error => {
+        console.error('Błąd podczas wykonywania żądania do /UserLike', error);
+        // Tutaj możesz dodać kod obsługi błędu
+      });
+  };
+
+  console.log(likeButtonStates)
+
+  const [disLikeButtonStates, setDisLikeButtonStates] = useState({});
+
+  const handleDislikeClick = (ID_Pizzy) => {
+    const existingLike = userLikes.find(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Nie');
+
+    if (!existingLike) {
+      console.log("git");
+      setDisLikeButtonStates(prevState => ({
+        ...prevState,
+        [ID_Pizzy]: true,
+      }));
+    }else{
+      setDisLikeButtonStates(prevState => ({
+        ...prevState,
+        [ID_Pizzy]: false,
+      }));
+    }
+  }
 
   return (
     <div className="d-flex flex-wrap">
@@ -447,21 +520,29 @@ const handleCheckboxChange = (pizzaID) => {
                         <td>{pizza.Cena} zł</td>
                         <td>
   <div className="button-container">
-    <button className="btn like-btn" id="green">
-      <i className="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+    <button
+      className={`btn like-btn`}
+      id="green"
+      onClick={() => handleLikeClick(pizza.ID_Pizzy)}
+    > 
+        <i className={`fa fa-thumbs-up fa-lg ${likeButtonStates[pizza.ID_Pizzy] ? 'green' : 'none'} ${(userLikes.some(like => like.ID_Pizzy === pizza.ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Tak')) ? 'green' : 'none'}`} aria-hidden="true"></i>
       <span>
-        {likes.some(like => like.ID_Pizzy === pizza.ID_Pizzy) ? (
-          likes.find(like => like.ID_Pizzy === pizza.ID_Pizzy).PolubieniaTak
+        {userLikes.some(like => like.ID_Pizzy === pizza.ID_Pizzy && like.Polubienie === 'Tak') ? (
+          userLikes.filter(like => like.ID_Pizzy === pizza.ID_Pizzy && like.Polubienie === 'Tak').length
         ) : (
           0
         )}
       </span>
     </button>
-    <button className="btn dislike-btn" id="red">
-      <i className="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+    <button
+      className={`btn dislike-btn`}
+      id="red"
+      onClick={() => handleDislikeClick(pizza.ID_Pizzy)}
+    >
+      <i className={`fa fa-thumbs-down fa-lg ${disLikeButtonStates[pizza.ID_Pizzy] ? 'red' : ''} ${userLikes.some(like => like.ID_Pizzy === pizza.ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Nie') ? 'red' : ''}`} aria-hidden="true"></i>
       <span>
-        {likes.some(like => like.ID_Pizzy === pizza.ID_Pizzy) ? (
-          likes.find(like => like.ID_Pizzy === pizza.ID_Pizzy).PolubieniaNie
+        {userLikes.some(like => like.ID_Pizzy === pizza.ID_Pizzy && like.Polubienie === 'Nie') ? (
+          userLikes.filter(like => like.ID_Pizzy === pizza.ID_Pizzy && like.Polubienie === 'Nie').length
         ) : (
           0
         )}

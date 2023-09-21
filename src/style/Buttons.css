@@ -114,6 +114,22 @@
   color: lightcoral;
 }
 
+.green{
+  color: green;
+}
+
+.red{
+  color:red;
+}
+
+.none{
+  color:none;
+}
+
+.blue{
+  color:blue;
+}
+
   @keyframes glowingBackground {
     0% {
       background-color: darkred;

@@ -20,47 +20,113 @@ router.get("/Likes", (req, res) => {
 })
 
 router.post("/UserLike", (req, res) => {
-    const ID_Uzytkownika = req.body.ID_Uzytkownika; // Założmy, że ID_Uzytkownika jest dostarczane w zapytaniu
-    const ID_Pizzy = req.body.ID_Pizzy; // Założmy, że ID_Pizzy jest dostarczane w zapytaniu
+    const ID_Uzytkownika = req.body.ID_Uzytkownika;
+    const ID_Pizzy = req.body.ID_Pizzy;
 
-    // Sprawdź, czy polubienie już istnieje
-    connection.query("SELECT * FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ? AND Polubienie = 'Tak'",
-    [ID_Uzytkownika, ID_Pizzy],
-    (error, results, fields) => {
-        if (error) {
-            throw error;
-        }
+    connection.query(
+        "SELECT * FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+        [ID_Uzytkownika, ID_Pizzy],
+        (error, results, fields) => {
+            if (error) {
+                throw error;
+            }
 
-        if (results.length > 0) {
-            // Jeśli polubienie istnieje, usuń je
-            connection.query("DELETE FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ? AND Polubienie = 'Tak'",
-            [ID_Uzytkownika, ID_Pizzy],
-            (deleteError, deleteResults, deleteFields) => {
-                if (deleteError) {
-                    throw deleteError;
+            if (results.length > 0) {
+                if (results[0].Polubienie === 'Tak') {
+                    // Jeśli polubienie już jest "Tak", usuń je
+                    connection.query(
+                        "DELETE FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+                        [ID_Uzytkownika, ID_Pizzy],
+                        (deleteError, deleteResults, deleteFields) => {
+                            if (deleteError) {
+                                throw deleteError;
+                            }
+                            res.json({ message: "Usunięto polubienie", Polubienie: 'Nie' });
+                        }
+                    );
+                } else {
+                    // Jeśli polubienie jest "Nie", aktualizuj je na "Tak"
+                    connection.query(
+                        "UPDATE pizza_polubienie SET Polubienie = 'Tak' WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+                        [ID_Uzytkownika, ID_Pizzy],
+                        (updateError, updateResults, updateFields) => {
+                            if (updateError) {
+                                throw updateError;
+                            }
+                            res.json({ message: "Zaktualizowano na polubienie", Polubienie: 'Tak' });
+                        }
+                    );
                 }
-                res.json({ message: "Usunięto polubienie", Polubienie: 'Nie' });
-            });
-        } else {
-            // Jeśli polubienie nie istnieje, dodaj je
-            connection.query("INSERT INTO pizza_polubienie (ID_Uzytkownika, ID_Pizzy, Polubienie) VALUES (?, ?, 'Tak')",
-            [ID_Uzytkownika, ID_Pizzy],
-            (insertError, insertResults, insertFields) => {
-                if (insertError) {
-                    throw insertError;
-                }
-                res.json({ message: "Dodano polubienie", Polubienie: 'Tak' });
-            });
+            } else {
+                // Jeśli nie ma wpisu, dodaj nowy wpis z Polubieniem "Tak"
+                connection.query(
+                    "INSERT INTO pizza_polubienie (ID_Uzytkownika, ID_Pizzy, Polubienie) VALUES (?, ?, 'Tak')",
+                    [ID_Uzytkownika, ID_Pizzy],
+                    (insertError, insertResults, insertFields) => {
+                        if (insertError) {
+                            throw insertError;
+                        }
+                        res.json({ message: "Dodano polubienie", Polubienie: 'Tak' });
+                    }
+                );
+            }
         }
-    });
+    );
 });
 
 router.post("/UserDisLike", (req, res) => {
-    connection.query("",
-    (error, results, fields) => {
-            if (error) throw error;
-            res.json(results);
-        });
+    const ID_Uzytkownika = req.body.ID_Uzytkownika;
+    const ID_Pizzy = req.body.ID_Pizzy;
+
+    connection.query(
+        "SELECT * FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+        [ID_Uzytkownika, ID_Pizzy],
+        (error, results, fields) => {
+            if (error) {
+                throw error;
+            }
+
+            if (results.length > 0) {
+                if (results[0].Polubienie === 'Nie') {
+                    // Jeśli polubienie już jest "Nie", usuń je
+                    connection.query(
+                        "DELETE FROM pizza_polubienie WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+                        [ID_Uzytkownika, ID_Pizzy],
+                        (deleteError, deleteResults, deleteFields) => {
+                            if (deleteError) {
+                                throw deleteError;
+                            }
+                            res.json({ message: "Usunięto niepolubienie", Polubienie: 'Tak' });
+                        }
+                    );
+                } else {
+                    // Jeśli polubienie jest "Tak", aktualizuj je na "Nie"
+                    connection.query(
+                        "UPDATE pizza_polubienie SET Polubienie = 'Nie' WHERE ID_Uzytkownika = ? AND ID_Pizzy = ?",
+                        [ID_Uzytkownika, ID_Pizzy],
+                        (updateError, updateResults, updateFields) => {
+                            if (updateError) {
+                                throw updateError;
+                            }
+                            res.json({ message: "Zaktualizowano na niepolubienie", Polubienie: 'Nie' });
+                        }
+                    );
+                }
+            } else {
+                // Jeśli nie ma wpisu, dodaj nowy wpis z Polubieniem "Nie"
+                connection.query(
+                    "INSERT INTO pizza_polubienie (ID_Uzytkownika, ID_Pizzy, Polubienie) VALUES (?, ?, 'Nie')",
+                    [ID_Uzytkownika, ID_Pizzy],
+                    (insertError, insertResults, insertFields) => {
+                        if (insertError) {
+                            throw insertError;
+                        }
+                        res.json({ message: "Dodano niepolubienie", Polubienie: 'Nie' });
+                    }
+                );
+            }
+        }
+    );
 })
 
 

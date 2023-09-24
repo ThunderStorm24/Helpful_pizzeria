@@ -130,6 +130,13 @@
   color:blue;
 }
 
+.likeBorder{
+  background-color:rgb(165, 165, 165);
+  border-radius: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
   @keyframes glowingBackground {
     0% {
       background-color: darkred;

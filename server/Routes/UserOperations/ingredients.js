@@ -9,7 +9,9 @@ router.post("/ZmienUlubione", (req, res) => {
     const ID_Uzytkownika = req.body.ID_Uzytkownika;
     const Nazwa = req.body.Nazwa;
 
-    console.log(Nazwa, ID_Skladnika, ID_Uzytkownika);
+    console.log("ID_Skladnika:", ID_Skladnika);
+    console.log("ID_Uzytkownika:", ID_Uzytkownika);
+    console.log("Nazwa:", Nazwa);
 
     if (Nazwa === null) {
         const checkQuery = "SELECT * FROM uzytkownicy_skladniki WHERE ID_Uzytkownika = ? AND ID_Skladnika = ?";
@@ -47,7 +49,7 @@ router.post("/ZmienUlubione", (req, res) => {
             })
     }
 
-    if (Nazwa === "znienawidzony") {
+    if (Nazwa === "nieulubiony") {
         connection.query("UPDATE uzytkownicy_skladniki SET Ulubiony = '' WHERE ID_Uzytkownika = ? AND ID_Skladnika = ?",
             [ID_Uzytkownika, ID_Skladnika],
             (err, result) => {
@@ -67,9 +69,17 @@ router.get("/Skladniki", (req, res) => {
         });
 })
 
-router.get("/UlubioneSkladniki", (req, res) => {
-    connection.query("SELECT uzytkownicy.ID_Uzytkownika, skladniki.Nazwa, uzytkownicy_skladniki.Ulubiony FROM uzytkownicy JOIN uzytkownicy_skladniki ON uzytkownicy.ID_Uzytkownika = uzytkownicy_skladniki.ID_Uzytkownika JOIN skladniki ON uzytkownicy_skladniki.ID_Skladnika = skladniki.ID_Skladnika"
-        , (error, results, fields) => {
+router.get("/UlubioneSkladniki/:ID_Uzytkownika", (req, res) => {
+    const loginID = req.params.ID_Uzytkownika; // Odczytaj loginID z parametru w ścieżce URL
+
+    connection.query(
+        "SELECT uzytkownicy.ID_Uzytkownika, skladniki.ID_Skladnika, skladniki.Nazwa, uzytkownicy_skladniki.Ulubiony " +
+        "FROM uzytkownicy " +
+        "JOIN uzytkownicy_skladniki ON uzytkownicy.ID_Uzytkownika = uzytkownicy_skladniki.ID_Uzytkownika " +
+        "JOIN skladniki ON uzytkownicy_skladniki.ID_Skladnika = skladniki.ID_Skladnika " +
+        "WHERE uzytkownicy.ID_Uzytkownika = ?",
+        [loginID], 
+        (error, results, fields) => {
             if (error) throw error;
             res.json(results);
         });

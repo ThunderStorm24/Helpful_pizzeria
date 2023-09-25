@@ -22,20 +22,36 @@ export default function Profil() {
 
   const [skladniki, setSkladniki] = useState([]);
   const [ulubione, setUlubione] = useState([]);
+  const [colors, setColors] = useState({});
 
   const handleCloseModal = () => {
     setEditModal(false);
 };
 
-  const handleSkladnikClick = (skladnik, skladnikId) => {
-    Axios.post('/ZmienUlubione', {
-      ID_Skladnika: skladnikId,
-      ID_Uzytkownika: loginID,
-      Nazwa: skladnik
-    }).then((response) => {
-      console.log(response)
-    })
-    window.location.reload();
+  const handleSkladnikClick = async (skladnik, skladnikId) => {
+    const updatedColors = { ...colors };
+
+    // Jeśli składnik jest szary, zmieniamy go na zielony, jeśli jest zielony, zmieniamy na czerwony, a jeśli jest czerwony, zmieniamy na szary
+    updatedColors[skladnikId] = (updatedColors[skladnikId] === '')
+      ? 'ulubiony'
+      : (updatedColors[skladnikId] === 'ulubiony')
+      ? 'nieulubiony'
+      : '';
+
+    // Aktualizujemy stan kolorów
+    setColors(updatedColors);
+
+    try {
+      const response = await Axios.post('/ZmienUlubione', {
+        ID_Skladnika: skladnikId,
+        ID_Uzytkownika: loginID,
+        Nazwa: skladnik
+      });
+  
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   //Jeszcze ikonki jakies dodac do składnikóww
@@ -47,26 +63,37 @@ export default function Profil() {
   }, []);
 
   useEffect(() => {
-    fetch('/ulubioneskladniki')
+    fetch(`/ulubioneskladniki/${loginID}`)
       .then(response => response.json())
-      .then(data => setUlubione(data))
+      .then(data => {
+        // Tworzymy obiekt kolorów na podstawie danych z bazy danych
+        const colorsObject = {};
+        data.forEach(item => {
+          if (item.Ulubiony === 'Tak') {
+            colorsObject[item.ID_Skladnika] = 'ulubiony';
+          } else if (item.Ulubiony === 'Nie') {
+            colorsObject[item.ID_Skladnika] = 'nieulubiony';
+          } else {
+            colorsObject[item.ID_Skladnika] = '';
+          }
+        });
+        setColors(colorsObject);
+        setUlubione(data);
+      })
       .catch(error => console.error(error));
-  }, []);
+  }, [loginID]); // Dodaj loginID jako zależność, aby efekt był wywoływany przy jego zmianie
 
   const isUlubiony = (skladnik) => {
-    const found = ulubione.find(u => u.Nazwa === skladnik.Nazwa && u.ID_Uzytkownika === loginID);
-    if (found) {
-      if (found.Ulubiony === 'Tak') {
-        return 'ulubiony';
-      } else if (found.Ulubiony === 'Nie') {
-        return 'znienawidzony';
-      } else {
-        return null;
-      }
+    const status = colors[skladnik.ID_Skladnika];
+    if (status === 'ulubiony') {
+      return 'ulubiony';
+    } else if (status === 'nieulubiony') {
+      return 'nieulubiony';
     } else {
       return null;
     }
   };
+
 
   useEffect(() => {
     Axios.get("/login").then((response) => {
@@ -204,7 +231,7 @@ export default function Profil() {
           {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
             <button
               key={skladnik.ID_Skladnika}
-              className={`skladnik ${isUlubiony(skladnik)}`}
+              className={`skladnik ${colors[skladnik.ID_Skladnika] || ''}`}
               onClick={() => handleSkladnikClick(isUlubiony(skladnik), skladnik.ID_Skladnika)}
             >
               {skladnik.Nazwa}

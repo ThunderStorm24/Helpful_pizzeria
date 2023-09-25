@@ -4,7 +4,7 @@
     border: 2px solid white;
     border-radius: 25px;
     padding: 10px 20px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
     margin: 5px;
   }
   
@@ -19,7 +19,7 @@
     border: 2px solid green;
     border-radius: 25px;
     padding: 10px 20px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
   
   .ulubiony:hover {
@@ -27,16 +27,16 @@
     border: 2px solid green;
   }
   
-  .znienawidzony {
+  .nieulubiony {
     background-color: red;
     color: white;
     border: 2px solid red;
     border-radius: 25px;
     padding: 10px 20px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
   
-  .znienawidzony:hover {
+  .nieulubiony:hover {
     background-color: #303030;
     border: 2px solid red;
   }

@@ -4,7 +4,7 @@ import { Form, FormControl } from 'react-bootstrap';
 import Button from "react-bootstrap/Button";
 
 
-const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMessage, customMessageAdd, customShowButton }) => {
+const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMessage, customMessageAdd, customShowButton, Added }) => {
 
   const [pizzaAdded, setPizzaAdded] = useState(false);
 
@@ -39,7 +39,7 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
   const handleSubmit = (event) => {
     if(pizzaAdded === false){
     event.preventDefault();
-    setPizzaAdded(true);
+    setPizzaAdded(Added);
     customOnSubmit({
       name,
       checkedItems,
@@ -62,10 +62,10 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
 
   return (
     <Modal show={customShow} onHide={customOnHide}>
-      <Modal.Header closeButton>
+      <Modal.Header className="border" closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
         <Modal.Title>Dodaj nową pizzę</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
         <div className="mb-2 mt-2">Pizza zostanie najpierw sprawdzona przez administrację, obserwuj Moje oczekujące pizze lub Moje pizze czy twoja pizza została dodana i ciesz się dodaną pizzą!</div>
         <Form onSubmit={handleSubmit}>
           <Form.Group>

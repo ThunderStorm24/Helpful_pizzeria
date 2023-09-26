@@ -8,6 +8,8 @@ const PizzaActions = ({
   handleDislikeClick,
   disLikeButtonStates,
   userLikes,
+  Role,
+  showNotification,
 }) => {
   return (
     <td className="d-flex justify-content-center">
@@ -16,7 +18,13 @@ const PizzaActions = ({
           <button
             className={`btn like-btn d-flex flex-column`}
             id="green"
-            onClick={() => handleLikeClick(pizza.ID_Pizzy)}
+            onClick={() => {
+              if (Role === 'admin' || Role === 'user') {
+                handleLikeClick(pizza.ID_Pizzy);
+              } else {
+                showNotification(); // Wywołanie funkcji pokazującej powiadomienie
+              }
+            }}
           >
             <i
               className={`fa fa-thumbs-up fa-lg ${likeButtonStates[pizza.ID_Pizzy] ? 'green' : 'none'} ${
@@ -41,7 +49,13 @@ const PizzaActions = ({
           <button
             className={`btn dislike-btn d-flex flex-column`}
             id="red"
-            onClick={() => handleDislikeClick(pizza.ID_Pizzy)}
+            onClick={() => {
+              if (Role === 'admin' || Role === 'user') {
+                handleDislikeClick(pizza.ID_Pizzy);
+              } else {
+                showNotification(); // Wywołanie funkcji pokazującej powiadomienie
+              }
+            }}
           >
             <i
               className={`fa fa-thumbs-down fa-lg ${disLikeButtonStates[pizza.ID_Pizzy] ? 'red' : 'none'} ${

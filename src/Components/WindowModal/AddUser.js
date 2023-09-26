@@ -43,10 +43,10 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
+      <Modal.Header className="border" closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
         <Form onSubmit={handleSubmit}>
 
            <Form.Group>
@@ -61,7 +61,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Imię:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Imię:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź imię"
@@ -71,7 +71,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Nazwisko:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Nazwisko:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź nazwisko"
@@ -81,7 +81,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Adres:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Adres:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź adres"
@@ -91,7 +91,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Kod_Pocztowy:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Kod_Pocztowy:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź kod pocztowy"
@@ -101,7 +101,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Telefon:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Telefon:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź telefon"
@@ -111,7 +111,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Login:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Login:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź login"
@@ -121,7 +121,7 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Hasło:</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Hasło:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Wprowadź hasło"

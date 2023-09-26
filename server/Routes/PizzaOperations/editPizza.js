@@ -4,14 +4,66 @@ const connection = require('./../db');
 const router = express.Router();
 
 router.post("/EdytujPizze", async (req, res) => {
+
+  const errors = {};
+
+    // Sprawdzenie czy Nazwa pizzy jest podana
+    if (!req.body.name) {
+        errors.nazwa = "Nazwa pizzy jest wymagana";
+    }
+
+    connection.query("SELECT * FROM pizze WHERE Nazwa = ? AND ID_Pizzy != ?", [req.body.name, req.body.ID], (err, results) => {
+        if (err) {
+          console.error('Błąd zapytania do bazy danych: ' + err.message);
+          res.status(500).json({ error: 'Błąd serwera' });
+        } else if (results.length > 0) {
+          errors.login = "Pizza: "+req.body.name+", już istnieje w naszej bazie danych, spróbuj innej nazwy pizzy";
+        } 
+      
+    
+      
+
+    // Sprawdzenie czy ID użytkownika jest podane i czy jest to liczba całkowita dodatnia
+    if (!req.body.ID || isNaN(req.body.ID) || req.body.ID <= 0) {
+        errors.id_uzytkownika = "Nieprawidłowe ID użytkownika";
+    }
+
+// Sprawdzenie, czy checkedItems jest podane, czy jest to tablica i czy przynajmniej dwa checkboxy są zaznaczone
+if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.checkedItems.length < 2) {
+    errors.checkedItems = "Zaznacz co najmniej dwa składniki";
+}
+
+    // Sprawdzenie czy cena ma poprawny format i czy jest to liczba dodatnia
+    if (!req.body.priceSmall || isNaN(req.body.priceSmall) || req.body.priceSmall <= 0) {
+        errors.cena_small = "Nieprawidłowa cena dla rozmiaru small";
+    }
+    if (!req.body.priceMedium || isNaN(req.body.priceMedium) || req.body.priceMedium <= 0) {
+        errors.cena_medium = "Nieprawidłowa cena dla rozmiaru medium";
+    }
+    if (!req.body.priceLarge || isNaN(req.body.priceLarge) || req.body.priceLarge <= 0) {
+        errors.cena_large = "Nieprawidłowa cena dla rozmiaru large";
+    }
+    if (!req.body.priceGiant || isNaN(req.body.priceGiant) || req.body.priceGiant <= 0) {
+        errors.cena_giant = "Nieprawidłowa cena dla rozmiaru giant";
+    }
+
+    // Jeśli są jakieś błędy to zwróć je w odpowiedzi
+    if (Object.keys(errors).length > 0) {
+        res.status(400).send({ errors: Object.values(errors) });
+        console.log(errors)
+        return;
+    } else {
+    }
+
+
+
     const { ID, name, checkedItems, priceSmall, priceMedium, priceLarge, priceGiant, pizzaStatus } = req.body;
     console.log("Received request:", req.body);
     let existingSkladniki = []; // Declare the variable here to make it accessible in the entire function
-  
     // Step 1: Update the Pizza's name for the given ID
     try {
         const updatePizzaQuery = "UPDATE pizze SET Nazwa = ? WHERE ID_Pizzy = ?";
-        await connection.query(updatePizzaQuery, [name, ID]);
+        connection.query(updatePizzaQuery, [name, ID]);
       } catch (error) {
         console.error("Error updating pizza name:", error);
         return res.status(500).json({ error: "Failed to update pizza name." });
@@ -22,7 +74,7 @@ router.post("/EdytujPizze", async (req, res) => {
     // Retrieve the current list of składniki associated with the pizza
     const selectSkladnikiQuery = "SELECT ID_Skladnika FROM pizze_skladniki WHERE ID_Pizzy = ?";
     try {
-        const result = await connection.query(selectSkladnikiQuery, [ID]);
+        const result = connection.query(selectSkladnikiQuery, [ID]);
         const rows = result[0];
         if (!rows || rows.length === 0) {
           // Handle the case when no rows are returned (empty result)
@@ -118,7 +170,6 @@ router.post("/EdytujPizze", async (req, res) => {
           console.error("Błąd zapytania SQL: ", error);
         }
       }
-
   
     // Step 4: Update the prices for all sizes of the pizza (Cena)
     try {
@@ -131,7 +182,7 @@ router.post("/EdytujPizze", async (req, res) => {
         "END " +
         "WHERE ID_Pizzy = ?";
   
-      await connection.query(updatePricesQuery, [priceSmall, priceMedium, priceLarge, priceGiant, ID]);
+      connection.query(updatePricesQuery, [priceSmall, priceMedium, priceLarge, priceGiant, ID]);
     } catch (error) {
       return res.status(500).json({ error: "Failed to update pizza prices." });
     }
@@ -142,7 +193,7 @@ router.post("/EdytujPizze", async (req, res) => {
       console.log("Pizza jest odrzucona, update na oczekuje")
       try {
           const updateStatusQuery = "UPDATE pizze SET Status = 'Oczekuje' WHERE ID_Pizzy = ?";
-          await connection.query(updateStatusQuery, [ID]);
+          connection.query(updateStatusQuery, [ID]);
       } catch (error) {
           console.error("Error updating pizza status:", error);
           return res.status(500).json({ error: "Failed to update pizza status." });
@@ -153,6 +204,7 @@ router.post("/EdytujPizze", async (req, res) => {
 
     console.log("DZIALAAA");
     res.status(201).send({ message: 'Pizza zedytowana pomyślnie!!!.' });
+  });
   });
 
 module.exports = router;

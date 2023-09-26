@@ -10,7 +10,16 @@ router.post("/DodajPizzeOryginalna", async (req, res) => {
     // Sprawdzenie czy Nazwa pizzy jest podana
     if (!req.body.name) {
         errors.nazwa = "Nazwa pizzy jest wymagana";
-    }
+      } 
+
+        connection.query("SELECT * FROM pizze WHERE Nazwa = ?", [req.body.name], (err, results) => {
+          if (err) {
+            console.error('Błąd zapytania do bazy danych: ' + err.message);
+            res.status(500).json({ error: 'Błąd serwera' });
+          } else if (results.length > 0) {
+            errors.login = "Pizza: "+req.body.name+", już istnieje w naszej bazie danych, spróbuj innej nazwy pizzy";
+          } 
+        
 
     // Sprawdzenie czy ID użytkownika jest podane i czy jest to liczba całkowita dodatnia
     if (!req.body.ID || isNaN(req.body.ID) || req.body.ID <= 0) {
@@ -88,7 +97,7 @@ if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.
     } catch (error) {
         console.error("Tresc errora:"+error);
     }
-    
+});
 });
 
 router.post("/DodajPizzeCustomowa", async (req, res) => {
@@ -99,6 +108,16 @@ router.post("/DodajPizzeCustomowa", async (req, res) => {
     if (!req.body.name) {
         errors.nazwa = "Nazwa pizzy jest wymagana";
     }
+
+    connection.query("SELECT * FROM pizze WHERE Nazwa = ?", [req.body.name], (err, results) => {
+        if (err) {
+          console.error('Błąd zapytania do bazy danych: ' + err.message);
+          res.status(500).json({ error: 'Błąd serwera' });
+        } else if (results.length > 0) {
+          errors.login = "Pizza: "+req.body.name+", już istnieje w naszej bazie danych, spróbuj innej nazwy pizzy";
+        } 
+    
+      
 
     // Sprawdzenie czy ID użytkownika jest podane i czy jest to liczba całkowita dodatnia
     if (!req.body.ID || isNaN(req.body.ID) || req.body.ID <= 0) {
@@ -178,6 +197,7 @@ if (!req.body.checkedItems || !Array.isArray(req.body.checkedItems) || req.body.
         console.error(error);
     }
     
+});
 });
 
 module.exports = router;

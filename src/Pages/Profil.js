@@ -25,7 +25,6 @@ export default function Profil() {
   const [colors, setColors] = useState({});
   const [initialColors, setInitialColors] = useState({});
   const [change, setChange] = useState(false);
-  const [countChange, setCountChange] = useState(0)
 
   const handleCloseModal = () => {
     setEditModal(false);

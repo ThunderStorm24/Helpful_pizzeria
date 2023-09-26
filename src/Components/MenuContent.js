@@ -8,13 +8,15 @@ import Spinner from 'react-bootstrap/Spinner';
 import ToastAddPizza from './smallComponents/ToastAddPizza'
 import { Table, Form, Overlay, OverlayTrigger, Tooltip, Toast, ToastContainer } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
-import LikeDisLike from './menuComponents/LikeDisLike'; // Zaimportuj komponent
-import PizzaFilter from './menuComponents/PizzaFilter'; // Zaimportuj komponent
+import LikeDisLike from './menuComponents/LikeDisLike'; 
+import PizzaFilter from './menuComponents/PizzaFilter'; 
+import AlertLog from './smallComponents/Alert'; 
 
 function Bookmarks({ props, updateItemsCount, actions }) {
 
   const [loading, setLoading] = useState(true);
 
+  const [showAlert, setShowAlert] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [pizzaName, setPizzaName] = useState('');
   const [ulubioneTooltipVisible, setUlubioneTooltipVisible] = useState(false);
@@ -486,9 +488,13 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       });
   }
 
+  const showNotification = () => {
+    setShowAlert(true);
+  }
+
   return (
     <div className="d-flex flex-wrap">
-      <div className="ms-3 col-12 col-md-8 ">
+      <div className="ms-3 col-11 col-md-8 ">
         <Tabs fill defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
             {loading ? (
@@ -565,6 +571,8 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                           handleDislikeClick={handleDislikeClick}
                           disLikeButtonStates={disLikeButtonStates}
                           userLikes={userLikes}
+                          Role={Rola}
+                          showNotification={showNotification}
                         />
                         {Rola == 'admin' && (
                           <td className="col-2">
@@ -1031,6 +1039,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
         setSortBy={setSortBy}
       />
       <ToastAddPizza title="Dodano pizze do koszyka!" describe={`Dodano pizzę o nazwie: ${pizzaName} do twojego koszyka.`} background="success" time="5000" show={showToast} hide={handleToastClose} />
+      <AlertLog showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
 
 

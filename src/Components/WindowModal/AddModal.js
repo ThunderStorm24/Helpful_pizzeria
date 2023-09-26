@@ -62,10 +62,10 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
+      <Modal.Header className="border" closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
         <Modal.Title>Dodaj nową pizzę</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Nazwa pizzy</Form.Label>
@@ -78,7 +78,7 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Składniki</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Składniki</Form.Label>
             <Form.Control
               type="text"
               placeholder="Szukaj składnika"
@@ -137,9 +137,9 @@ const PizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButton, A
               Dodaj
             </Button>
           ) : (
-            <button type="button" className="mt-2 btn btn-primary blueButton" onClick={() => onHide(false)}>
+            <Button type="button" className="mt-2 btn btn-primary blueButton" onClick={() => onHide(false)}>
               OK
-            </button>
+            </Button>
           )}
           <div className="" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
           {message && message.length > 0 ? (

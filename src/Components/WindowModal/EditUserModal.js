@@ -61,10 +61,10 @@ useEffect(() => {
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
+      <Modal.Header className="border" closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Imię:</Form.Label>

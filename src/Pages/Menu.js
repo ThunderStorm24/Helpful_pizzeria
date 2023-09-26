@@ -119,6 +119,7 @@ export default function Menu() {
             setCustomMessageAdd(data.data.message)
             setCustomMessage([])
             setCustomShowButton(0)
+            setAdded(true);
         }).catch((error) => {
                 console.log('error', error);
                 setCustomMessage(error.response.data.errors);
@@ -228,6 +229,7 @@ export default function Menu() {
         customMessage={customMessage} // Przekazanie wartości "message" jako props
         customMessageAdd={customMessageAdd}
         customShowButton={customShowButton}
+        Added={added}
       />
       <EditPizzaModal
         show={editModal}

@@ -52,19 +52,6 @@
     animation: blink-animation 1s infinite; /* Dodajemy animację migania przy włączonym mówieniu */
   }
 
-  .recognize {
-    height: 50px;
-    width: 400px;
-    margin-bottom:5px;
-    border: 2px solid darkred;
-    border-radius: 10px;
-    padding: 12px;
-    display: inline-block;
-    color: white;
-    background-color: darkred;
-    animation: glowingBackground 2s infinite; /* Dodajemy animację do klasy recognize */
-  }
-
 .rate {
     height: 46px;
     padding: 0 10px;
@@ -137,6 +124,30 @@
   padding-bottom: 5px;
 }
 
+.recognize {
+  height: 50px;
+  width: 400px;
+  margin-bottom:5px;
+  border: 2px solid darkred;
+  border-radius: 10px;
+  padding: 12px;
+  display: inline-block;
+  color: white;
+  background-color: darkred;
+  animation: glowingBackground 2s infinite; /* Dodajemy animację do klasy recognize */
+}
+
+.saveIngredients {
+  margin-bottom:5px;
+  border: 2px solid rgb(0, 123, 255);
+  border-radius: 10px;
+  padding: 12px;
+  display: inline-block;
+  color: white;
+  background-color: rgb(0, 123, 255);
+  animation: glowingBackground2 2s infinite; /* Dodajemy animację do klasy recognize */
+}
+
   @keyframes glowingBackground {
     0% {
       background-color: darkred;
@@ -148,6 +159,21 @@
     }
     100% {
       background-color: darkred;
+      box-shadow: none;
+    }
+  }
+
+  @keyframes glowingBackground2 {
+    0% {
+      background-color: rgb(0, 123, 255);
+      box-shadow: none;
+    }
+    50% {
+      background-color: rgb(0, 123, 255);
+      box-shadow: 0 0 10px 5px rgb(0, 123, 255);
+    }
+    100% {
+      background-color: rgb(0, 123, 255);
       box-shadow: none;
     }
   }

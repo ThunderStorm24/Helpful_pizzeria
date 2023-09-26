@@ -23,37 +23,56 @@ export default function Profil() {
   const [skladniki, setSkladniki] = useState([]);
   const [ulubione, setUlubione] = useState([]);
   const [colors, setColors] = useState({});
+  const [initialColors, setInitialColors] = useState({});
+  const [change, setChange] = useState(false);
+  const [countChange, setCountChange] = useState(0)
 
   const handleCloseModal = () => {
     setEditModal(false);
 };
 
   const handleSkladnikClick = async (skladnik, skladnikId) => {
+    setChange(true);
     const updatedColors = { ...colors };
 
     // Jeśli składnik jest szary, zmieniamy go na zielony, jeśli jest zielony, zmieniamy na czerwony, a jeśli jest czerwony, zmieniamy na szary
-    updatedColors[skladnikId] = (updatedColors[skladnikId] === '')
-      ? 'ulubiony'
-      : (updatedColors[skladnikId] === 'ulubiony')
+    if (updatedColors[skladnikId]) {
+    updatedColors[skladnikId] = (updatedColors[skladnikId] === 'ulubiony')
       ? 'nieulubiony'
       : '';
+  } else {
+    // Jeśli składnik nie istnieje, dodaj go do stanu i ustaw na 'ulubiony'
+    updatedColors[skladnikId] = 'ulubiony';
+  }
 
     // Aktualizujemy stan kolorów
     setColors(updatedColors);
-
-    try {
-      const response = await Axios.post('/ZmienUlubione', {
-        ID_Skladnika: skladnikId,
-        ID_Uzytkownika: loginID,
-        Nazwa: skladnik
-      });
-  
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
   }
 
+  const getChangedColors = () => {
+    const changedColors = {};
+    for (const skladnikId in colors) {
+      if (colors[skladnikId] !== initialColors[skladnikId]) {
+        changedColors[skladnikId] = colors[skladnikId];
+      }
+    }
+    return changedColors;
+  };
+
+  const handleSkladnikAccept = () => {
+    const changedColors = getChangedColors();
+
+    // Wyślij zmienione składniki na serwer za pomocą Axios
+    Axios.post('/ZmienUlubione', { changedColors, loginID })
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        // Obsłuż błąd, jeśli to konieczne
+      });
+  };
+
+  console.log(colors);
   //Jeszcze ikonki jakies dodac do składnikóww
   useEffect(() => {
     fetch('/skladniki')
@@ -68,16 +87,21 @@ export default function Profil() {
       .then(data => {
         // Tworzymy obiekt kolorów na podstawie danych z bazy danych
         const colorsObject = {};
+        const initialColors = {};
         data.forEach(item => {
           if (item.Ulubiony === 'Tak') {
             colorsObject[item.ID_Skladnika] = 'ulubiony';
+            initialColors[item.ID_Skladnika] = 'ulubiony';
           } else if (item.Ulubiony === 'Nie') {
             colorsObject[item.ID_Skladnika] = 'nieulubiony';
+            initialColors[item.ID_Skladnika] = 'nieulubiony';
           } else {
             colorsObject[item.ID_Skladnika] = '';
+            initialColors[item.ID_Skladnika] = '';
           }
         });
         setColors(colorsObject);
+        setInitialColors(initialColors);
         setUlubione(data);
       })
       .catch(error => console.error(error));
@@ -242,6 +266,7 @@ export default function Profil() {
           ))}
         </div>
       </div>
+      <button className={`mt-3 btn btn-primary ${change ? 'saveIngredients' : ''}`} onClick={() => handleSkladnikAccept()} disabled={!change}>Zapisz składniki</button>
       <div className="mt-5" >
       <a href="https://www.flaticon.com/free-icons/vegetable" title="vegetable icons">Vegetable icons created by SA Family - Flaticon</a>
       </div>

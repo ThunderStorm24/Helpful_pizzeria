@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import MySpeechRecognition from './SpeechRecognition';
 
 const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const navigate = useNavigate();
@@ -24,7 +25,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const [loading, setLoading] = useState(true);
   const [browser, setBrowser] = useState(true);
 
-  const [isListening, setIsListening] = useState (false);
   const [message, setMessage] = useState('');
 
   const dictionary = [
@@ -121,55 +121,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       window.location.reload();
     });
   };
-
-  const commands = [
-    {
-      command: ['menu','jedzenie','ceny','głodny','jeść',            
-                'food','hungry','price','eat'],
-      callback: () => {
-        setMessage('Menu');
-        setIsListening(false);
-        SpeechRecognition.stopListening();
-      }
-    },
-    {
-      command: ['wyczyść','odśwież','zresetuj',
-                'clear','reset','refresh'],
-      callback: ({resetTranscript}) => resetTranscript()
-    },
-    {
-      command: ['zatrzymaj',
-                'stop'],
-      callback: () => {
-        setIsListening(false);
-        SpeechRecognition.stopListening()
-      }
-    }
-  ]
-
-  const toggleListening = () => {
-    if (isListening) {
-      SpeechRecognition.stopListening();
-      setIsListening(false);
-    } else {
-      SpeechRecognition.startListening({continuous: true});
-      setIsListening(true);
-    }
-  }
-
-  const {
-    listening,
-    browserSupportsSpeechRecognition
-  } = useSpeechRecognition();
-
-  const{ transcript , resetTranscript} = useSpeechRecognition ({ commands });
-
-  useEffect(() => {
-    if (!browserSupportsSpeechRecognition) {
-      setBrowser(false);
-    }
-  }, [browserSupportsSpeechRecognition]);
-
 
   const handleInputChange = (event) => {
     const userInput = event.target.value;
@@ -300,29 +251,9 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
         </Form>
       </div>
+      <MySpeechRecognition />
       <div className="ms-2 me-2">
-      {browser ? (
-          <img
-          className={`m-1 microphone ${isListening ? 'active-microphone' : ''}`}
-          src="Microphone.png"
-          alt="Microphone"
-          style={{ width: "40px", height: "40px", cursor: "pointer" }}
-          onClick={toggleListening}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              toggleListening();
-            }
-          }}  
-          tabIndex={0}
-          role="button"
-        />
-      ) : (
-        <div>
-        <div className="recognize">
-          Browser doesn't support speech recognition.
-        </div>
-        </div>
-      )}
+      
     </div>
     
       
@@ -362,28 +293,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 )}
     </Navbar.Collapse>
   </Container>
-  <Modal
-    show={isListening}
-    onHide={() => {
-      setIsListening(false);
-      SpeechRecognition.stopListening();
-    }}
-    dialogClassName="modal-90w"
-    aria-labelledby="example-custom-modal-styling-title"
-  >
-    <Modal.Header closeButton style={{backgroundColor: '#444444' , color: 'white'}}>
-      <Modal.Title id="example-custom-modal-styling-title">
-        Co mówisz
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body style={{backgroundColor: '#141414' , color: 'white'}}>
-      <p>
-        {transcript}
-      </p>
-      <Button onClick={toggleListening} style={{margin: '5px'}}>{isListening ? 'Stop' : 'Start'}</Button>
-      <Button onClick={resetTranscript} style={{margin: '5px'}}>Reset</Button>
-    </Modal.Body>
-  </Modal>
 </Navbar>
     );
 }   

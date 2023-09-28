@@ -35,9 +35,9 @@ console.log(pizzaData)
 
   const commands = [
     {
-        command: [`Jakie są pizze`],
+        command: [`Jakie są pizze`,`pizzę`],
         callback: () => {
-          const pizzaList = pizzaData.map((pizza) => `ID: ${pizza.ID_Pizzy}, Nazwa: ${pizza.Nazwa}`).join(', '); // Tworzy listę nazw pizz razem z ID, oddzielonych przecinkami
+          const pizzaList = pizzaData.map((pizza) => `${pizza.ID_Pizzy} ${pizza.Nazwa}`).join(', '); // Tworzy listę nazw pizz razem z ID, oddzielonych przecinkami
           speak(`Dostępne pizze to: ${pizzaList}`);
         }
       },
@@ -77,6 +77,7 @@ console.log(pizzaData)
       command: ['zatrzymaj',
                 'stop'],
       callback: () => {
+        speak();
         setIsListening(false);
         SpeechRecognition.stopListening()
       }
@@ -109,11 +110,28 @@ console.log(pizzaData)
     }
   }, [browserSupportsSpeechRecognition]);
 
+  let sayTimeout = null; 
+
   const speak = (text) => {
     const synthesis = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    synthesis.speak(utterance);
+  
+    if (synthesis.speaking) {
+      synthesis.cancel();
+  
+      if (sayTimeout !== null) {
+        clearTimeout(sayTimeout);
+      }
+  
+      sayTimeout = setTimeout(() => {
+        speak(text);
+      }, 100);
+    } else {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "pl-PL";
+      synthesis.speak(utterance);
+    }
   };
+  
 
   return (
     <div>

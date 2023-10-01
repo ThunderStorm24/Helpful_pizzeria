@@ -270,7 +270,7 @@ const userDataCommands = [
       }
     },
     {
-      command: [`mail`],
+      command: [`mail`,`e-mail`],
       callback: () => {
         speak(`Nasz mail to: 
         Roberto@gmail.com.`);

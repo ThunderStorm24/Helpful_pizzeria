@@ -29,7 +29,6 @@ function MySpeechRecognition() {
         console.error('Błąd podczas pobierania danych z serwera:', error);
       });
   }, []);
-console.log(pizzaData)
 
 const userDataCommands = [
   {
@@ -182,32 +181,103 @@ const userDataCommands = [
   },
 ]
 
-  const pizzaCommands = pizzaData.map((pizza) => ({
-    command: [`chcę pizzę ${pizza.Nazwa}`,`dodaj ${pizza.Nazwa}`,`zapisz ${pizza.Nazwa}`],
-    callback: () => {
-        const updatedSelectedPizza = [...selectedPizza, pizza];
+const pizzaCommands = pizzaData.flatMap((pizza) => {
+  const commands = [`chcę pizzę ${pizza.Nazwa}`, `dodaj ${pizza.Nazwa}`, `zapisz ${pizza.Nazwa}`];
+  const skladnikiCommand = `składniki ${pizza.Nazwa}`;
+  const cenaCommand = `cena ${pizza.Nazwa}`;
+  const rozmiarCommand = `rozmiar ${pizza.Nazwa} *`
+
+  return [
+    {
+      command: commands,
+      callback: () => {
+        const cenaString = pizza.Cena;
+        const ceny = cenaString.split('/');
+        const cena = parseInt(ceny[0]);
+        const updatedSelectedPizza = [
+          ...selectedPizza,
+          {
+            pizza: pizza.Nazwa,
+            rozmiar: 'Mała', // Tutaj ustaw odpowiedni rozmiar
+            cena: cena
+          },
+        ];
         setSelectedPizza(updatedSelectedPizza);
-        speak(`Dodaję pizzę ${pizza.Nazwa} do wybranych.`);
+        speak(`Dodaję pizzę ${pizza.Nazwa} (rozmiar Mała) do wybranych.`);
+      },
     },
-    command: [`składniki ${pizza.Nazwa}`],
-    callback: () => {
+    {
+      command: rozmiarCommand,
+      callback: (size) => {
+
+        let rozmiar = 'Mała'; // Domyślnie ustawiamy rozmiar na "Mała"
+        const cenaString = pizza.Cena;
+        const ceny = cenaString.split('/');
+        let cena = ceny[0]; 
+    
+        // Sprawdzamy, czy komenda zawiera odpowiedni rozmiar
+        if (size.includes('mała')) {
+          rozmiar = 'Mała';
+          cena = ceny[0];
+        } else if (size.includes('średnia')) {
+          rozmiar = 'Średnia';
+          cena = ceny[1];
+        } else if (size.includes('duża')) {
+          rozmiar = 'Duża';
+          cena = ceny[2];
+        } else if (size.includes('gigant')) {
+          rozmiar = 'Gigant';
+          cena = ceny[3];
+        } else {
+          // Jeżeli rozmiar nie został zrozumiany, informujemy użytkownika
+          speak('Nie rozumiem rozmiaru. Proszę powiedzieć przykładowo: "Capriciosa mała", "Capriciosa średnia", "Capriciosa duża", lub "Capriciosa gigant".');
+          return; // Kończymy funkcję, aby nie aktualizować stanu
+        }
+
+        const parseCena = parseInt(cena);
+
+        const updatedSelectedPizza = selectedPizza.map((selected) => {
+          if (selected.pizza === pizza.Nazwa) {
+            // Aktualizujemy tylko rozmiar wybranej pizzy
+            return {
+              ...selected,
+              rozmiar: rozmiar,
+              cena: parseCena,
+            };
+          }
+          return selected;
+        });
+      
+        setSelectedPizza(updatedSelectedPizza);
+        speak(`Rozmiar pizzy ${pizza.Nazwa} zaktualizowano na ${rozmiar}.`);
+
+
+      },
+    },
+    {
+      command: [skladnikiCommand],
+      callback: () => {
         speak(`Składniki pizzy ${pizza.Nazwa} to ${pizza.Skladniki}.`);
+      },
     },
-    command: [`cena ${pizza.Nazwa}`],
-    callback: () => {
-      const sizes = ['Mała', 'Średnia', 'Duża', 'Gigant']; // Zakładam, że masz dostępne te rozmiary
-      const cenaString = pizza.Cena; // Zakładam, że cena jest zapisana w formie '10/20/30/40'
-      const ceny = cenaString.split('/'); // Dzielimy ciąg znaków na tablicę cen
-      let cenaMessage = ''; // Inicjujemy pustą wiadomość na ceny
-    
-      sizes.forEach((size, index) => {
-        const cena = ceny[index]; // Wybieramy cenę odpowiednią dla danego rozmiaru
-        cenaMessage += `${size} pizza: ${cena} złoty. `; // Dodajemy cenę do wiadomości
-      });
-    
-      speak(cenaMessage); // Odczytujemy całą wiadomość z cenami
+    {
+      command: [cenaCommand],
+      callback: () => {
+        const sizes = ['Mała', 'Średnia', 'Duża', 'Gigant'];
+        const cenaString = pizza.Cena;
+        const ceny = cenaString.split('/');
+        let cenaMessage = '';
+
+        sizes.forEach((size, index) => {
+          const cena = ceny[index];
+          cenaMessage += `${size} pizza: ${cena} złoty. `;
+        });
+
+        speak(cenaMessage);
+      },
     },
-  }));
+  ];
+});
 
   const commands = [
     {
@@ -284,21 +354,26 @@ const userDataCommands = [
         }
       },
       {
-        command: [`Jakie wybrałem pizze`,`Jakie wybrałem pizzę`,`Jakie mam pizze`,`Jakie mam pizzę`,`Moja lista`,`Moje pizze`,`Moje pizzę`],
+        command: [`Jakie wybrałem pizze`,`Jakie wybrałem pizzę`,`Jakie mam pizze`,`Jakie mam pizzę`,`Moja lista`,`Moje pizze`,`Moje pizzę`,`Ja wybrałem pizzę`,`Jaki wybrałem pizzę`],
         callback: () => {
-            if (selectedPizza && selectedPizza.length > 0) {
-                const selectedPizzaNames = selectedPizza.map((pizza) => pizza.Nazwa).join(', ');
-                speak(`Wybrałeś: ${selectedPizzaNames}`);
-              } else {
-                speak(`Nie wybrałeś jeszcze żadnej pizzy.`);
-              }
+          if (selectedPizza && selectedPizza.length > 0) {
+            const selectedPizzaInfo = selectedPizza.map((pizza) => {
+              return `${pizza.pizza} (rozmiar ${pizza.rozmiar})`;
+            }).join(', ');
+            speak(`Wybrałeś: ${selectedPizzaInfo}`);
+          } else {
+            speak(`Nie wybrałeś jeszcze żadnej pizzy.`);
+          }
         }
       },
       {
         command: ['złóż zamówienie','zamów'],
         callback: () => {
-          if (!imie) {
+          if (selectedPizza.length === 0) {
+            speak('Nie wybrano żadnej pizzy. Proszę wybrać przynajmniej jedną pizzę do zamówienia w forme "Chcę [Nazwa pizzy]".');
+          } else if (!imie) {
             speak('Brakuje imienia. Proszę podaj swoje imię w formie "Imie [Twoje Imię]".');
+            console.log(selectedPizza)
           } else if (!nazwisko) {
             speak('Brakuje nazwiska. Proszę podaj swoje nazwisko w formie "Nazwisko [Twoje Nazwisko]".');
           } else if (!numerTelefonu) {
@@ -308,8 +383,21 @@ const userDataCommands = [
           } else if (!kodPocztowy) {
             speak('Brakuje kodu pocztowego. Proszę podaj swój kod pocztowy w formie "Kod pocztowy [Twój kod pocztowy]".');
           } else {
-            // Tutaj możesz złożyć zamówienie, ponieważ wszystkie dane są dostępne
             speak('Dziękuję! Zamówienie zostało złożone.');
+            Axios.post('/ordervocally', {
+              selectedPizzas: selectedPizza,
+              Imie: imie,
+              Nazwisko: nazwisko,
+              Telefon: numerTelefonu,
+              Adres: adres,
+              Kod: kodPocztowy,
+            })
+            .then((response) => {
+            console.log('Odpowiedź z serwera:', response.data);
+            })
+            .catch((error) => {
+            console.error('Błąd podczas wysyłania zamówienia:', error);
+            });
           }
           }
         },

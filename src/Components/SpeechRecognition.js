@@ -182,7 +182,7 @@ const userDataCommands = [
 ]
 
 const pizzaCommands = pizzaData.flatMap((pizza) => {
-  const commands = [`chcę pizzę ${pizza.Nazwa}`, `dodaj ${pizza.Nazwa}`, `zapisz ${pizza.Nazwa}`];
+  const commands = [`chcę pizzę ${pizza.Nazwa}`, `dodaj ${pizza.Nazwa}`, `zapisz ${pizza.Nazwa}`,`chcę ${pizza.Nazwa}`];
   const skladnikiCommand = `składniki ${pizza.Nazwa}`;
   const cenaCommand = `cena ${pizza.Nazwa}`;
   const rozmiarCommand = `rozmiar ${pizza.Nazwa} *`

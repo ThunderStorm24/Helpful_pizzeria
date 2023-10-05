@@ -5,7 +5,7 @@ import { Spinner, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import ConfirmModal from '../Components/WindowModal/ConfirmCancelModal.js'
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
-import LogOrders from '../Components/orderComponents/LoggedOrders';
+import NotLogOrders from '../Components/orderComponents/NotLoggedOrders';
 
 export default function AdminOrders() {
 
@@ -23,7 +23,6 @@ export default function AdminOrders() {
     const navigate = useNavigate();
 
     const [orders, setOrders] = useState([]);
-    const [ordersNotLogged, setOrdersNotLogged] = useState([]);
     const [orderID, setOrderID] = useState('');
     const [orderPizza, setOrderPizza] = useState([])
 
@@ -46,22 +45,15 @@ export default function AdminOrders() {
     
 
     useEffect(() => {
-        Axios.get(`/ZamowieniaAdmin`)
-            .then(response => {
-                setOrders(response.data);
-                setLoading(false); // zmiana stanu loading na false
-            })
-            .catch(error => console.error(error));
-    }, []);
-
-    useEffect(() => {
       Axios.get(`/ZamowieniaAdminNiezalogowani`)
           .then(response => {
-              setOrdersNotLogged(response.data);
+              setOrders(response.data);
               setLoading(false); // zmiana stanu loading na false
           })
           .catch(error => console.error(error));
   }, []);
+
+  
 
     //Zmiana na gotowe zamowienie
     const handleReady = (order) => {
@@ -71,7 +63,7 @@ export default function AdminOrders() {
     };
 
     const handleReadyOrder = () => {
-      Axios.post('/GotoweZamowienie', {
+      Axios.post('/GotoweZamowienieNiezalogowani', {
       orderID: orderID,
     }).then((response) => {
       window.location.reload();
@@ -86,7 +78,7 @@ export default function AdminOrders() {
     };
 
     const handleFinishOrder = () => {
-      Axios.post('/ZakonczoneZamowienie', {
+      Axios.post('/ZakonczoneZamowienieNiezalogowani', {
         orderID: orderID,
       }).then((response) => {
         window.location.reload();
@@ -101,7 +93,7 @@ export default function AdminOrders() {
     };
 
     const handleDeleteOrder = () => {
-      Axios.post('/UsuwaneZamowienie', {
+      Axios.post('/UsuwaneZamowienieNiezalogowani', {
         orderID: orderID,
       }).then((response) => {
         window.location.reload();
@@ -122,15 +114,16 @@ export default function AdminOrders() {
     ) : (rola === "admin" ? ( 
       <div style={{ marginTop: "10px"}}>
 
-        <Button href="/AdminOrder" disabled>Zamówienia</Button>
-        <Button href="/AdminOrdersNotLogged">Zamówienia niezalogowanych użytkowników</Button>
+        <Button href="/AdminOrders">Zamówienia</Button>
+        <Button href="/AdminOrdersNotLogged" disabled>Zamówienia niezalogowanych użytkowników</Button>
 
-      <LogOrders
+      <NotLogOrders
         orders={orders}
         handleReady={handleReady}
         handleFinish={handleFinish}
         handleDelete={handleDelete}
       />
+
 
     </div>
     ):(<div>nieuprawniony dostęp</div>))}

@@ -8,6 +8,7 @@ import Axios from 'axios';
 function MySpeechRecognition() {
 
     const [pizzaData, setPizzaData] = useState([]);
+    const [orderData, setOrderData] = useState([]);
     const [selectedPizza, setSelectedPizza] = useState([]);
 
     const [imie,setImie] = useState('');
@@ -344,6 +345,38 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
       callback: () => {
         speak(`Nasz mail to: 
         Roberto@gmail.com.`);
+      }
+    },
+    {
+      command: [`Zamówienie dla *`],
+      callback: (phone) => {
+        const noSpace = phone.replace(/\s+/g, '');
+        if (/^\d{9}$/.test(noSpace)) {
+          // Wyślij komunikat z zapisanym numerem telefonu
+          setNumerTelefonu('+48' + noSpace);
+          Axios.get(`/glosowezamowienia/+48${noSpace}`)
+          .then((response) => {
+            const orders = response.data; // Tutaj otrzymasz tablicę z zamówieniami
+            console.log(orders);
+        
+            if (orders.length === 0) {
+              console.log("Brak zamówień dla tego numeru telefonu.");
+              speak(`Brak zamówień dla tego numeru telefonu.`);
+              return;
+            }
+        
+            // Przeglądanie i wyświetlanie statusu każdego zamówienia
+            orders.forEach((order, index) => {
+              const status = order.Status;
+              console.log(`Zamówienie ${index + 1}: Status zamówienia to ${status}`);
+              speak(`Zamówienie ${index + 1}: Status zamówienia to ${status}`);
+            });
+          })
+          
+        } else {
+          // Jeśli numer telefonu nie spełnia wymagań, wyślij odpowiedni komunikat
+          speak('Niepoprawny numer telefonu. Numer telefonu musi składać się z 9 cyfr.');
+        }
       }
     },
     {

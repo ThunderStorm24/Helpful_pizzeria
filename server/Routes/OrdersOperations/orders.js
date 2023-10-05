@@ -61,10 +61,32 @@ router.get("/Zamowienia/:ID_Uzytkownika", (req, res) => {
   );
 });
 
+router.get("/glosowezamowienia/:Telefon", (req, res) => {
+  const { Telefon } = req.params;
+  connection.query(
+    "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, glosowezamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE glosowezamowienia.telefon = ? GROUP BY glosowezamowienia.ID_Zamowienia;",
+    [Telefon],
+    (error, results, fields) => {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+});
+
 //Wszystie zamówienia dla pizzeri
 router.get("/ZamowieniaAdmin", (req, res) => {
   connection.query(
       "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, zamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY zamowienia.ID_Zamowienia;",
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
+router.get("/ZamowieniaAdminNiezalogowani", (req, res) => {
+  connection.query(
+      "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.telefon, glosowezamowienia.imie, glosowezamowienia.nazwisko, glosowezamowienia.adres, glosowezamowienia.kod_pocztowy, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, glosowezamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY glosowezamowienia.ID_Zamowienia;",
       (error, results, fields) => {
           if (error) throw error;
           res.json(results);
@@ -85,6 +107,19 @@ router.post("/GotoweZamowienie", (req, res) => {
   );
 });
 
+router.post("/GotoweZamowienieNiezalogowani", (req, res) => {
+  const orderID  = req.body.orderID;
+  console.log(orderID)
+  connection.query(
+    "UPDATE glosowezamowienia SET Status = 'Gotowe' WHERE ID_Zamowienia = ?;",
+    [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
 router.post("/ZakonczoneZamowienie", (req, res) => {
   const orderID  = req.body.orderID;
   connection.query(
@@ -97,10 +132,34 @@ router.post("/ZakonczoneZamowienie", (req, res) => {
   );
 });
 
+router.post("/ZakonczoneZamowienieNiezalogowani", (req, res) => {
+  const orderID  = req.body.orderID;
+  connection.query(
+      "UPDATE glosowezamowienia SET Status = 'Zakończone' WHERE ID_Zamowienia = ?;",
+      [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
 router.post("/UsuwaneZamowienie", (req, res) => {
   const orderID  = req.body.orderID;
   connection.query(
     "DELETE FROM Zamowienia WHERE ID_Zamowienia = ?;",
+    [orderID],
+      (error, results, fields) => {
+          if (error) throw error;
+          res.json(results);
+      }
+  );
+});
+
+router.post("/UsuwaneZamowienieNiezalogowani", (req, res) => {
+  const orderID  = req.body.orderID;
+  connection.query(
+    "DELETE FROM glosowezamowienia WHERE ID_Zamowienia = ?;",
     [orderID],
       (error, results, fields) => {
           if (error) throw error;

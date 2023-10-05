@@ -10,6 +10,7 @@ import Register from './Auth/Register.js';
 import Koszyk from './Pages/Koszyk.js';
 import Orders from './Pages/Orders.js';
 import AdminOrders from './Pages/AdminOrder.js';
+import AdminOrdersNotLogged from './Pages/AdminOrderNotLogged.js';
 import Users from './Pages/Users.js'
 import { Route, Routes} from "react-router-dom";
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/Koszyk" element={<Koszyk />}></Route>
         <Route path="/Orders" element={<Orders />}></Route>
         <Route path="/AdminOrders" element={<AdminOrders />}></Route>
+        <Route path="/AdminOrdersNotLogged" element={<AdminOrdersNotLogged />}></Route>
         <Route path="/Users" element={<Users />}></Route>
       </Routes>
 

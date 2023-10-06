@@ -122,8 +122,8 @@ export default function AdminOrders() {
     ) : (rola === "admin" ? ( 
       <div style={{ marginTop: "10px"}}>
 
-        <Button href="/AdminOrder" disabled>Zamówienia</Button>
-        <Button href="/AdminOrdersNotLogged">Zamówienia niezalogowanych użytkowników</Button>
+        <Button className="" href="/AdminOrder" disabled>Zamówienia</Button>
+        <Button className="" href="/AdminOrdersNotLogged">Zamówienia niezalogowanych użytkowników</Button>
 
       <LogOrders
         orders={orders}

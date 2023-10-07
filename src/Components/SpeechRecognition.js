@@ -348,7 +348,7 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
       }
     },
     {
-      command: [`Zamówienie dla *`],
+      command: [`Zamówienie dla *`,`Status dla *`],
       callback: (phone) => {
         const noSpace = phone.replace(/\s+/g, '');
         if (/^\d{9}$/.test(noSpace)) {

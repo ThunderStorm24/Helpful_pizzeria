@@ -156,15 +156,69 @@ router.post("/UsuwaneZamowienie", (req, res) => {
   );
 });
 
-router.post("/UsuwaneZamowienieNiezalogowani", (req, res) => {
-  const orderID  = req.body.orderID;
+router.post('/ordervocally', (req, res) => {
+
+  const { selectedPizzas, Imie, Nazwisko, Telefon, Adres, Kod, Dostawa } = req.body;
+
+  console.log('Odebrane dane:');
+  console.log('Wybrane pizze:', selectedPizzas);
+  console.log('Imię:', Imie);
+  console.log('Nazwisko:', Nazwisko);
+  console.log('Telefon:', Telefon);
+  console.log('Adres:', Adres);
+  console.log('Kod pocztowy:', Kod);
+  console.log('Kod pocztowy:', Dostawa);
+
   connection.query(
-    "DELETE FROM glosowezamowienia WHERE ID_Zamowienia = ?;",
-    [orderID],
-      (error, results, fields) => {
-          if (error) throw error;
-          res.json(results);
+    `INSERT INTO glosowezamowienia (Cena, Dostawa, Status, Data_Zlozenia, Godzina, Telefon, Imie, Nazwisko, Kod_Pocztowy, Adres)
+     VALUES (?, ?, ?, CURRENT_DATE, CURRENT_TIME, ?, ?, ?, ?, ?)`,
+    [0, Dostawa, 'Oczekujące', Telefon, Imie, Nazwisko, Kod, Adres],
+    (error, results) => {
+      if (error) {
+        console.error("Błąd podczas dodawania zamówienia: ", error);
+        res.status(500).json({ message: "Wystąpił błąd podczas dodawania zamówienia." });
+      } else {
+        const ID_Zamowienia = results.insertId; // Pobierz zwrócone ID_Zamowienia
+
+        // Przelicz cenę zamówienia na podstawie wybranych pizz
+        let cenaZamowienia = 0;
+        for (const pizza of selectedPizzas) {
+          cenaZamowienia += pizza.cena;
+          console.log("Cena pizzy:", pizza.cena);
+        }
+
+        console.log("Obliczona cena zamówienia:", cenaZamowienia);
+
+        // Zaktualizuj cenę zamówienia w tabeli glosowezamowienia
+        connection.query(
+          'UPDATE glosowezamowienia SET Cena = ? WHERE ID_Zamowienia = ?',
+          [cenaZamowienia, ID_Zamowienia],
+          (error, results) => {
+            if (error) {
+              console.error("Błąd podczas aktualizacji ceny zamówienia: ", error);
+              res.status(500).json({ message: "Wystąpił błąd podczas aktualizacji ceny zamówienia." });
+            } else {
+              for (const pizza of selectedPizzas) {
+                const dodajPizzeQuery = "INSERT INTO glosowezamowienia_pizza (ID_Zamowienia, ID_Pizzy, Rozmiar_Pizzy, Cena) VALUES (?, ?, ?, ?)";
+                const pizzValues = [ID_Zamowienia, pizza.idpizzy, pizza.rozmiar, pizza.cena];
+
+                connection.query(
+                  dodajPizzeQuery,
+                  pizzValues,
+                  (error, results) => {
+                    if (error) {
+                      console.error("Błąd podczas dodawania pizzy: ", error);
+                      res.status(500).json({ message: "Wystąpił błąd podczas dodawania pizzy." });
+                    }
+                  }
+                );
+              }
+
+            }
+          }
+        );
       }
+    }
   );
 });
 

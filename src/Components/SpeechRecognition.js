@@ -16,6 +16,7 @@ function MySpeechRecognition() {
     const [numerTelefonu,setNumerTelefonu] = useState('');
     const [adres,setAdres] = useState('');
     const [kodPocztowy,setKodPocztowy] = useState('');
+    const [dostawa,setDostawa] = useState('');
 
 
   const [isListening, setIsListening] = useState(false);
@@ -35,7 +36,7 @@ const userDataCommands = [
   {
     command: 'Imię *',
     callback: (name) => {
-      if(/^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(name)){
+      if(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(name)){
       speak(`Twoje imię zostało zapisane jako ${name}`)
       setImie(name);
       } else {
@@ -46,7 +47,7 @@ const userDataCommands = [
   {
     command: 'Nazwisko *',
     callback: (surname) => {
-      if(/^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(surname)){
+      if(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(surname)){
       speak(`Twoje nazwisko zostało zapisane jako ${surname}`)
       setNazwisko(surname);
     } else {
@@ -90,6 +91,20 @@ const userDataCommands = [
         // Jeśli numer telefonu nie spełnia wymagań, wyślij odpowiedni komunikat
         speak('Niepoprawny numer telefonu. Numer telefonu musi składać się z 9 cyfr.');
       }
+    }
+  },
+  {
+    command: ['Dostawa Tak','Dostawa do domu','Chcę dostawę'],
+    callback: () => {
+      speak('Dostawa ustawiona na dowóz do domu')
+      setDostawa('Tak');
+    }
+  },
+  {
+    command: ['Dostawa Nie','Odbiór osobisty','Nie chcę dostawy'],
+    callback: () => {
+      speak('Dostawa ustawiona na odbiór w restauracji')
+      setDostawa('Nie');
     }
   },
   {
@@ -180,10 +195,24 @@ const userDataCommands = [
     }
   }
   },
+  {
+    command: [`Jaka dostawa`,`Jaką wybrałem dostawe`,`Dostawa`],
+    callback: () => {
+      if (dostawa == "Tak") {
+      speak(`Wybrałeś dowóz do domu`);
+    } else if(dostawa =="Nie"){
+      speak(`Wybrałeś obiór w restauracji`);
+    } else {
+      speak(`nie podano. Proszę podaj formę dostawy w postaci "Dostawa do domu lub Odbiór osobisty"`);
+    }
+  }
+  },
 ]
 
+console.log(selectedPizza);
+
 const pizzaCommands = pizzaData.flatMap((pizza) => {
-  const commands = [`chcę pizzę ${pizza.Nazwa}`, `dodaj ${pizza.Nazwa}`, `zapisz ${pizza.Nazwa}`,`chcę ${pizza.Nazwa}`];
+  const commands = [`chcę pizzę ${pizza.Nazwa}`,`chcę pizza ${pizza.Nazwa}`, `dodaj ${pizza.Nazwa}`, `zapisz ${pizza.Nazwa}`,`chcę ${pizza.Nazwa}`];
   const skladnikiCommand = `składniki ${pizza.Nazwa}`;
   const cenaCommand = `cena ${pizza.Nazwa}`;
   const rozmiarCommand = `rozmiar ${pizza.Nazwa} *`
@@ -192,21 +221,32 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
     {
       command: commands,
       callback: () => {
-        const cenaString = pizza.Cena;
-        const ceny = cenaString.split('/');
-        const cena = parseInt(ceny[0]);
-        const updatedSelectedPizza = [
-          ...selectedPizza,
-          {
-            pizza: pizza.Nazwa,
-            rozmiar: 'Mała', // Tutaj ustaw odpowiedni rozmiar
-            cena: cena
-          },
-        ];
-        setSelectedPizza(updatedSelectedPizza);
-        speak(`Dodaję pizzę ${pizza.Nazwa} (rozmiar Mała) do wybranych.`);
+        // Sprawdzamy, czy już istnieje pizza o tej samej nazwie
+        const existingPizzaIndex = selectedPizza.findIndex((selected) => selected.pizza === pizza.Nazwa);
+        
+        if (existingPizzaIndex === -1) {
+          // Jeśli nie istnieje, dodajemy pizzę
+          const cenaString = pizza.Cena;
+          const ceny = cenaString.split('/');
+          const cena = parseInt(ceny[0]);
+          const updatedSelectedPizza = [
+            ...selectedPizza,
+            {
+              number: selectedPizza.length,
+              idpizzy: pizza.ID_Pizzy,
+              pizza: pizza.Nazwa,
+              rozmiar: 'Mała', // Tutaj ustaw odpowiedni rozmiar
+              cena: cena
+            },
+          ];
+          setSelectedPizza(updatedSelectedPizza);
+          speak(`Dodaję pizzę ${pizza.Nazwa} (rozmiar Mała) do wybranych.`);
+        } else {
+          // Jeśli już istnieje pizza o tej samej nazwie, informujemy użytkownika
+          speak(`Pozycja ${pizza.Nazwa} już istnieje w zamówieniu. Proszę zmienić rozmiar przez przykładowo rozmiar Capriciosa mała lub stworzyć kolejne zamówienie z tą samą pizzą.`);
+        }
+      }
       },
-    },
     {
       command: rozmiarCommand,
       callback: (size) => {
@@ -387,11 +427,11 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
         }
       },
       {
-        command: [`Jakie wybrałem pizze`,`Jakie wybrałem pizzę`,`Jakie mam pizze`,`Jakie mam pizzę`,`Moja lista`,`Moje pizze`,`Moje pizzę`,`Ja wybrałem pizzę`,`Jaki wybrałem pizzę`],
+        command: [`jakie brałem pizzę`,`Jakie wybrałem pizze`,`Jakie wybrałem pizzę`,`Jakie mam pizze`,`Jakie mam pizzę`,`Moja lista`,`Moje pizze`,`Moje pizzę`,`Ja wybrałem pizzę`,`Jaki wybrałem pizzę`],
         callback: () => {
           if (selectedPizza && selectedPizza.length > 0) {
             const selectedPizzaInfo = selectedPizza.map((pizza) => {
-              return `${pizza.pizza} (rozmiar ${pizza.rozmiar})`;
+              return `${pizza.pizza} (rozmiar ${pizza.rozmiar}) (cena ${pizza.cena})`;
             }).join(', ');
             speak(`Wybrałeś: ${selectedPizzaInfo}`);
           } else {
@@ -406,7 +446,6 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
             speak('Nie wybrano żadnej pizzy. Proszę wybrać przynajmniej jedną pizzę do zamówienia w forme "Chcę [Nazwa pizzy]".');
           } else if (!imie) {
             speak('Brakuje imienia. Proszę podaj swoje imię w formie "Imie [Twoje Imię]".');
-            console.log(selectedPizza)
           } else if (!nazwisko) {
             speak('Brakuje nazwiska. Proszę podaj swoje nazwisko w formie "Nazwisko [Twoje Nazwisko]".');
           } else if (!numerTelefonu) {
@@ -415,6 +454,8 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
             speak('Brakuje adresu. Proszę podaj swój adres w formie "Adres [Twój Adres]".');
           } else if (!kodPocztowy) {
             speak('Brakuje kodu pocztowego. Proszę podaj swój kod pocztowy w formie "Kod pocztowy [Twój kod pocztowy]".');
+          } else if (!dostawa) {
+            speak('Brakuje formy dostawy. Proszę podaj formę dostawy w postaci "Dostawa do domu lub Odbiór osobisty".');
           } else {
             speak('Dziękuję! Zamówienie zostało złożone.');
             Axios.post('/ordervocally', {
@@ -424,6 +465,7 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
               Telefon: numerTelefonu,
               Adres: adres,
               Kod: kodPocztowy,
+              Dostawa: dostawa,
             })
             .then((response) => {
             console.log('Odpowiedź z serwera:', response.data);

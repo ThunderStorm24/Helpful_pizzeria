@@ -45,7 +45,7 @@ useEffect(() => {
       
       setIndex(0);
     }
-  },[userID]);
+  },[show]);
 
   useEffect(() => {
     if (user.length > 0 && index !== null) {

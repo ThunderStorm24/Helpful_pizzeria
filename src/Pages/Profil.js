@@ -1,20 +1,21 @@
 import NavbarE from './../Components/NavBar.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import EditModal from "../Components/WindowModal/EditUserModal.js"
 import Spinner from 'react-bootstrap/Spinner';
+import { SessionContext } from '../SessionContext/Session.js';
 
 export default function Profil() {
 
-  const [loading, setLoading] = useState(true);
+
+  const userSession = useContext(SessionContext).userSession;
+  const [loading, setLoading] = useState(false);
 
   const [editModal, setEditModal] = useState(false);
   const [added, setAdded] = useState(false);
 
   const navigate = useNavigate();
-  const [loginID, setLoginID] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
   const [user, setUser] = useState({});
 
   const [message, setMessage] = useState('');
@@ -61,6 +62,8 @@ export default function Profil() {
   const handleSkladnikAccept = () => {
     const changedColors = getChangedColors();
 
+    const loginID=userSession?.ID_Uzytkownika;
+
     // Wyślij zmienione składniki na serwer za pomocą Axios
     Axios.post('/ZmienUlubione', { changedColors, loginID })
       .then((response) => {
@@ -81,7 +84,8 @@ export default function Profil() {
   }, []);
 
   useEffect(() => {
-    fetch(`/ulubioneskladniki/${loginID}`)
+    if (userSession?.ID_Uzytkownika) {
+    fetch(`/ulubioneskladniki/${userSession?.ID_Uzytkownika}`)
       .then(response => response.json())
       .then(data => {
         // Tworzymy obiekt kolorów na podstawie danych z bazy danych
@@ -104,7 +108,8 @@ export default function Profil() {
         setUlubione(data);
       })
       .catch(error => console.error(error));
-  }, [loginID]); // Dodaj loginID jako zależność, aby efekt był wywoływany przy jego zmianie
+    }
+  }, [userSession?.ID_Uzytkownika]); // Dodaj userSession?.ID_Uzytkownika jako zależność, aby efekt był wywoływany przy jego zmianie
 
   const isUlubiony = (skladnik) => {
     const status = colors[skladnik.ID_Skladnika];
@@ -116,31 +121,6 @@ export default function Profil() {
       return null;
     }
   };
-
-
-  useEffect(() => {
-    Axios.get("/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setLoginStatus(response.data.user[0].Login)
-        setLoginID(response.data.user[0].ID_Uzytkownika)
-      } else {
-        navigate("/");
-      }
-    })
-  }, [])
-
-  
-  //WYŚWIETLANIE zalogowanego użytkownika
-  useEffect(() => {
-    if (loginID) { // Sprawdź, czy userID nie jest pusty
-    Axios.get(`/uzytkownicy/${loginID}`)
-    .then(response => {
-      setUser(response.data);
-      setLoading(false); // zmiana stanu loading na false
-    })
-      .catch(error => console.error(error));
-  }
-  }, [loginStatus]);
 
   //EDYTOWANIE zalogowanego użytkownika
   const handleChange = () => {
@@ -183,7 +163,7 @@ export default function Profil() {
           <div className="col-md-6">
             <div className="card bg-dark text-white">
               <div className="card-header text-center border-secondary">
-                <h4>Profil użytkownika [ID: {user.ID_Uzytkownika}]</h4>
+                <h4>Profil użytkownika [ID: {userSession?.ID_Uzytkownika}]</h4>
               </div>
               <div className="card-body">
                 <div className="row">
@@ -191,7 +171,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Imię:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Imie}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Imie}</h6>
                   </div>
                 </div>
                 <div className="row">
@@ -199,7 +179,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Nazwisko:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Nazwisko}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Nazwisko}</h6>
                   </div>
                 </div>
                 <div className="row">
@@ -207,7 +187,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Adres:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Adres}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Adres}</h6>
                   </div>
                 </div>
                 <div className="row">
@@ -215,7 +195,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Kod pocztowy:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Kod_Pocztowy}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Kod_Pocztowy}</h6>
                   </div>
                 </div>
                 <div className="row">
@@ -223,7 +203,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Telefon:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Telefon}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Telefon}</h6>
                   </div>
                 </div>
                 <div className="row">
@@ -231,7 +211,7 @@ export default function Profil() {
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Login:</h6>
                   </div>
                   <div className="col-8">
-                    <h6 className="ms-5" style={{ textAlign: "left" }}>{user.Login}</h6>
+                    <h6 className="ms-5" style={{ textAlign: "left" }}>{userSession?.Login}</h6>
                   </div>
                 </div>
                 <div className="text-center mt-4">
@@ -278,7 +258,7 @@ export default function Profil() {
         onHide={handleCloseModal}
         onSubmit={handleEditModal}
         title={`Edytowanie twoich danych`}
-        userID={loginID}
+        userID={userSession?.ID_Uzytkownika}
         button={`Edytuj`}
         Added={added}
         message={message}

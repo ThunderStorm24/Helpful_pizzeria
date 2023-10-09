@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactDOM } from "react";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -15,12 +15,15 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import MySpeechRecognition from './SpeechRecognition';
+import { SessionContext } from '../SessionContext/Session.js';
 
 const NavbarE = ({addItemsCart, subtractItemsCart}) => {
+
+  const userSession = useContext(SessionContext).userSession;
+
+  console.log(userSession?.ID_Uzytkownika);
   const navigate = useNavigate();
 
-  const [loginStatus, setLoginStatus] = useState ("");
-  const [loginID, setLoginID] = useState (0);
   const [rola, setRola] = useState ("");
   const [loading, setLoading] = useState(true);
   const [browser, setBrowser] = useState(true);
@@ -52,7 +55,8 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   
   //Pobranie informacji odnośnie liczby pizz w koszyku dla zalogowanego użytkownika
   useEffect(() => {
-    Axios.get(`/Koszyk/${loginID}`)
+    if(userSession?.ID_Uzytkownika){
+    Axios.get(`/Koszyk/${userSession?.ID_Uzytkownika}`)
       .then(response => { 
         const data = response.data;
         setCountItemsCart(data.length);
@@ -60,11 +64,12 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       .catch(error => {
         console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
       });
-  }, [loginStatus]);
+    }
+  }, [userSession?.ID_Uzytkownika]);
     //Pobranie informacji odnośnie liczby zamówień dla zalogowanego użytkownika
     useEffect(() => {
-      if (loginID) { // Sprawdź, czy userID nie jest pusty
-      Axios.get(`/Zamowienia/${loginID}`)
+      if (userSession?.ID_Uzytkownika) { // Sprawdź, czy userID nie jest pusty
+      Axios.get(`/Zamowienia/${userSession?.ID_Uzytkownika}`)
         .then(response => { 
           const data = response.data;
           setCountOrders(data.length);
@@ -73,7 +78,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
         });
       }
-    }, [loginStatus]);
+    }, [userSession?.ID_Uzytkownika]);
         //Pobranie informacji odnośnie liczby zamówień dla pracowników pizzeri
         useEffect(() => {
           Axios.get(`/ZamowieniaAdmin`)
@@ -101,22 +106,10 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const TotalOrders = countOrders;
   //Liczba zamówień dla pracowników pizzerii
   const TotalAdminOrders = countAdminOrders;
-  
-  useEffect(() => {
-    Axios.get("/login").then((response) => {
-        if (response.data.loggedIn == true) {
-        setLoginStatus(response.data.user[0].Login)
-        setLoginID(response.data.user[0].ID_Uzytkownika)
-        setRola(response.data.user[0].Rola)
-        }
-        setLoading(false); // zmiana stanu loading na false
-    })
-}, [])
 
   const handleLogout = () => {
     Axios.get('/wyloguj').then((response) => {
       alert('Wylogowano!');
-      setLoginStatus("");
       navigate('/');
       window.location.reload();
     });
@@ -258,10 +251,10 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
     
       
       
-      {loginStatus ? (
+      {userSession?.ID_Uzytkownika ? (
         <Dropdown>
         <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2 loginButton">
-          {loginStatus}
+          {userSession?.ID_Uzytkownika}
         </Dropdown.Toggle>
   
         <Dropdown.Menu align="end" variant="dark">

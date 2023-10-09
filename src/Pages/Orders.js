@@ -1,44 +1,33 @@
 import NavbarE from './../Components/NavBar.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 import Axios from 'axios';
 import { Button } from "react-bootstrap";
-
-
+import { SessionContext } from '../SessionContext/Session.js';
 
 export default function Orders() {
 
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
-    const [loginID, setLoginID] = useState("");
-    const [loginStatus, setLoginStatus] = useState("");
 
     const [orders, setOrders] = useState([]);
 
-    useEffect(() => {
-        Axios.get("/login").then((response) => {
-            if (response.data.loggedIn == true) {
-                setLoginStatus(response.data.user[0].Login)
-                setLoginID(response.data.user[0].ID_Uzytkownika)
-            } else {
-                navigate("/");
-            }
-        })
-    }, [])
+    const userSession = useContext(SessionContext).userSession;
+
+    console.log(userSession?.ID_Uzytkownika);
 
     useEffect(() => {
-      if (loginID) { // Sprawdź, czy userID nie jest pusty
-        Axios.get(`/Zamowienia/${loginID}`)
+      if (userSession?.ID_Uzytkownika) { // Sprawdź, czy userID nie jest pusty
+        Axios.get(`/Zamowienia/${userSession?.ID_Uzytkownika}`)
             .then(response => {
                 setOrders(response.data);
-                console.log(orders);
                 setLoading(false); // zmiana stanu loading na false
             })
             .catch(error => console.error(error));
           }
-    }, [loginID]);
+    }, [userSession?.ID_Uzytkownika]);
 
   return (
     <div style={{ minHeight: "140vh" }}>

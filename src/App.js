@@ -13,11 +13,29 @@ import AdminOrders from './Pages/AdminOrder.js';
 import AdminOrdersNotLogged from './Pages/AdminOrderNotLogged.js';
 import Users from './Pages/Users.js'
 import { Route, Routes} from "react-router-dom";
+import { SessionContext } from "./SessionContext/Session.js";
+import Axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from "react-router-dom";
 
 function App() {
+
+  const navigate = useNavigate();
+  const [userSession,setUserSession] = useState(null);
+
+  useEffect(() => {
+    Axios.get("/login").then((response) => {
+      if (response.data.loggedIn == true) {
+        setUserSession(response.data.user[0])
+      } else {
+      }
+    })
+  }, [])
   
   return (
     <div className="App black text-white">
+      <SessionContext.Provider value={{ userSession, setUserSession }}>
+        
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/Menu" element={<Menu />}></Route>
@@ -30,6 +48,7 @@ function App() {
         <Route path="/AdminOrdersNotLogged" element={<AdminOrdersNotLogged />}></Route>
         <Route path="/Users" element={<Users />}></Route>
       </Routes>
+      </SessionContext.Provider>
 
     </div>
   );

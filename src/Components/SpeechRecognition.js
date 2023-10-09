@@ -196,7 +196,7 @@ const userDataCommands = [
   }
   },
   {
-    command: [`Jaka dostawa`,`Jaką wybrałem dostawe`,`Dostawa`],
+    command: [`Jaka dostawa`,`Jaką wybrałem dostawe`,`Dostawa`,`Jest Dostawa`],
     callback: () => {
       if (dostawa == "Tak") {
       speak(`Wybrałeś dowóz do domu`);

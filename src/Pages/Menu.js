@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import NavbarE from './../Components/NavBar.js';
 import Bookmarks from "./../Components/MenuContent.js";
 import PizzaModal from "./../Components/WindowModal/AddModal";
@@ -7,6 +7,7 @@ import EditPizzaModal from "./../Components/WindowModal/EditModal";
 import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
 import ToastOperations from './../Components/smallComponents/ToastOperations'
 import Axios from 'axios';
+import { SessionContext } from '../SessionContext/Session.js';
 
 export default function Menu() {
     const [showModal, setShowModal] = useState(false);
@@ -23,6 +24,10 @@ export default function Menu() {
     const [custom, setCustom] = useState('');
 
     const [addItemsCart, setAddItemsCart] = useState(0);
+
+    const userSession = useContext(SessionContext).userSession;
+
+    console.log(userSession?.ID_Uzytkownika);
 
   const increaseItemsCount = () => {
     setAddItemsCart(prevCount => prevCount + 1); // Zwiększenie licznika o 1
@@ -72,16 +77,7 @@ export default function Menu() {
     const [added,setAdded] = useState(false);
 
     //Sesja
-    const [ID, setID] = useState("");
-
-    //SESJA
-    useEffect(() => {
-        Axios.get("/login").then((response) => {
-            if (response.data.loggedIn == true) {
-                setID(response.data.user[0].ID_Uzytkownika)
-            }
-        })
-    }, [])
+      const ID = userSession?.ID_Uzytkownika;
 
     const handleAddPizza = async (pizza) => {
         Axios.post('http://localhost:5000/DodajPizzeOryginalna', {

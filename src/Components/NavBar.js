@@ -21,6 +21,8 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
   const userSession = useContext(SessionContext).userSession;
 
+  console.log(userSession?.ID_Uzytkownika)
+
   console.log(userSession?.ID_Uzytkownika);
   const navigate = useNavigate();
 
@@ -68,11 +70,13 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   }, [userSession?.ID_Uzytkownika]);
     //Pobranie informacji odnośnie liczby zamówień dla zalogowanego użytkownika
     useEffect(() => {
+      setLoading(true);
       if (userSession?.ID_Uzytkownika) { // Sprawdź, czy userID nie jest pusty
       Axios.get(`/Zamowienia/${userSession?.ID_Uzytkownika}`)
         .then(response => { 
           const data = response.data;
           setCountOrders(data.length);
+          setLoading(false);
         })
         .catch(error => {
           console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
@@ -86,6 +90,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
               const data = response.data;
               const orderedOrders = data.filter(order => order.Status === "Zamówiono");
               setCountAdminOrders(orderedOrders.length);
+              setLoading(false);
             })
             .catch(error => {
               console.error('Wystąpił błąd podczas pobierania danych z koszyka:', error);
@@ -108,6 +113,9 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const TotalAdminOrders = countAdminOrders;
 
   const handleLogout = () => {
+
+    localStorage.removeItem('cachedUser');
+
     Axios.get('/wyloguj').then((response) => {
       alert('Wylogowano!');
       navigate('/');
@@ -248,33 +256,31 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       <div className="ms-2 me-2">
       
     </div>
-    
-      
-      
-      {userSession?.ID_Uzytkownika ? (
+
+      {userSession != null ? (
         <Dropdown>
         <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2 loginButton">
-          {userSession?.ID_Uzytkownika}
+          {userSession?.Login}
         </Dropdown.Toggle>
   
         <Dropdown.Menu align="end" variant="dark">
           <Dropdown.Item href="/Profil">Mój profil</Dropdown.Item>
-          {rola === 'user' ? (
+          {userSession?.Rola === 'admin' ? (
+            <>
+            <Dropdown.Item href="/Menu">Pizze</Dropdown.Item>
+            <Dropdown.Item href="/adminOrders">
+              {TotalAdminOrders > 0 ? (
+                <strong>Zamówienia ({TotalAdminOrders})</strong>
+              ) : (
+                <span>Zamówienia ({TotalAdminOrders})</span>
+              )}
+            </Dropdown.Item>
+            <Dropdown.Item href="/Users">Użytkownicy</Dropdown.Item>
+          </>
+          ) : (
             <>
               <Dropdown.Item href="/koszyk">Koszyk ({TotalItemsCart})</Dropdown.Item>
               <Dropdown.Item href="/Orders">Moje zamówienia ({TotalOrders})</Dropdown.Item>
-            </>
-          ) : (
-            <>
-              <Dropdown.Item href="/Menu">Pizze</Dropdown.Item>
-              <Dropdown.Item href="/adminOrders">
-                {TotalAdminOrders > 0 ? (
-                  <strong>Zamówienia ({TotalAdminOrders})</strong>
-                ) : (
-                  <span>Zamówienia ({TotalAdminOrders})</span>
-                )}
-              </Dropdown.Item>
-              <Dropdown.Item href="/Users">Użytkownicy</Dropdown.Item>
             </>
           )}
           <Dropdown.Divider />

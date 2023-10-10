@@ -1,16 +1,15 @@
 import NavbarE from './../Components/NavBar.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
+import { SessionContext } from '../SessionContext/Session.js';
 
 export default function Koszyk() {
 
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
-    const [loginID, setLoginID] = useState("");
-    const [loginStatus, setLoginStatus] = useState("");
 
     const [KoszykID, setKoszykID] = useState(null); // Początkowo ustawiamy na null, ponieważ ID_Koszyka może być null, jeśli koszyk jest pusty
     const [koszyk, setKoszyk] = useState([]);
@@ -19,6 +18,10 @@ export default function Koszyk() {
     const [total, setTotal] = useState(0);
 
     const [subtractItemsCart, setSubtractItemsCart] = useState(0);
+
+    const userSession = useContext(SessionContext).userSession;
+
+    console.log(userSession?.ID_Uzytkownika);
 
     const lowerItemsCount = () => {
       setSubtractItemsCart(prevCount => prevCount - 1); // Zmniejszenie licznika o 1
@@ -60,19 +63,8 @@ export default function Koszyk() {
     }, [koszyk, sizes])
 
     useEffect(() => {
-        Axios.get("/login").then((response) => {
-            if (response.data.loggedIn == true) {
-                setLoginStatus(response.data.user[0].Login)
-                setLoginID(response.data.user[0].ID_Uzytkownika)
-            } else {
-                navigate("/");
-            }
-        })
-    }, [])
-
-    useEffect(() => {
-        if (loginID) { // Sprawdź, czy userID nie jest pusty
-        Axios.get(`/Koszyk/${loginID}`)
+        if (userSession?.ID_Uzytkownika) { // Sprawdź, czy userID nie jest pusty
+        Axios.get(`/Koszyk/${userSession?.ID_Uzytkownika}`)
             .then(response => {
                 setKoszyk(response.data);
                 setLoading(false); // zmiana stanu loading na false
@@ -80,7 +72,7 @@ export default function Koszyk() {
             })
             .catch(error => console.error(error));
         }
-    }, [loginStatus]);
+    }, [userSession?.ID_Uzytkownika]);
 
     const handleRemove = (pizzaId) => {
         const newKoszyk = koszyk.filter((pizza) => pizza.ID_Kombinacji !== pizzaId);
@@ -135,7 +127,7 @@ export default function Koszyk() {
         });
         
         const orderData = {
-          ID_Uzytkownika: loginID,
+          ID_Uzytkownika: userSession?.ID_Uzytkownika,
           Cena: total,
           Dostawa: 'Tak',
           Status: 'Zamówiono', // You can set the initial status to "Submitted" here

@@ -43,7 +43,7 @@ export default function Orders() {
             <div className="d-flex justify-content-center flex-wrap">
               <h1 className="col-10 col-md-6 border border-5 mt-4 p-3" style={{ background: "#df3400" }}>Zamówione/Gotowe</h1>
             </div>
-            <div className="d-flex flex-wrap">
+            <div className="d-flex justify-content-center flex-wrap">
               {orders.length === 0 ? (
                 <div className="alert alert-info m-3">
                   Nie masz żadnych aktywnych zamówień. Aby złożyć zamówienie, zerknij do naszego menu:

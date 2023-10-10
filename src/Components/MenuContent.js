@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Axios from 'axios';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -11,10 +11,18 @@ import 'font-awesome/css/font-awesome.min.css';
 import LikeDisLike from './menuComponents/LikeDisLike'; 
 import PizzaFilter from './menuComponents/PizzaFilter'; 
 import AlertLog from './smallComponents/Alert'; 
+import { SessionContext } from '../SessionContext/Session.js';
 
 function Bookmarks({ props, updateItemsCount, actions }) {
 
+  const userSession = useContext(SessionContext).userSession;
+
+  console.log(userSession?.ID_Uzytkownika);
+
   const [loading, setLoading] = useState(true);
+
+  const ID = userSession?.ID_Uzytkownika;
+  const Rola = userSession?.Rola;
 
   const [showAlert, setShowAlert] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -32,8 +40,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   const [skladniki, setSkladniki] = useState([]);
 
   //SESJA
-  const [Rola, setRola] = useState("");
-  const [ID, setID] = useState("");
   const [ulubione, setUlubione] = useState([])
 
   // Paginacja
@@ -330,19 +336,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     }
   };
 
-  //SESJA
-  useEffect(() => {
-    Axios.get("/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setRola(response.data.user[0].Rola)
-        setID(response.data.user[0].ID_Uzytkownika)
-        setLoading(false);
-      } else {
-        setLoading(false);
-      }
-    })
-  }, [])
-
   const [tableWidth, setTableWidth] = useState('100%');
 
   useEffect(() => {
@@ -373,7 +366,10 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   useEffect(() => {
     fetch('/pizzeLike')
       .then(response => response.json())
-      .then(data => setLikes(data))
+      .then(data => {
+        setUserLikes(data);
+        setLoading(false); // Ustawienie setLoading na false po udanym pobraniu danych
+      })
       .catch(error => console.error(error));
   }, []);
 

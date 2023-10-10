@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useContext } from 'react'; 
 import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
 import { Navigate, useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
 import EditModal from "../Components/WindowModal/EditUserModal.js"
 import AddUser from "../Components/WindowModal/AddUser.js"
 import { Container, Form, Button, Alert, Table, Spinner, Row, Col } from 'react-bootstrap';
+import { SessionContext } from '../SessionContext/Session.js';
 
 function Users() {
 
@@ -19,7 +20,11 @@ function Users() {
     const [search, setSearch] = useState('');
     const [sortBy, setSortBy] = useState(''); 
     const [searchUser, setSearchUser] = useState('');
-    const [sortByUser, setSortByUser] = useState(''); 
+    const [sortByUser, setSortByUser] = useState('');
+    
+    const userSession = useContext(SessionContext).userSession;
+
+    console.log(userSession?.ID_Uzytkownika);
 
     const handleSortByChange = (e) => {
       setSortBy(e.target.value);
@@ -42,30 +47,12 @@ function Users() {
     const [errors, setErrors] = useState([]);
 
     const [loading, setLoading] = useState(true);
-
-    const [rola,setRola]=useState("");
-    const [loginID, setLoginID] = useState("");
-    const [loginStatus, setLoginStatus] = useState("");
     
     const handleCloseModal = () => {
             setCancelModal(false);
             setEditModal(false);
             setAddModal(false);
     };
-
-    //Sesja czy Admin jest zalogowany, narazie jest i user i admin, a ma być tylko admin
-    useEffect(() => {
-        Axios.get("/login").then((response) => {
-          if (response.data.user[0].Rola == "admin" && response.data.loggedIn == true) {
-                setRola(response.data.user[0].Rola);
-                setLoginStatus(response.data.user[0].Login)
-                setLoginID(response.data.user[0].ID_Uzytkownika)
-                setLoading(false); // zmiana stanu loading na falsee
-            } else {
-                navigate("/");
-            }
-        })
-    }, [])
 
       //wyświetlanie użytkowników o roli ADMIN
       useEffect(() => {
@@ -81,6 +68,7 @@ function Users() {
         Axios.get(`/Users`)
         .then(response => {
           setUsers(response.data);
+          setLoading(false);
         })
           .catch(error => console.error(error));
       }, []);
@@ -194,7 +182,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
         console.log(`Usuwam użytkownika o ID: ${userID}`)
         Axios.post('http://localhost:5000/UsunUzytkownika', {
             UserID: userID,
-            NowLoggedInUserID: loginID,
+            NowLoggedInUserID: userSession?.ID_Uzytkownika,
         }).then((data) => {
           console.log(data)
           setMessage(data.data);
@@ -242,7 +230,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
             <div style={{ minHeight: "100vh"}}>
             <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             </div>
-          ) : (rola === "admin" ? ( 
+          ) : (userSession?.Rola === "admin" ? ( 
             <div className="container mt-4">
                 
                 <div className="p-5 rounded-5" style={{background: '#050505'}}>
@@ -303,7 +291,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                                 <td>{admin.Telefon}</td>
                                 <td>{admin.Login}</td>
                                 <td>
-                                {loginID === admin.ID_Uzytkownika ? (
+                                {userSession?.ID_Uzytkownika === admin.ID_Uzytkownika ? (
                                     <>
                                         <Button className="me-2" variant="danger" disabled>Usuń</Button>
                                         <Button onClick={() => handleChange(admin)} variant="warning">Edytuj</Button>

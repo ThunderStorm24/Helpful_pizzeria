@@ -24,18 +24,27 @@ function App() {
   const [userSession,setUserSession] = useState(null);
 
   useEffect(() => {
-    Axios.get("/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setUserSession(response.data.user[0])
-      } else {
-      }
-    })
-  }, [])
+    // Sprawdzamy, czy mamy dane użytkownika w pamięci podręcznej (localStorage)
+    const cachedUser = localStorage.getItem('cachedUser');
+
+    if (cachedUser) {
+      setUserSession(JSON.parse(cachedUser));
+    } else {
+      // Jeśli danych użytkownika nie ma w pamięci podręcznej, wykonujemy zapytanie
+      Axios.get("/login").then((response) => {
+        if (response.data.loggedIn === true) {
+          // Zapisujemy dane użytkownika w pamięci podręcznej
+          localStorage.setItem('cachedUser', JSON.stringify(response.data.user[0]));
+          setUserSession(response.data.user[0]);
+        } else {
+        }
+      });
+    }
+  }, []);
   
   return (
     <div className="App black text-white">
       <SessionContext.Provider value={{ userSession, setUserSession }}>
-        
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/Menu" element={<Menu />}></Route>

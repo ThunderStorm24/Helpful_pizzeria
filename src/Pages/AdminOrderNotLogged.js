@@ -1,11 +1,12 @@
 import NavbarE from '../Components/NavBar.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import { Spinner, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import ConfirmModal from '../Components/WindowModal/ConfirmCancelModal.js'
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import NotLogOrders from '../Components/orderComponents/NotLoggedOrders';
+import { SessionContext } from '../SessionContext/Session.js';
 
 export default function AdminOrders() {
 
@@ -26,23 +27,9 @@ export default function AdminOrders() {
     const [orderID, setOrderID] = useState('');
     const [orderPizza, setOrderPizza] = useState([])
 
-    const [loginID, setLoginID] = useState("");
-    const [loginStatus, setLoginStatus] = useState("");
-    const [rola,setRola] = useState("");
+    const userSession = useContext(SessionContext).userSession;
 
-    useEffect(() => {
-      Axios.get("/login").then((response) => {
-          if (response.data.user[0].Rola == "admin" && response.data.loggedIn == true) {
-              setRola(response.data.user[0].Rola)
-              setLoginStatus(response.data.user[0].Login)
-              setLoginID(response.data.user[0].ID_Uzytkownika)
-              setLoading(false); // zmiana stanu loading na falsee
-          } else {
-              navigate("/");
-          }
-      })
-  }, [])
-    
+    console.log(userSession?.ID_Uzytkownika);
 
     useEffect(() => {
       Axios.get(`/ZamowieniaAdminNiezalogowani`)
@@ -52,8 +39,6 @@ export default function AdminOrders() {
           })
           .catch(error => console.error(error));
   }, []);
-
-  
 
     //Zmiana na gotowe zamowienie
     const handleReady = (order) => {
@@ -111,7 +96,7 @@ export default function AdminOrders() {
     <NavbarE />
     {loading ? (
       <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
-    ) : (rola === "admin" ? ( 
+    ) : (userSession?.Rola === "admin" ? ( 
       <div style={{ marginTop: "10px"}}>
 
         <Button className="" href="/AdminOrders">Zamówienia</Button>

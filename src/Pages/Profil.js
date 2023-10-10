@@ -10,7 +10,7 @@ export default function Profil() {
 
 
   const userSession = useContext(SessionContext).userSession;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [editModal, setEditModal] = useState(false);
   const [added, setAdded] = useState(false);
@@ -85,31 +85,33 @@ export default function Profil() {
 
   useEffect(() => {
     if (userSession?.ID_Uzytkownika) {
-    fetch(`/ulubioneskladniki/${userSession?.ID_Uzytkownika}`)
-      .then(response => response.json())
-      .then(data => {
-        // Tworzymy obiekt kolorów na podstawie danych z bazy danych
-        const colorsObject = {};
-        const initialColors = {};
-        data.forEach(item => {
-          if (item.Ulubiony === 'Tak') {
-            colorsObject[item.ID_Skladnika] = 'ulubiony';
-            initialColors[item.ID_Skladnika] = 'ulubiony';
-          } else if (item.Ulubiony === 'Nie') {
-            colorsObject[item.ID_Skladnika] = 'nieulubiony';
-            initialColors[item.ID_Skladnika] = 'nieulubiony';
-          } else {
-            colorsObject[item.ID_Skladnika] = '';
-            initialColors[item.ID_Skladnika] = '';
-          }
-        });
-        setColors(colorsObject);
-        setInitialColors(initialColors);
-        setUlubione(data);
-      })
-      .catch(error => console.error(error));
+      Axios.get(`/ulubioneskladniki/${userSession?.ID_Uzytkownika}`)
+        .then(response => {
+          const data = response.data; // Odczytaj dane z odpowiedzi Axios
+  
+          // Tworzymy obiekt kolorów na podstawie danych z bazy danych
+          const colorsObject = {};
+          const initialColors = {};
+          data.forEach(item => {
+            if (item.Ulubiony === 'Tak') {
+              colorsObject[item.ID_Skladnika] = 'ulubiony';
+              initialColors[item.ID_Skladnika] = 'ulubiony';
+            } else if (item.Ulubiony === 'Nie') {
+              colorsObject[item.ID_Skladnika] = 'nieulubiony';
+              initialColors[item.ID_Skladnika] = 'nieulubiony';
+            } else {
+              colorsObject[item.ID_Skladnika] = '';
+              initialColors[item.ID_Skladnika] = '';
+            }
+          });
+          setColors(colorsObject);
+          setInitialColors(initialColors);
+          setUlubione(data);
+          setLoading(false);
+        })
+        .catch(error => console.error(error));
     }
-  }, [userSession?.ID_Uzytkownika]); // Dodaj userSession?.ID_Uzytkownika jako zależność, aby efekt był wywoływany przy jego zmianie
+  }, [userSession?.ID_Uzytkownika]);
 
   const isUlubiony = (skladnik) => {
     const status = colors[skladnik.ID_Skladnika];
@@ -153,9 +155,6 @@ export default function Profil() {
   return <div style={{ height: "1200px" }}>
 
     <NavbarE />
-    {loading ? (
-        <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
-        ) : (
     <div>
         
       <div className="container mt-5">
@@ -231,19 +230,27 @@ export default function Profil() {
       <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "red"}}>NIEULUBIONE</div>
       <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "#303030"}}>OBOJĘTNE</div>
     </div>
-          {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
-            <button
-              key={skladnik.ID_Skladnika}
-              className={`skladnik ${colors[skladnik.ID_Skladnika] || ''}`}
-              onClick={() => handleSkladnikClick(isUlubiony(skladnik), skladnik.ID_Skladnika)}
-            >
-              {skladnik.Nazwa}
-              {skladnik.ikona !== null && (
-              <img className="ms-1" style={{width:"30px", height:"30px"}} src={skladnik.ikona} />
-              )}
-            </button>
-          ))}
-        </div>
+    {loading ? (
+  // Ten blok zostanie wyrenderowany podczas ładowania danych
+  <div className="text-center mt-2">Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
+) : (
+  <div>
+  {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
+    <button
+      key={skladnik.ID_Skladnika}
+      className={`skladnik ${colors[skladnik.ID_Skladnika] || ''}`}
+      onClick={() => handleSkladnikClick(isUlubiony(skladnik), skladnik.ID_Skladnika)}
+    >
+      {skladnik.Nazwa}
+      {skladnik.ikona && (
+        <img className="ms-1" style={{ width: "30px", height: "30px" }} src={skladnik.ikona} alt={skladnik.Nazwa} />
+      )}
+    </button>
+  ))}
+</div>
+)}
+          </div>
+
       </div>
       <button className={`mt-3 btn btn-primary ${change ? 'saveIngredients' : ''}`} onClick={() => handleSkladnikAccept()} disabled={!change}>Zapisz składniki</button>
       <div className="mt-5" >
@@ -251,7 +258,6 @@ export default function Profil() {
       </div>
      
     </div>
-        )}
 
         <EditModal 
         show={editModal}

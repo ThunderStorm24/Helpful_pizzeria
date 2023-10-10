@@ -65,11 +65,7 @@ router.get("/UlubioneSkladniki/:ID_Uzytkownika", (req, res) => {
     const loginID = req.params.ID_Uzytkownika; // Odczytaj loginID z parametru w ścieżce URL
 
     connection.query(
-        "SELECT uzytkownicy.ID_Uzytkownika, skladniki.ID_Skladnika, skladniki.Nazwa, uzytkownicy_skladniki.Ulubiony " +
-        "FROM uzytkownicy " +
-        "JOIN uzytkownicy_skladniki ON uzytkownicy.ID_Uzytkownika = uzytkownicy_skladniki.ID_Uzytkownika " +
-        "JOIN skladniki ON uzytkownicy_skladniki.ID_Skladnika = skladniki.ID_Skladnika " +
-        "WHERE uzytkownicy.ID_Uzytkownika = ?",
+        "SELECT uzytkownicy_skladniki.Ulubiony, uzytkownicy_skladniki.ID_Uzytkownika, uzytkownicy_skladniki.ID_Skladnika FROM uzytkownicy_skladniki WHERE uzytkownicy_skladniki.ID_Uzytkownika = ?;",
         [loginID], 
         (error, results, fields) => {
             if (error) throw error;

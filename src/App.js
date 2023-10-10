@@ -12,16 +12,19 @@ import Orders from './Pages/Orders.js';
 import AdminOrders from './Pages/AdminOrder.js';
 import AdminOrdersNotLogged from './Pages/AdminOrderNotLogged.js';
 import Users from './Pages/Users.js'
-import { Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { SessionContext } from "./SessionContext/Session.js";
 import Axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
+import UserPrivateRoute from "./PrivateRoutes/UserPrivateRoute.js"
+import PrivateRoute from './PrivateRoutes/PrivateRoute.js';
+import NotLoggedRoute from "./PrivateRoutes/NotLoogedRoute.js";
 
 function App() {
 
   const navigate = useNavigate();
-  const [userSession,setUserSession] = useState(null);
+  const [userSession, setUserSession] = useState(null);
 
   useEffect(() => {
     // Sprawdzamy, czy mamy dane użytkownika w pamięci podręcznej (localStorage)
@@ -41,22 +44,58 @@ function App() {
       });
     }
   }, []);
-  
+
+
   return (
     <div className="App black text-white">
       <SessionContext.Provider value={{ userSession, setUserSession }}>
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/Menu" element={<Menu />}></Route>
-        <Route path="/Login" element={<Login />}></Route>
-        <Route path="/Rejestracja" element={<Register />}></Route>
-        <Route path="/Profil" element={<Profil />}></Route>
-        <Route path="/Koszyk" element={<Koszyk />}></Route>
-        <Route path="/Orders" element={<Orders />}></Route>
-        <Route path="/AdminOrders" element={<AdminOrders />}></Route>
-        <Route path="/AdminOrdersNotLogged" element={<AdminOrdersNotLogged />}></Route>
-        <Route path="/Users" element={<Users />}></Route>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/Menu" element={<Menu />}></Route>
+
+          <Route path="/Login" 
+          element={
+            <NotLoggedRoute element={
+              <Login />
+            }>
+            </NotLoggedRoute> 
+          }> 
+        </Route>
+
+          <Route path="/Rejestracja" element={
+            <NotLoggedRoute element={
+              <Register />
+            }>
+            </NotLoggedRoute>
+          }>
+          </Route>
+
+          <Route path="/Profil" element={<Profil />}>
+          </Route>
+
+          <Route path="/Koszyk" element={
+          <UserPrivateRoute element={
+          <Koszyk />
+          }>
+          </UserPrivateRoute>
+        }>
+          </Route>
+
+          <Route path="/Orders" element={
+          <NotLoggedRoute element={<Orders />}>
+          </NotLoggedRoute>          
+            }>
+          </Route>
+
+          <Route path="/AdminOrders" element={<AdminOrders />}>
+          </Route>
+
+          <Route path="/AdminOrdersNotLogged" element={<AdminOrdersNotLogged />}>
+          </Route>
+
+          <Route path="/Users" element={<Users />}></Route>
+          
+        </Routes>
       </SessionContext.Provider>
 
     </div>

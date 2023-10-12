@@ -489,7 +489,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   }
 
   return (
-    <div className="d-flex flex-wrap">
+    <div className="d-flex flex-wrap mt-2">
       <div className="ms-3 col-11 col-md-8 ">
         <Tabs fill defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
@@ -497,7 +497,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
               <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             ) : (
               <div className="mb-3">
-                <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+                <Table style={{ width: tableWidth }} responsive striped bordered hover size="lg">
                   <thead>
                     <tr>
                       {Rola !== 'admin' && (
@@ -616,7 +616,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
               <div>Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
             ) : (
               <div className="table-responsive mb-3">
-                <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+                <Table style={{ width: tableWidth }} responsive striped bordered hover  size="lg">
                   <thead>
                     <tr>
                       {Rola !== 'admin' && (
@@ -733,7 +733,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
           {Rola === "user" ? (
             <Tab eventKey={3} title="Moje Pizze">
               <div className="table-responsive mb-3">
-              <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+              <Table style={{ width: tableWidth }} responsive striped bordered hover  size="lg">
                   <thead>
                     <tr>
                       <th className="col-1">Ulubiona</th>
@@ -820,7 +820,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
           ) : Rola === "admin" ? (
             <Tab eventKey={3} title="Pizze do zatwierdzenia">
               <div className="table-responsive mb-3">
-              <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+              <Table style={{ width: tableWidth }} responsive striped bordered hover  size="lg">
                   <thead>
                     <tr>
                       <th className="col-1" scope="col">
@@ -867,7 +867,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
           {Rola === "user" ? (
             <Tab eventKey={4} title="Pizze oczekujące na dodanie">
               <div className="table-responsive mb-3">
-              <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+              <Table style={{ width: tableWidth }} responsive striped bordered hover  size="lg">
                   <thead>
                     <tr>
                       <th className="col-1" scope="col">
@@ -934,7 +934,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
           {Rola === "user" ? (
             <Tab eventKey={5} title="Moje ulubione pizze">
               <div className="table-responsive mb-3">
-              <Table style={{ width: tableWidth }} responsive striped bordered hover variant="dark" size="lg">
+              <Table style={{ width: tableWidth }} responsive striped bordered hover  size="lg">
                   <thead>
                     <tr>
                       <th className="col-1">Ulubiona</th>

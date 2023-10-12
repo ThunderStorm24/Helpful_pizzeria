@@ -47,7 +47,7 @@ function App() {
 
 
   return (
-    <div className="App black text-white">
+    <div className="App">
       <SessionContext.Provider value={{ userSession, setUserSession }}>
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -73,18 +73,10 @@ function App() {
           <Route path="/Profil" element={<Profil />}>
           </Route>
 
-          <Route path="/Koszyk" element={
-          <UserPrivateRoute element={
-          <Koszyk />
-          }>
-          </UserPrivateRoute>
-        }>
+          <Route path="/Koszyk" element={<Koszyk />}>
           </Route>
 
-          <Route path="/Orders" element={
-          <NotLoggedRoute element={<Orders />}>
-          </NotLoggedRoute>          
-            }>
+          <Route path="/Orders" element={<Orders />}>
           </Route>
 
           <Route path="/AdminOrders" element={<AdminOrders />}>

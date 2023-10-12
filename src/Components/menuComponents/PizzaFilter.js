@@ -23,7 +23,7 @@ const PizzaFilter = ({
         <Form>
           <fieldset>
             <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
-            <div className="ms-4 mt-5 mb-4 d-flex" style={{ color: "white", fontWeight: "bold" }}>Opcje:</div>
+            <div className="ms-4 mt-5 mb-4 d-flex" style={{ fontWeight: "bold" }}>Opcje:</div>
             <div className="d-flex flex-column">
               <div
                 className="d-flex text-left me-2"
@@ -103,7 +103,7 @@ const PizzaFilter = ({
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   placeholder="Tu wpisz id/nazwę/składniki/cenę w dowolnej kolejności"
-                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "white", color: "black" }}
+                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px"}}
                 />
               </div>
               <div className="ms-3 mt-3 d-flex flex-wrap">
@@ -111,7 +111,7 @@ const PizzaFilter = ({
                 <Form.Select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value)}
-                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px", background: "#555", color: "white" }}
+                  style={{ padding: "5px", marginRight: "25px", marginTop: "5px"}}
                 >
                   <option value="">-- Wybierz --</option>
                   <option value="IDAsc">ID rosnąco</option>

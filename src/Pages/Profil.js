@@ -161,10 +161,10 @@ export default function Profil() {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card bg-dark text-white">
-              <div className="card-header text-center border-secondary">
+              <div className="card-header text-center border-secondary" style={{ backgroundColor: '#242424', color: 'white' }}>
                 <h4>Profil użytkownika [ID: {userSession?.ID_Uzytkownika}]</h4>
               </div>
-              <div className="card-body">
+              <div className="card-body" style={{ backgroundColor: '#171717', color: 'white' }}>
                 <div className="row">
                   <div className="col-4">
                     <h6 className="text-muted ms-5" style={{ textAlign: "left" }}>Imię:</h6>
@@ -226,9 +226,9 @@ export default function Profil() {
         <div className="col-md-5">
     <h1 className="mt-3">SKŁADNIKI</h1>
     <div className="text-center mt-2 mb-3">
-      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "green"}}>ULUBIONE</div>
-      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "red"}}>NIEULUBIONE</div>
-      <div className="d-inline-block p-2 text-white border" style={{backgroundColor: "#303030"}}>OBOJĘTNE</div>
+      <div className="d-inline-block p-2 border" style={{backgroundColor: "green"}}>ULUBIONE</div>
+      <div className="d-inline-block p-2 border" style={{backgroundColor: "red"}}>NIEULUBIONE</div>
+      <div className="d-inline-block p-2 border" style={{backgroundColor: "#303030"}}>OBOJĘTNE</div>
     </div>
     {loading ? (
   // Ten blok zostanie wyrenderowany podczas ładowania danych

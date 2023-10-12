@@ -29,10 +29,10 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
+      <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>{description}
+      <Modal.Body>{description}
         {disable ? null : (
           <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick}>
             {buttonText}
@@ -70,7 +70,7 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
           )}
 
       </Modal.Body>
-      <Modal.Footer style={{ backgroundColor: '#141414', color: 'white' }}>
+      <Modal.Footer>
         <Button className="redButton" variant="danger" onClick={onHide}>
           {buttonDanger}
         </Button>

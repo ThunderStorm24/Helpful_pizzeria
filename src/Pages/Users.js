@@ -233,7 +233,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
           ) : (userSession?.Rola === "admin" ? ( 
             <div className="container mt-4">
                 
-                <div className="p-5 rounded-5" style={{background: '#050505'}}>
+                <div className="p-5 rounded-5"  style={{background: '#111111'}}>
             <h2 className="">Admins:</h2>
               <Row className="mb-3">
                 <Col md={2} xs={12}>
@@ -310,7 +310,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                 <Button onClick={() => handleAdd("admin")} className="mb-1 mt-2" variant="primary">Dodaj admina</Button>
                 </div>
 
-                <div className="p-5 rounded-5 mt-4" style={{background: '#050505'}}>
+                <div className="p-5 rounded-5 mt-4" style={{background: '#111111'}}>
                 <h2>Users:</h2>
                 <Row className="mb-3">
                 <Col md={2} xs={12}>

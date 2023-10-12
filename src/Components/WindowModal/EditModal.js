@@ -105,7 +105,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header className="border" closeButton style={{ backgroundColor: '#444444', color: 'white' }}>
+      <Modal.Header className="border" closeButton>
         <Modal.Title>Edytuj pizzę</Modal.Title>
       </Modal.Header>
       <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>

@@ -207,7 +207,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
     return (
       
-       <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
+       <Navbar expand="lg" sticky="top" className="bg-body-tertiary">
   <Container fluid>
     <Navbar.Brand  href="#">Pizzeria La Thunderas</Navbar.Brand>
     <Navbar.Toggle aria-controls="navbarScroll" />

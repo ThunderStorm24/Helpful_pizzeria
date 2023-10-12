@@ -504,18 +504,15 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
       SpeechRecognition.stopListening();
       setIsListening(false);
     } else {
-        speak("Witaj w obsłudze głosowej, Powiedz info lub komendy dla pomocy")
-      SpeechRecognition.startListening({continuous: true});
+      speak("Witaj w obsłudze głosowej, Powiedz info lub komendy dla pomocy")
+      SpeechRecognition.startListening({ continuous: true });
       setIsListening(true);
     }
   }
 
-  const {
-    listening,
-    browserSupportsSpeechRecognition
-  } = useSpeechRecognition();
 
-  const{ transcript , resetTranscript} = useSpeechRecognition ({ commands });
+
+  const{ transcript , resetTranscript, browserSupportsSpeechRecognition} = useSpeechRecognition ({ commands });
 
   useEffect(() => {
     if (!browserSupportsSpeechRecognition) {

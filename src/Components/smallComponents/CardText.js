@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 export default function CardText({title, describe, button, location}) {
 
-  return <Card className="col-11 col-md-5 m-2" style={{ background: '#343434' }}>
+  return <Card className="col-11 col-md-5 m-2">
   <Card.Body>
     <Card.Title>{title}</Card.Title>
     <Card.Text>

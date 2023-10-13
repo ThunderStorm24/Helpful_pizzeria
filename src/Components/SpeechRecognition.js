@@ -475,7 +475,7 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
           }
         },
     {
-        command: ['info','informacja','pomoc','pomóż'],
+        command: ['pomoc','pomóż','help'],
         callback: () => {
           speak('Jeżeli chcesz poznać nasz numer telefonu, powiedz kontakt. Jeżeli chcesz usłyszeć pizze jakie posiadamy, powiedz menu. Jeżeli chcesz usłyszeć skład i cenę danej pizzy, powiedz składnik Nazwa pizzy lub cena Nazwa pizzy. Jeżeli chcesz złożyć zamówienie podaj wszystkie dane osobowe z komendy zamówienia, a gdy wszystkie dane osobowe zostaną podane a pizze wybrane to powiedz zamów. Jeżeli chcesz poznac komendy to powiedz komendy. To wszystko odnośnie pomocy.');
         }
@@ -504,7 +504,7 @@ const pizzaCommands = pizzaData.flatMap((pizza) => {
       SpeechRecognition.stopListening();
       setIsListening(false);
     } else {
-      speak("Witaj w obsłudze głosowej, Powiedz info lub komendy dla pomocy")
+      speak("Witaj w obsłudze głosowej, Powiedz pomoc lub komendy")
       SpeechRecognition.startListening({ continuous: true });
       setIsListening(true);
     }

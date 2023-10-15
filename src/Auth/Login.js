@@ -4,7 +4,7 @@ import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 
-export default function Login() {
+export default function Login({ setUserSession }) {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,25 +18,11 @@ export default function Login() {
             Login: username, 
             Password: password
         }).then((response) => {
-
-            if(response.data.message){
-                setLoginStatus(response.data.message)
-            } else {
-                setLoginStatus("Jesteś zalogowany jako: "+response.data[0].Login)
+                setUserSession(response.data)
                 navigate("/");
-                window.location.reload();
-            }
         })
     }
 
-    useEffect(() => {
-        Axios.get("/login").then((response) => {
-            if (response.data.loggedIn == true) {
-            setLoginStatus(response.data.user[0].Login)
-            navigate("/Profil");
-            }
-        })
-    }, [])
 
     return   <div style={{ minHeight: "100vh" }}>
     <NavbarE />

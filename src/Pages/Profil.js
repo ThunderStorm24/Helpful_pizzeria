@@ -84,7 +84,6 @@ export default function Profil() {
   }, []);
 
   useEffect(() => {
-    if (userSession?.ID_Uzytkownika) {
       Axios.get(`/ulubioneskladniki/${userSession?.ID_Uzytkownika}`)
         .then(response => {
           const data = response.data; // Odczytaj dane z odpowiedzi Axios
@@ -110,7 +109,6 @@ export default function Profil() {
           setLoading(false);
         })
         .catch(error => console.error(error));
-    }
   }, [userSession?.ID_Uzytkownika]);
 
   const isUlubiony = (skladnik) => {

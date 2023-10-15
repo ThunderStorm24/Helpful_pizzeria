@@ -15,7 +15,7 @@ import Users from './Pages/Users.js'
 import { Route, Routes } from "react-router-dom";
 import { SessionContext } from "./SessionContext/Session.js";
 import Axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import UserPrivateRoute from "./PrivateRoutes/UserPrivateRoute.js"
 import PrivateRoute from './PrivateRoutes/PrivateRoute.js';
@@ -26,7 +26,7 @@ function App() {
   const navigate = useNavigate();
   const [userSession, setUserSession] = useState(null);
 
-  useEffect(() => {
+    useEffect(() => {
     // Sprawdzamy, czy mamy dane użytkownika w pamięci podręcznej (localStorage)
     const cachedUser = localStorage.getItem('cachedUser');
 
@@ -43,8 +43,9 @@ function App() {
         }
       });
     }
-  }, []);
+  },[]);
 
+  console.log(userSession)
 
   return (
     <div className="App">
@@ -56,7 +57,7 @@ function App() {
           <Route path="/Login" 
           element={
             <NotLoggedRoute element={
-              <Login />
+              <Login setUserSession={setUserSession} />
             }>
             </NotLoggedRoute> 
           }> 
@@ -86,6 +87,8 @@ function App() {
           </Route>
 
           <Route path="/Users" element={<Users />}></Route>
+
+          <Route path="*" element={<div className="mt-5" style={{fontSize: "50px"}}>ERROR 404 NOT FOUND</div>}></Route>
           
         </Routes>
       </SessionContext.Provider>

@@ -19,14 +19,12 @@ export default function Orders() {
     console.log(userSession?.ID_Uzytkownika);
 
     useEffect(() => {
-      if (userSession?.ID_Uzytkownika) { // Sprawdź, czy userID nie jest pusty
         Axios.get(`/Zamowienia/${userSession?.ID_Uzytkownika}`)
             .then(response => {
                 setOrders(response.data);
                 setLoading(false); // zmiana stanu loading na false
             })
             .catch(error => console.error(error));
-          }
     }, [userSession?.ID_Uzytkownika]);
 
   return (

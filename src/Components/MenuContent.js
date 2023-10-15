@@ -111,7 +111,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     .filter(skladnik => skladnik.ID_Uzytkownika === ID && skladnik.Ulubiony === "Nie")
     .map(skladnik => skladnik.Nazwa);
 
-
   // funkcja, która przefiltrowuje pizze i zwróci tylko te, które zawierają ulubione lub nieulubione składniki użytkownika
   const filterPizze = (pizzeArray, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy) => {
     let filteredPizze = [...pizzeArray]; // Tworzymy kopię tablicy, aby uniknąć modyfikowania oryginalnej tablicy
@@ -179,11 +178,9 @@ function Bookmarks({ props, updateItemsCount, actions }) {
 
   //WYŚWIETLANIE ulubionych
   useEffect(() => {
-    if (ID) { // Sprawdź, czy ID nie jest puste
       Axios.get(`/pizzeUlubione/${ID}`)
         .then(response => setUlubione(response.data))
         .catch(error => console.error(error));
-    }
   }, [ID]);
 
   const handleCheckboxChange = (pizzaID) => {
@@ -231,11 +228,9 @@ function Bookmarks({ props, updateItemsCount, actions }) {
 
   //WYŚWIETLANIE pizz danego użytkownika
   useEffect(() => {
-    if (ID) { // Sprawdź, czy ID nie jest puste
       Axios.get(`/pizzeM/${ID}`)
         .then(response => setPizzeM(response.data))
         .catch(error => console.error(error));
-    }
   }, [ID]);
 
   //WYŚWIETLANIE pizz do zatwierdzenia
@@ -267,11 +262,13 @@ function Bookmarks({ props, updateItemsCount, actions }) {
 
   //WYŚWIETLANIE ulubionych składników 
   useEffect(() => {
-    fetch('/ulubioneskladniki')
+    fetch(`/Ulubioneskladniki/${ID}`)
       .then(response => response.json())
       .then(data => setSkladniki(data))
       .catch(error => console.error(error));
-  }, []);
+  }, [ID]);
+
+  console.log(skladniki);
 
   //OPERACJE edytowanie
   const handleEdit = (pizza) => {
@@ -422,7 +419,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       ID_Uzytkownika: ID
     })
       .then(response => {
-        console.log('Pomyślnie wykonano żądanie do /UserLike', response.data);
 
       })
       .catch(error => {
@@ -430,9 +426,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
         // Tutaj możesz dodać kod obsługi błędu
       });
   };
-
-  console.log(userLikes)
-  console.log(likeButtonStates)
 
   const [disLikeButtonStates, setDisLikeButtonStates] = useState({});
 
@@ -475,7 +468,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       ID_Uzytkownika: ID
     })
       .then(response => {
-        console.log('Pomyślnie wykonano żądanie do /UserDisLike', response.data);
 
       })
       .catch(error => {
@@ -487,6 +479,8 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   const showNotification = () => {
     setShowAlert(true);
   }
+
+  
 
   return (
     <div className="d-flex flex-wrap mt-2">

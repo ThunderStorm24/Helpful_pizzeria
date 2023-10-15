@@ -21,9 +21,8 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
   const userSession = useContext(SessionContext).userSession;
 
-  console.log(userSession?.ID_Uzytkownika)
+   console.log(userSession);
 
-  console.log(userSession?.ID_Uzytkownika);
   const navigate = useNavigate();
 
   const [rola, setRola] = useState ("");
@@ -226,7 +225,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           </NavDropdown.Item>
         </NavDropdown>
       </Nav>
-      <div className="mx-auto d-flex col-4">
+      <div className="mx-auto d-flex col-4 col-md-5">
         <Form onSubmit={handleFormSubmit}> 
         <div className="d-flex">
           <Form.Control variant="dark" className="searchBar col-12 col-md-12" type="search" placeholder="Search" value={message} aria-label="Search" 
@@ -234,7 +233,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputFocus} />
-          <Button className="col-6 col-md-3 ms-3 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
+          <Button className="col-6 col-md-3 ms-1 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
           </div>
         
           <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">
@@ -252,9 +251,8 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
         </Form>
       </div>
+    <div>
       <MySpeechRecognition />
-      <div className="ms-2 me-2">
-      
     </div>
 
       {userSession != null ? (

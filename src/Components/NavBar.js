@@ -233,7 +233,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputFocus} />
-          <Button className="col-6 col-md-3 ms-1 blueButton" type="submit" style={{margin: '5px'}}>Znajdź</Button>
+          <Button className="col-2 col-md-2 ms-1 blueButton" type="submit" style={{background: "transparent", border: "none"}}><i class="fa fa-search" aria-hidden="true"></i></Button>
           </div>
         
           <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">
@@ -258,31 +258,31 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
       {userSession != null ? (
         <Dropdown>
         <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2 loginButton">
-          {userSession?.Login}
+        <i className="fa fa-user me-2" aria-hidden="true"></i>{userSession?.Login}
         </Dropdown.Toggle>
   
         <Dropdown.Menu align="end" variant="dark">
-          <Dropdown.Item href="/Profil">Mój profil</Dropdown.Item>
+          <Dropdown.Item href="/Profil"><i className="fa fa-address-card me-2" aria-hidden="true"></i>Mój profil</Dropdown.Item>
           {userSession?.Rola === 'admin' ? (
             <>
-            <Dropdown.Item href="/Menu">Pizze</Dropdown.Item>
+            <Dropdown.Item href="/Menu"><i className="fa fa-cutlery" aria-hidden="true" style={{marginInlineEnd: "13px"}}></i>Pizze</Dropdown.Item>
             <Dropdown.Item href="/adminOrders">
               {TotalAdminOrders > 0 ? (
-                <strong>Zamówienia ({TotalAdminOrders})</strong>
+                <strong><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</strong>
               ) : (
-                <span>Zamówienia ({TotalAdminOrders})</span>
+                <span><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</span>
               )}
             </Dropdown.Item>
-            <Dropdown.Item href="/Users">Użytkownicy</Dropdown.Item>
+            <Dropdown.Item href="/Users"><i className="fa fa-users me-2" aria-hidden="true"></i>Użytkownicy</Dropdown.Item>
           </>
           ) : (
             <>
-              <Dropdown.Item href="/koszyk">Koszyk ({TotalItemsCart})</Dropdown.Item>
-              <Dropdown.Item href="/Orders">Moje zamówienia ({TotalOrders})</Dropdown.Item>
+              <Dropdown.Item href="/koszyk"><i class="fa fa-shopping-cart" aria-hidden="true" style={{marginInlineEnd: "11px"}}></i>Koszyk ({TotalItemsCart})</Dropdown.Item>
+              <Dropdown.Item href="/Orders"><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Moje zamówienia ({TotalOrders})</Dropdown.Item>
             </>
           )}
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleLogout}>Wyloguj</Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout}><i className="fa fa-sign-out me-2" aria-hidden="true"></i>Wyloguj</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     ) : (

@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import Axios from 'axios';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from 'react-paginate';
 import Spinner from 'react-bootstrap/Spinner';
 import ToastAddPizza from './smallComponents/ToastAddPizza'
-import { Table, Form, Overlay, OverlayTrigger, Tooltip, Toast, ToastContainer } from 'react-bootstrap';
+import { Table, OverlayTrigger, Tooltip, Tabs, Tab } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import LikeDisLike from './menuComponents/LikeDisLike'; 
 import PizzaFilter from './menuComponents/PizzaFilter'; 
@@ -575,9 +573,9 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                           </td>
                         )}
                         {Rola == "user" && (
-                          <td className="col-1">
+                          <td className="">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
-                              Zamów
+                            Zamów
                             </button>
                           </td>
                         )}

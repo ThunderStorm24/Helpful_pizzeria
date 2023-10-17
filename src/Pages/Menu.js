@@ -192,7 +192,7 @@ export default function Menu() {
 
     return <div>
         <NavbarE addItemsCart={addItemsCart} />
-    <div className="black text-white d-flex" style={{marginTop: "10px", paddingBottom: "450px"}}>
+    <div className="black text-white d-flex" style={{ paddingBottom: "50px"}}>
     <div className="col-12 col-md-12">
     <Bookmarks 
     updateItemsCount={increaseItemsCount} 

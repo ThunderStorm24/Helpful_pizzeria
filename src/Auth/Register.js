@@ -65,6 +65,8 @@ export default function Login() {
 
       <Form.Group controlId="username" className="mt-3">
         <Form.Label>Login:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="^[a-zA-Z0-9]+$"
@@ -77,10 +79,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Login musi mieć conajmniej 4 znaki i nie może zawierać znaków specjalnych!
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="password" className="mt-3">
         <Form.Label>Password:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-lock"></i></InputGroup.Text>
         <Form.Control
           required
           maxLength="150"
@@ -92,10 +97,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Hasło musi mieć conajmniej 5 znaków!
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="name" className="mt-3">
         <Form.Label>Imię:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*$"
@@ -108,10 +116,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Imię musi zaczynać się z dużej litery, mieć conajmniej 3 znaki i nie może zawierać znaków specjalnych
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="surname" className="mt-3">
         <Form.Label>Nazwisko:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-user"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*$"
@@ -124,10 +135,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Nazwusji musi zaczynać się z dużej litery, mieć conajmniej 3 znaki i nie może zawierać znaków specjalnych
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="address" className="mt-3">
         <Form.Label>Adres:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-address-card" aria-hidden="true"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\s]+)\s(\d+\/\d+[A-Za-z]*)\s([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+)"
@@ -139,10 +153,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Adres musi być w formacie: ulica numer/mieszkanie miasto
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="zip-code" className="mt-3">
         <Form.Label>Kod Pocztowy:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-map-pin" aria-hidden="true"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="\d{2}-\d{3}"
@@ -154,10 +171,13 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Kod pocztowy musi być w formacie XX-XXX
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group controlId="phone-number" className="mt-3">
         <Form.Label>Numer Telefonu:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-phone"></i></InputGroup.Text>
         <Form.Control
           required
           pattern="\+48\d{9}"
@@ -169,6 +189,7 @@ export default function Login() {
         <Form.Control.Feedback type="invalid">
           Telefon musi być w formacie +48XXXXXXXXX
         </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       {errors && errors.length > 0 ? (  

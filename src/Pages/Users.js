@@ -234,11 +234,11 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
             <div className="container mt-4">
                 
                 <div className="p-5 rounded-5"  style={{background: '#111111'}}>
-            <h2 className="">Admins:</h2>
+            <h2 className=""><i class="fa fa-users me-2" aria-hidden="true"></i>Admins:</h2>
               <Row className="mb-3">
                 <Col md={2} xs={12}>
                   <Form.Group className="mt-3">
-                    <Form.Label htmlFor="search">Znajdź:</Form.Label>
+                    <Form.Label htmlFor="search">Znajdź<i class="fa fa-search ms-2" aria-hidden="true"></i></Form.Label>
                     <Form.Control
                       type="search"
                       id="search"
@@ -250,7 +250,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                 </Col>
                 <Col md={2} xs={12}>
                   <Form.Group className="mt-3">
-                    <Form.Label>Sortuj:</Form.Label>
+                    <Form.Label>Sortuj<i class="fa fa-sort ms-2" aria-hidden="true"></i></Form.Label>
                     <Form.Select value={sortBy} onChange={handleSortByChange}>
                       <option value="">Brak sortowania</option>
                       <option value="IDAsc">ID rosnąco</option>
@@ -311,11 +311,11 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                 </div>
 
                 <div className="p-5 rounded-5 mt-4" style={{background: '#111111'}}>
-                <h2>Users:</h2>
+                <h2><i class="fa fa-users me-2" aria-hidden="true"></i>Users:</h2>
                 <Row className="mb-3">
                 <Col md={2} xs={12}>
                   <Form.Group className="mt-3">
-                    <Form.Label htmlFor="searchUser">Znajdź:</Form.Label>
+                    <Form.Label htmlFor="searchUser">Znajdź<i class="fa fa-search ms-2" aria-hidden="true"></i></Form.Label>
                     <Form.Control
                       type="search"
                       id="searchUser"
@@ -327,7 +327,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                 </Col>
                 <Col md={2} xs={12}>
                   <Form.Group className="mt-3">
-                    <Form.Label>Sortuj:</Form.Label>
+                    <Form.Label>Sortuj<i class="fa fa-sort ms-2" aria-hidden="true"></i></Form.Label>
                     <Form.Select value={sortByUser} onChange={handleSortByChangeUser}>
                       <option value="">Brak sortowania</option>
                       <option value="IDAsc">ID rosnąco</option>

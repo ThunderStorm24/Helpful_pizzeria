@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Alert, InputGroup } from 'react-bootstrap';
 
 export default function Login({ setUserSession }) {
     const navigate = useNavigate();
@@ -20,6 +20,7 @@ export default function Login({ setUserSession }) {
         }).then((response) => {
                 setUserSession(response.data)
                 navigate("/");
+                window.location.reload();
         })
     }
 
@@ -36,22 +37,28 @@ export default function Login({ setUserSession }) {
 
       <Form.Group className="mt-3">
         <Form.Label htmlFor="username">Login:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
         <Form.Control
           type="text"
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        </InputGroup>
       </Form.Group>
 
       <Form.Group className="mt-3">
         <Form.Label htmlFor="password">Password:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-lock ml-2"></i></InputGroup.Text>
         <Form.Control
           type="password"
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        </InputGroup>
       </Form.Group>
 
       <Button onClick={login} className="btn btn-primary mt-5 w-100">

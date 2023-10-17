@@ -23,7 +23,7 @@ const PizzaFilter = ({
         <Form>
           <fieldset>
             <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>
-            <div className="ms-4 mt-5 mb-4 d-flex" style={{ fontWeight: "bold" }}>Opcje:</div>
+            <div className="ms-3 mt-3 mb-4 d-flex" style={{ fontWeight: "bold" }}><i class="fa fa-filter me-2 mt-1" aria-hidden="true"></i>Opcje:</div>
             <div className="d-flex flex-column">
               <div
                 className="d-flex text-left me-2"
@@ -96,7 +96,7 @@ const PizzaFilter = ({
                 )}
               </Overlay>
               <div className="ms-3 mt-3 d-flex flex-wrap">
-                <label style={{ fontWeight: "bold" }}>Nazwa:</label>
+                <label style={{ fontWeight: "bold" }}><i class="fa fa-search me-2" aria-hidden="true"></i>Nazwa:</label>
                 <Form.Control
                   className="col-6"
                   type="text"
@@ -107,7 +107,7 @@ const PizzaFilter = ({
                 />
               </div>
               <div className="ms-3 mt-3 d-flex flex-wrap">
-                <label style={{ fontWeight: "bold" }}>Sortuj według:</label>
+                <label style={{ fontWeight: "bold" }}><i class="fa fa-sort me-2" aria-hidden="true"></i>Sortuj według:</label>
                 <Form.Select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value)}

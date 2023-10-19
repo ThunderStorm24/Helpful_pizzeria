@@ -2,18 +2,19 @@
   text-align: center;
 }
 
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.fg--search {
+  position: relative;
+  font-size: 15px;
 }
-*/
-/* Dostosowanie paska przewijania dla przeglądarek WebKit */
+
+.fg--search button {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 7px 1px;
+}
+
 ::-webkit-scrollbar {
   width: 8px; /* Szerokość paska przewijania */
 }

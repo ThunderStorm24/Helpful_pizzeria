@@ -225,15 +225,15 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
           </NavDropdown.Item>
         </NavDropdown>
       </Nav>
-      <div className="mx-auto d-flex col-4 col-md-5">
+      <div className="mx-auto d-flex col-4 col-md-3">
         <Form onSubmit={handleFormSubmit}> 
-        <div className="d-flex">
-          <Form.Control variant="dark" className="searchBar col-12 col-md-12" type="search" placeholder="Search" value={message} aria-label="Search" 
+        <div className="form-group fg--search">
+          <Form.Control variant="dark" className="searchBar col-12 col-md-12 pe-5 rounded-pill" placeholder="Search" value={message} aria-label="Search" 
             onChange={handleInputChange}
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputFocus} />
-          <Button className="col-2 col-md-2 ms-1 blueButton" type="submit" style={{background: "transparent", border: "none"}}><i class="fa fa-search" aria-hidden="true"></i></Button>
+          <Button className="col-2 col-md-2 ms-1" type="submit" style={{background: "transparent", border: "none"}}><i class="fa fa-search" aria-hidden="true"></i></Button>
           </div>
         
           <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">

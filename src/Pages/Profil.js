@@ -79,7 +79,10 @@ export default function Profil() {
   useEffect(() => {
     fetch('/skladniki')
       .then(response => response.json())
-      .then(data => setSkladniki(data))
+      .then(data => {
+        setSkladniki(data);
+        setLoading(false);
+      })
       .catch(error => console.error(error));
   }, []);
 
@@ -106,7 +109,6 @@ export default function Profil() {
           setColors(colorsObject);
           setInitialColors(initialColors);
           setUlubione(data);
-          setLoading(false);
         })
         .catch(error => console.error(error));
   }, [userSession?.ID_Uzytkownika]);
@@ -124,7 +126,6 @@ export default function Profil() {
 
   //EDYTOWANIE zalogowanego użytkownika
   const handleChange = () => {
-    
     setEditModal(true);
   };
 
@@ -153,6 +154,10 @@ export default function Profil() {
   return <div style={{ height: "1200px" }}>
 
     <NavbarE />
+    {loading ? (
+  // Ten blok zostanie wyrenderowany podczas ładowania danych
+  <div className="text-center mt-2">Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
+) : (
     <div>
         
       <div className="container mt-5">
@@ -228,10 +233,7 @@ export default function Profil() {
       <div className="d-inline-block p-2 border" style={{backgroundColor: "red"}}>NIEULUBIONE</div>
       <div className="d-inline-block p-2 border" style={{backgroundColor: "#303030"}}>OBOJĘTNE</div>
     </div>
-    {loading ? (
-  // Ten blok zostanie wyrenderowany podczas ładowania danych
-  <div className="text-center mt-2">Ładowanie... <Spinner animation="border" variant="primary" size="sm" /></div>
-) : (
+    
   <div>
   {skladniki.sort((a, b) => a.Nazwa.localeCompare(b.Nazwa)).map(skladnik => (
     <button
@@ -241,12 +243,12 @@ export default function Profil() {
     >
       {skladnik.Nazwa}
       {skladnik.ikona && (
-        <img className="ms-1" style={{ width: "30px", height: "30px" }} src={skladnik.ikona} alt={skladnik.Nazwa} />
+        <img className="ms-1" loading="lazy" style={{ width: "30px", height: "30px" }} src={skladnik.ikona} alt={skladnik.Nazwa} />
       )}
     </button>
   ))}
 </div>
-)}
+
           </div>
 
       </div>
@@ -254,9 +256,9 @@ export default function Profil() {
       <div className="mt-5" >
       <a href="https://www.flaticon.com/free-icons/vegetable" title="vegetable icons">Vegetable icons created by SA Family - Flaticon</a>
       </div>
-     
-    </div>
 
+    </div>
+)}
         <EditModal 
         show={editModal}
         onHide={handleCloseModal}
@@ -268,6 +270,7 @@ export default function Profil() {
         message={message}
         errors={errors}
         />
+
   </div>
 
 

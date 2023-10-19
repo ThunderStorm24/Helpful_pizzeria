@@ -211,7 +211,10 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   useEffect(() => {
     fetch('/pizze')
       .then(response => response.json())
-      .then(data => setPizze(data))
+      .then(data => {
+        setPizze(data);
+        setLoading(false);
+      })
       .catch(error => console.error(error));
   }, []);
 
@@ -363,7 +366,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       .then(response => response.json())
       .then(data => {
         setUserLikes(data);
-        setLoading(false); // Ustawienie setLoading na false po udanym pobraniu danych
       })
       .catch(error => console.error(error));
   }, []);

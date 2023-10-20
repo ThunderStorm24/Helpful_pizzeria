@@ -357,8 +357,6 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     };
   }, []);
 
-  const [likes, setLikes] = useState([]);
-  const [dislikes, setDislikes] = useState(0);
   const [userLikes, setUserLikes] = useState([]);
 
   useEffect(() => {

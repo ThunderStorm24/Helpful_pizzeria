@@ -378,6 +378,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   const [likeButtonStates, setLikeButtonStates] = useState({});
 
   const handleLikeClick = (ID_Pizzy) => {
+    console.log(ID_Pizzy)
     const existingLikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Tak');
     const existingDislikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Nie');
 
@@ -481,7 +482,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   
 
   return (
-    <div className="d-flex flex-wrap mt-2">
+    <div className="d-flex flex-wrap mt-2" style={{ minHeight: "90vh" }}>
       <div className="ms-3 col-11 col-md-8 ">
         <Tabs fill defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Pizze Oryginalne">
@@ -679,6 +680,8 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             handleDislikeClick={handleDislikeClick}
                             disLikeButtonStates={disLikeButtonStates}
                             userLikes={userLikes}
+                            Role={Rola}
+                            showNotification={showNotification}
                           />
                         </td>
                         {Rola == "admin" && (
@@ -776,6 +779,8 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             handleDislikeClick={handleDislikeClick}
                             disLikeButtonStates={disLikeButtonStates}
                             userLikes={userLikes}
+                            Role={Rola}
+                            showNotification={showNotification}
                           />
                         </td>
                         {Rola == "user" && (
@@ -977,6 +982,8 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             handleDislikeClick={handleDislikeClick}
                             disLikeButtonStates={disLikeButtonStates}
                             userLikes={userLikes}
+                            Role={Rola}
+                            showNotification={showNotification}
                           />
                         </td>
                         {Rola == "user" && (

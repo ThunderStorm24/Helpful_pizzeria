@@ -99,8 +99,8 @@ export default function AdminOrders() {
     ) : (userSession?.Rola === "admin" ? ( 
       <div style={{ marginTop: "10px"}}>
 
-        <Button className="" href="/AdminOrders">Zamówienia</Button>
-        <Button className="" href="/AdminOrdersNotLogged" disabled>Zamówienia niezalogowanych użytkowników</Button>
+        <Button className="me-3 mt-3" href="/AdminOrders">Zamówienia</Button>
+        <Button className="ms-3 mt-3" href="/AdminOrdersNotLogged" disabled>Zamówienia niezalogowanych użytkowników</Button>
 
       <NotLogOrders
         orders={orders}

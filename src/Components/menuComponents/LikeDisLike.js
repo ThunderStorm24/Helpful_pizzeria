@@ -14,7 +14,7 @@ const PizzaActions = ({
   return (
     <td className="d-flex justify-content-center">
       <div className="d-flex">
-        <div className="likeBorder">
+        <div className="">
           <button
             className={`btn like-btn d-flex flex-column`}
             id="green"
@@ -45,7 +45,7 @@ const PizzaActions = ({
             </span>
           </button>
         </div>
-        <div className="ms-2 likeBorder">
+        <div className="ms-2">
           <button
             className={`btn dislike-btn d-flex flex-column`}
             id="red"

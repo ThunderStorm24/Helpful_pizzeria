@@ -8,7 +8,7 @@ function PrivateRoute({ element }) {
   if(!userSession?.Rola){
     console.log("XD?")
     return <Navigate to="/" replace />;
-} else if (!userSession?.Rola || userSession?.Rola === 'user'){
+} else if (!userSession?.Rola === 'user'){
     return <Navigate to="/" replace />;
 }
 return element;

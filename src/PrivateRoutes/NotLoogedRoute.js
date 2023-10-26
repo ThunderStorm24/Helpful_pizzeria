@@ -5,10 +5,10 @@ import { SessionContext } from "../SessionContext/Session";
 function NotLoggedRoute( { element } ){
     const userSession = useContext(SessionContext).userSession;
 
-    if(!userSession?.Rola){
-        return element;
-    }else if(userSession?.Rola){
+    if(userSession?.Rola === 'admin' || userSession?.Rola === 'user'){
         return <Navigate to="/Profil" replace />;
+    } else if (userSession?.Rola === undefined) {
+        return <Navigate to='/Login' replace />;
     }
     return element;
 } 

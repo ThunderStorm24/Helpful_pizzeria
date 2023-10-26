@@ -23,10 +23,10 @@ import NotLoggedRoute from "./PrivateRoutes/NotLoogedRoute.js";
 
 function App() {
 
-  const navigate = useNavigate();
   const [userSession, setUserSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Dodajemy nowy stan do monitorowania, czy dane są ładowane
 
-    useEffect(() => {
+  useEffect(() => {
     // Sprawdzamy, czy mamy dane użytkownika w pamięci podręcznej (localStorage)
     const cachedUser = localStorage.getItem('cachedUser');
 
@@ -43,54 +43,120 @@ function App() {
         }
       });
     }
-  },[]);
+    setIsLoading(false);
+  }, []);
+
+
 
   console.log(userSession)
 
   return (
     <div className="App">
       <SessionContext.Provider value={{ userSession, setUserSession }}>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/Menu" element={<Menu />}></Route>
+        {isLoading ? (
+          // Tutaj możesz dodać komunikat lub spinner oczekiwania na dane
+          <div>Loading...</div>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/Menu" element={<Menu />}></Route>
 
-          <Route path="/Login" 
-          element={
-            <NotLoggedRoute element={
-              <Login setUserSession={setUserSession} />
+            <Route path="/Login"
+              element={
+                userSession ? (
+                  <Navigate to="/Profil" />
+                ) : (
+                  <Login setUserSession={setUserSession} />
+                )
+              }>
+            </Route>
+
+            <Route path="/Rejestracja" element={
+              userSession ? (
+                <Navigate to="/Profil" />
+              ) : (
+                <Register />
+              )
             }>
-            </NotLoggedRoute> 
-          }> 
-        </Route>
+            </Route>
 
-          <Route path="/Rejestracja" element={
-            <NotLoggedRoute element={
-              <Register />
+            <Route
+              path="/Profil"
+              element={
+                userSession ? (
+                  <Profil />
+                ) : (
+                  <Navigate to="/Login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/Koszyk"
+              element={
+                userSession ? (
+                  userSession.Rola === 'admin' ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Koszyk />
+                  )
+                ) : (
+                  <Navigate to="/Login" />
+                )
+              }
+            />
+
+            <Route path="/Orders" element={
+              userSession ? (
+                <Orders />
+              ) : (
+                <Navigate to="/Login" />
+              )
             }>
-            </NotLoggedRoute>
-          }>
-          </Route>
+            </Route>
 
-          <Route path="/Profil" element={<Profil />}>
-          </Route>
+            <Route path="/AdminOrders" element={
+              userSession ? (
+                userSession.Rola === 'admin' ? (
+                  <AdminOrders />
+                ) : (
+                  <Navigate to="/" />
+                )
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }>
+            </Route>
 
-          <Route path="/Koszyk" element={<Koszyk />}>
-          </Route>
+            <Route path="/AdminOrdersNotLogged" element={
+              userSession ? (
+                userSession.Rola === 'admin' ? (
+                  <AdminOrdersNotLogged />
+                ) : (
+                  <Navigate to="/" />
+                )
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }>
+            </Route>
 
-          <Route path="/Orders" element={<Orders />}>
-          </Route>
+            <Route path="/Users" element={
+              userSession ? (
+                userSession.Rola === 'admin' ? (
+                  <Users />
+                ) : (
+                  <Navigate to="/" />
+                )
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }></Route>
 
-          <Route path="/AdminOrders" element={<AdminOrders />}>
-          </Route>
+            <Route path="*" element={<div className="mt-5" style={{ fontSize: "50px" }}>ERROR 404 NOT FOUND</div>}></Route>
 
-          <Route path="/AdminOrdersNotLogged" element={<AdminOrdersNotLogged />}>
-          </Route>
-
-          <Route path="/Users" element={<Users />}></Route>
-
-          <Route path="*" element={<div className="mt-5" style={{fontSize: "50px"}}>ERROR 404 NOT FOUND</div>}></Route>
-          
-        </Routes>
+          </Routes>
+        )}
       </SessionContext.Provider>
 
     </div>

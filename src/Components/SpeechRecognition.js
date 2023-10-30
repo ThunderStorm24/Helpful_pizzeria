@@ -163,9 +163,29 @@ function MySpeechRecognition() {
           response += ' Telefon nie podano.';
         }
 
+        const data = [
+          { label: 'Imie', value: imie },
+          { label: 'Nazwisko', value: nazwisko },
+          { label: 'Adres', value: adres },
+          { label: 'Kod pocztowy', value: kodPocztowy },
+          { label: 'Telefon', value: numerTelefonu },
+        ];
+    
+        const message = (
+          <div>Twoje dane osobowe to:
+          <ul>
+            {data.map((item) => 
+              <li key={item.label}>
+                {item.label}: {item.value ? item.value : 'Nie podano'}
+              </li>
+            )}
+          </ul>
+          </div>
+        );
+
         console.log(numerTelefonu)
         speak(response);
-        setMessage(response);
+        setMessage(message);
       },
     },
     {
@@ -294,9 +314,21 @@ function MySpeechRecognition() {
                 cena: cena
               },
             ];
+
             setSelectedPizza(updatedSelectedPizza);
             speak(`Dodaję pizzę ${pizza.Nazwa} (rozmiar Mała) do wybranych.`);
-            setMessage(`Dodaję pizzę ${pizza.Nazwa} (rozmiar Mała) do wybranych.`);
+
+            const pizzaList = (
+              <div>Dodaję pizzę {pizza.Nazwa} (rozmiar Mała) do wybranych.
+              <ol>
+                {updatedSelectedPizza.map((item, index) => 
+                  <li key={index}>{item.pizza} - {item.rozmiar}</li>
+                )}
+              </ol>
+              </div>
+            );
+
+            setMessage(pizzaList);
           } else {
             // Jeśli już istnieje pizza o tej samej nazwie, informujemy użytkownika
             speak(`Pozycja ${pizza.Nazwa} już istnieje w zamówieniu. Proszę zmienić rozmiar przez przykładowo rozmiar Capriciosa mała lub stworzyć kolejne zamówienie z tą samą pizzą.`);
@@ -358,10 +390,20 @@ function MySpeechRecognition() {
         command: [skladnikiCommand],
         callback: () => {
           setUserMessage(`${transcript}`)
+          const skladnikiArray = pizza.Skladniki.split(', '); // Przekształć ciąg na tablicę składników
+          const skladnikiList = (
+            <div> Składniki pizzy {pizza.Nazwa} to
+          <ul>
+            {skladnikiArray.map((skladnik, index) => 
+              <li key={index}>{skladnik}</li>
+            )}
+          </ul>
+          </div>
+          );
 
           resetTranscript();
           speak(`Składniki pizzy ${pizza.Nazwa} to ${pizza.Skladniki}.`);
-          setMessage(`Składniki pizzy ${pizza.Nazwa} to ${pizza.Skladniki}.`);
+          setMessage(skladnikiList);
         },
       },
       {
@@ -380,8 +422,16 @@ function MySpeechRecognition() {
             cenaMessage += `${size} pizza: ${cena} złoty. `;
           });
 
+          const message = (
+            <ul>
+              {sizes.map((size, index) => 
+                <li key={size}>{size} pizza: {ceny[index]} złoty</li>
+              )}
+            </ul>
+          );
+          
           speak(cenaMessage);
-          setMessage(cenaMessage);
+          setMessage(message);
         },
       },
     ];
@@ -392,6 +442,17 @@ function MySpeechRecognition() {
       command: [`komendy`],
       callback: () => {
         setUserMessage(`${transcript}`)
+        const message = (
+          <div>Aby zobaczyć komendy powiedz:
+          <ol>
+            <li>komendy menu.</li>
+            <li>komendy zamówienia.</li>
+            <li>komendy wybranych pizzy.</li>
+            <li>komendy danych osobowych.</li>
+          </ol>
+          Jeżeli potrzebujesz pomocy powiedz pomoc.
+          </div>
+        );
 
         resetTranscript();
         speak(`Aby zobaczyć komendy powiedz:
@@ -400,12 +461,7 @@ function MySpeechRecognition() {
         3. komendy wybranych pizzy.
         4. komendy danych osobowych.
         Jeżeli potrzebujesz pomocy powiedz pomoc.`);
-        setMessage(`Aby zobaczyć komendy powiedz:
-        1. komendy menu.
-        2. komendy zamówienia.
-        3. komendy wybranych pizzy.
-        4. komendy danych osobowych.
-        Jeżeli potrzebujesz pomocy powiedz pomoc.`);
+        setMessage(message);
       }
     },
     {
@@ -424,6 +480,18 @@ function MySpeechRecognition() {
       command: [`komendy danych osobowych`],
       callback: () => {
         setUserMessage(`${transcript}`)
+        const message = (
+          <div>Aby dowiedzieć się o swoich podanych danych to powiedz:
+          <ol>
+            <li>Moje dane osobowe.</li>
+            <li>Moje imię.</li>
+            <li>Moję nazwisko.</li>
+            <li>Mój adres.</li>
+            <li>Mój kod pocztowy.</li>
+            <li>Mój numer telefonu.</li>
+          </ol>
+          </div>
+        );
 
         resetTranscript();
         speak(`Aby dowiedzieć się o swoich podanych danych to:
@@ -433,35 +501,48 @@ function MySpeechRecognition() {
         4. Mój adres.
         5. Mój kod pocztowy.
         6. Mój numer telefonu.`);
-        setMessage(`Aby dowiedzieć się o swoich podanych danych to:
-        1. Moje dane osobowe.
-        2. Moje imię.
-        3. Moję nazwisko.
-        4. Mój adres.
-        5. Mój kod pocztowy.
-        6. Mój numer telefonu.`);
+        setMessage(message);
       }
     },
     {
       command: [`komendy menu`],
       callback: () => {
         setUserMessage(`${transcript}`)
+        const message = (
+          <div>Aby dowiedzieć się o pizzach to powiedz:
+          <ol>
+            <li>menu.</li>
+            <li>składniki [Nazwa pizzy]</li>
+            <li>cena [Nazwa pizzy]</li>
+          </ol>
+          </div>
+        );
 
         resetTranscript();
-        speak(`Aby dowiedzieć się o pizzach to:
+        speak(`Aby dowiedzieć się o pizzach to powiedz:
         1. menu.
         2. składniki [Nazwa pizzy].
         3. cena [Nazwa pizzy].`);
-        setMessage(`Aby dowiedzieć się o pizzach to:
-        1. menu.
-        2. składniki [Nazwa pizzy].
-        3. cena [Nazwa pizzy].`);
+        setMessage(message);
       }
     },
     {
       command: [`komendy zamówienia`],
       callback: () => {
         setUserMessage(`${transcript}`)
+        const message = (
+          <div>Aby złożyć zamówienie to:
+          <ol>
+            <li>Imię [Twoje imię].</li>
+            <li>Nazwisko [Twoje nazwisko].</li>
+            <li>Adres [Twój adres].</li>
+            <li>Kod pocztowy [Twój kod pocztowy]</li>
+            <li>Numer telefonu [Twój numer telefonu]</li>
+            <li>dodaj [Nazwa pizzy].</li>
+          </ol>
+          </div>
+        );
+
 
         resetTranscript();
         speak(`Aby złożyć zamówienie to:
@@ -471,27 +552,27 @@ function MySpeechRecognition() {
         4. Kod pocztowy [Twój kod pocztowy].
         5. Numer telefonu [Twój numer telefonu].
         6. dodaj [Nazwa pizzy].`);
-        setMessage(`Aby złożyć zamówienie to:
-        1. Imię [Twoje imię].
-        2. Nazwisko [Twoje nazwisko].
-        3. Adres [Twój adres].
-        4. Kod pocztowy [Twój kod pocztowy].
-        5. Numer telefonu [Twój numer telefonu].
-        6. dodaj [Nazwa pizzy].`);
+        setMessage(message);
       }
     },
     {
       command: [`zadzwoń`, `kontakt`],
       callback: () => {
         setUserMessage(`${transcript}`)
+        const message = (
+          <div>Nasz numer telefonu to:
+          <ol>
+            <li>Telefon komórkowy: +48 632 532 123.</li>
+            <li>Telefon komórkowy: +48 332 232 723.</li>
+          </ol>
+          </div>
+        );
 
         resetTranscript();
         speak(`Nasz numer telefonu to: 
         1. Telefon komórkowy: +48 632 532 123.
         2. Telefon komórkowy: +48 332 232 723.`);
-        setMessage(`Nasz numer telefonu to: 
-        1. Telefon komórkowy: +48 632 532 123.
-        2. Telefon komórkowy: +48 332 232 723.`);
+        setMessage(message);
       }
     },
     {
@@ -548,8 +629,19 @@ function MySpeechRecognition() {
 
         resetTranscript();
         const pizzaList = pizzaData.map((pizza) => `${pizza.ID_Pizzy} ${pizza.Nazwa}`).join(', '); // Tworzy listę nazw pizz razem z ID, oddzielonych przecinkami
+
+        const message = (
+          <div>
+            Dostępne pizze to:
+            <ul style={{ listStyleType: 'none', padding: '8px' }}>
+              {pizzaData.map((pizza) => 
+                <li key={pizza.ID_Pizzy}>{pizza.ID_Pizzy}. {pizza.Nazwa}</li>
+              )}
+            </ul>
+          </div>
+        );
         speak(`Dostępne pizze to: ${pizzaList}`);
-        setMessage(`Dostępne pizze to: ${pizzaList}`);
+        setMessage(message);
       }
     },
     {
@@ -560,10 +652,23 @@ function MySpeechRecognition() {
         resetTranscript();
         if (selectedPizza && selectedPizza.length > 0) {
           const selectedPizzaInfo = selectedPizza.map((pizza) => {
-            return `${pizza.pizza} (rozmiar ${pizza.rozmiar}) (cena ${pizza.cena})`;
+            return `${pizza.pizza} (rozmiar ${pizza.rozmiar}) (cena ${pizza.cena}).`;
           }).join(', ');
+
+          const message = (
+            <div>Wybrałeś:
+            <ol>
+              {selectedPizza.map((pizza, index) => 
+                <li key={index}>
+                  {pizza.pizza} (rozmiar {pizza.rozmiar}) (cena {pizza.cena}).
+                </li>
+              )}
+            </ol>
+            </div>
+          );
+
           speak(`Wybrałeś: ${selectedPizzaInfo}`);
-          setMessage(`Wybrałeś: ${selectedPizzaInfo}`);
+          setMessage(message);
 
         } else {
           speak(`Nie wybrałeś jeszcze żadnej pizzy.`);
@@ -777,7 +882,7 @@ function MySpeechRecognition() {
             }}>
               <div className="col-12 mb-3">
                 <div className="mb-1">Użytkownik:</div>
-                <div className="border p-2 rounded" style={{ backgroundColor: 'blue' }}>
+                <div className="border p-2 rounded" style={{ backgroundColor: '#000077' }}>
                   {userMessage}
                 </div>
               </div>
@@ -788,26 +893,38 @@ function MySpeechRecognition() {
             }}>
               <div className="col-12 mb-3">
                 <div className="mb-1">Maszyna:</div>
-                <div className="border p-2 rounded" style={{ backgroundColor: 'grey' }}>
+                <div className="border p-2 rounded" style={{ backgroundColor: '#555555' }}>
                   {message}
                 </div>
               </div>
             </div>
           </div>
-          <Button onClick={toggleListening} style={{ margin: '5px' }}>{isListening ? 'Stop' : 'Start'}</Button>
-          <Button onClick={resetTranscript} style={{ margin: '5px' }}>Reset</Button>
           <Alert variant="dark" className="mt-3">
-          <div><div>Przydatne Komendy:</div>
+          <div><div>Przydatne Komendy Informacyjne:</div>
             <ul>
               <li>kontakt</li>
+              <li>pomoc / komendy</li>
               <li>menu</li>
-              <li>chcę pizzę ...</li>
               <li>cena ...</li>
               <li>składniki ...</li>
+              <li>Dane osobowe</li>
+            </ul>
+              <div>Komendy dodawania pizz do koszyka:</div>
+              <ul>
+                <li>chcę pizzę ... / dodaj ...</li>
+                <li>rozmiar ... ... (gdzie 'nazwa' 'rozmiar')</li>
+                <li>moje pizze</li>
+                <li>Zamów</li>
+              </ul>
+              <div>Komendy danych osobowych:</div>
+              <ul>
               <li>Imię ... / Nazwisko ... / Adres ... </li>
               <li>Kod Pocztowy ... / Telefon ... / Dostawa ...</li>
-              <li>Dane osobowe</li>
-              <li>Zamów</li>
+              </ul>
+              <div>Aby zamówić</div>
+              <ul>
+                <li>Wszystkie dane osobowe muszą być wypełnione (komenda 'Dane osobowe')</li>
+                <li>Conajmniej jedna pizza musi zostać wybrana</li>
             </ul>
           </div>
           </Alert>

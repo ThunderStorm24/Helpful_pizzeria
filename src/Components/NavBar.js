@@ -257,7 +257,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
       {userSession != null ? (
         <Dropdown>
-        <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="ms-2 loginButton">
+        <Dropdown.Toggle variant="secondary" id="dropdown-item-button" className="border ms-2 loginButton" style={{backgroundColor:"transparent"}}>
         <i className="fa fa-user me-2" aria-hidden="true"></i>{userSession?.Login}
         </Dropdown.Toggle>
   
@@ -286,7 +286,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
         </Dropdown.Menu>
       </Dropdown>
     ) : (
-    <Button href="/Login" className="btn-secondary ms-3 me-3 loginButton">{loading ? (<div> <Spinner animation="border" variant="primary" size="sm" /></div>) : (<div>Zaloguj</div>)}</Button>
+    <Button href="/Login" className="border ms-3 me-3 loginButton" style={{backgroundColor:"transparent"}}>{loading ? (<div> <Spinner animation="border" variant="primary" size="sm" /></div>) : (<div>Zaloguj</div>)}</Button>
 )}
     </Navbar.Collapse>
   </Container>

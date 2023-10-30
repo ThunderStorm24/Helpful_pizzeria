@@ -19,7 +19,7 @@ const PizzaFilter = ({
 }) => {
   return (
     <div className="d-flex justify-content-center col-12 col-md-3">
-      <div className="col-11 col-md-11 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px", background: '#222', padding: '20px' }}>
+      <div className="col-11 col-md-11 border" style={{ responsive: "true", marginTop: "40px", height: "454px", marginLeft: "0px", padding: '20px' }}>
         <Form>
           <fieldset>
             <legend className="mt-2" style={{ fontWeight: "bold", fontSize: "18px" }}>Wybierz Opcje Filtrowania</legend>

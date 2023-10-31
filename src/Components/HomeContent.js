@@ -11,14 +11,13 @@ function Introduction(){
 
 
         <img
-          className="col-12 col-md-12 d-block w-100"
-         // className="d-block w-100"
+          className="col-12 col-md-12 d-block"
           src="Menu.jpg"
           style={{objectFit:'cover'}}
         />
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
         <div className="napis col-10">Pizzeria la Thunderas</div> 
-        <button className="napis1 col-6">Zamów już dziś!</button>
+        <button className="napis1 col-6 mt-5">Zamów już dziś!</button>
         </div>
 </div>
   );

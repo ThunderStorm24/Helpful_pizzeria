@@ -242,8 +242,8 @@ export default function Menu() {
         show={deleteModal}
         onHide={handleCloseModal}
         operation={handleDeletePizza}
-        buttonSuccess={"Anuluj"}
-        buttonDanger={"Usuń Pizzę"}
+        buttonSuccess={"Usuń Pizzę"}
+        buttonDanger={"Anuluj"}
         description = {`Pizza "${pizza.Nazwa}" o ID: ${pizza.ID_Pizzy} ze składnikami: (${pizza.Skladniki}) zostanie usunięta na stałe. Czy na pewno chcesz to zrobić?`}
         title={`Czy chcesz usunąć pizzę [${pizza.ID_Pizzy}]`}
         disable={false}

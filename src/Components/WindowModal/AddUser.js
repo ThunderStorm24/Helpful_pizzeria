@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Form, FormControl, Alert } from 'react-bootstrap';
-import Button from "react-bootstrap/Button";
-import Axios from 'axios';
-
+import { Form, FormControl, Alert, Button, InputGroup } from 'react-bootstrap';
 
 const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Role, message, errors }) => {
 
@@ -51,6 +48,8 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
 
            <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Rola:</Form.Label>
+            <InputGroup>
+            <InputGroup.Text id="basic-addon1"><i class="fa fa-users me-2" aria-hidden="true"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź Rolę"
@@ -58,76 +57,98 @@ const AddUserModal = ({ show, onHide, onSubmit, title, userID, button, Added, Ro
               onChange={(event) => setRole(event.target.value)}
               disabled
             />
+            </InputGroup>
           </Form.Group>
-
+          
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Imię:</Form.Label>
+            <InputGroup>
+            <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź imię"
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Nazwisko:</Form.Label>
+            <InputGroup>
+            <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź nazwisko"
               value={surname}
               onChange={(event) => setSurname(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Adres:</Form.Label>
+            <InputGroup>
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-address-card" aria-hidden="true"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź adres"
               value={adress}
               onChange={(event) => setAdress(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Kod_Pocztowy:</Form.Label>
+            <InputGroup>
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-map-pin" aria-hidden="true"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź kod pocztowy"
               value={zipcode}
               onChange={(event) => setZipcode(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Telefon:</Form.Label>
+            <InputGroup>
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-phone"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź telefon"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Login:</Form.Label>
+            <InputGroup>
+            <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź login"
               value={login}
               onChange={(event) => setLogin(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Hasło:</Form.Label>
+            <InputGroup>
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-lock"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź hasło"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           {errors && errors.length > 0 ? (  

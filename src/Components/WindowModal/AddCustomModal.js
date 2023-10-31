@@ -79,7 +79,7 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Składniki</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Składniki</Form.Label>
             <Form.Control
               type="text"
               placeholder="Szukaj składnika"
@@ -104,7 +104,7 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Cena</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Cena</Form.Label>
             <Form.Control
               type="number"
               placeholder="Cena małej pizzy"
@@ -134,13 +134,13 @@ const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMess
             />
           </Form.Group>
           {customShowButton ? (
-            <Button variant="primary" type="submit" className="mt-2">
+            <Button variant="primary" type="submit" className="mt-3">
               Dodaj
             </Button>
           ) : (
-            <button className="mt-2 btn btn-primary" onClick={() => customOnHide(false)}>OK</button>
+            <button className="mt-3 btn btn-primary" onClick={() => customOnHide(false)}>OK</button>
           )}
-          <div className="" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
+          <div className="mt-3" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
           {customMessage && customMessage.length > 0 ? (
             customMessage.map((msg, index) => (
               <ul className="text-danger" style={{ margin: "0px" }} key={index}><li>{msg}</li></ul>

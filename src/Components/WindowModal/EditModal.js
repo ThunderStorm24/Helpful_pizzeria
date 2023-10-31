@@ -105,7 +105,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header className="border" closeButton>
+      <Modal.Header className="border" style={{ backgroundColor: '#444444', color: 'white' }} closeButton>
         <Modal.Title>Edytuj pizzę</Modal.Title>
       </Modal.Header>
       <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
@@ -121,7 +121,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Składniki</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Składniki</Form.Label>
             <Form.Control
               type="text"
               placeholder="Szukaj składnika"
@@ -146,7 +146,7 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
           </Form.Group>
 
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Cena</Form.Label>
+            <Form.Label className="mt-2" style={{ fontWeight: "bold" }}>Cena</Form.Label>
             <Form.Control
               type="number"
               placeholder="Cena małej pizzy"
@@ -176,13 +176,13 @@ const EditPizzaModal = ({ show, onHide, onSubmit, message, messageAdd, showButto
             />
           </Form.Group>
           {showButton ? (
-            <Button variant="primary" type="submit" className="mt-2">
+            <Button variant="primary" type="submit" className="mt-3">
               Edytuj
             </Button>
           ) : (
-            <button type="button" className="mt-2 btn btn-primary" onClick={() => onHide(false)}>OK</button>
+            <button type="button" className="mt-3 btn btn-primary" onClick={() => onHide(false)}>OK</button>
           )}
-          <div className="" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
+          <div className="mt-2" style={{ fontWeight: "bold" }}>Status Pizzy:</div>
           {message && message.length > 0 ? (
             message.map((msg, index) => (
               <ul className="text-danger" style={{ margin: "0px" }} key={index}><li>{msg}</li></ul>

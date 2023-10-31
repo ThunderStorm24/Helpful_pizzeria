@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Form, FormControl, Alert } from 'react-bootstrap';
-import Button from "react-bootstrap/Button";
+import { Form, FormControl, Alert, Button, InputGroup } from 'react-bootstrap';
 import Axios from 'axios';
 
 
@@ -61,69 +60,87 @@ useEffect(() => {
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header className="border" closeButton>
+      <Modal.Header className="border" style={{ backgroundColor: '#444444', color: 'white' }} closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="border" style={{ backgroundColor: '#141414', color: 'white' }}>
         <Form onSubmit={handleSubmit}>
           <Form.Group>
-            <Form.Label style={{ fontWeight: "bold" }}>Imię:</Form.Label>
+            <Form.Label className="mt-1"  style={{ fontWeight: "bold" }}>Imię:</Form.Label>
+            <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź imię"
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Nazwisko:</Form.Label>
+            <InputGroup className="mb-3">
+          <InputGroup.Text id="basic-addon1"><i class="fa fa-user"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź nazwisko"
               value={surname}
               onChange={(event) => setSurname(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Adres:</Form.Label>
+            <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1"><i class="fa fa-address-card" aria-hidden="true"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź adres"
               value={adress}
               onChange={(event) => setAdress(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Kod_Pocztowy:</Form.Label>
+            <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-map-pin" aria-hidden="true"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź kod pocztowy"
               value={zipcode}
               onChange={(event) => setZipcode(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Telefon:</Form.Label>
+            <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i class="fa fa-phone"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź telefon"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           <Form.Group>
             <Form.Label style={{ fontWeight: "bold" }}>Login:</Form.Label>
+            <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1"><i className="fa fa-user ml-2"></i></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Wprowadź login"
               value={login}
               onChange={(event) => setLogin(event.target.value)}
             />
+            </InputGroup>
           </Form.Group>
 
           {errors && errors.length > 0 ? (  

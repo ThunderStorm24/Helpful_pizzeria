@@ -307,7 +307,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                         ))}
                     </tbody>
                 </Table>
-                <Button onClick={() => handleAdd("admin")} className="mb-1 mt-2" variant="primary">Dodaj admina</Button>
+                <Button onClick={() => handleAdd("admin")} className="mb-1 mt-3" variant="primary">Dodaj admina</Button>
                 </div>
 
                 <div className="p-5 rounded-5 mt-4" style={{background: '#111111'}}>
@@ -375,7 +375,7 @@ const filteredUsers = filterAndSort(users, searchUser, sortByUser);
                         ))}
                     </tbody>
                 </Table>
-                <Button onClick={() => handleAdd("user")} className="mb-1 mt-2" variant="primary">Dodaj użytkownika</Button>
+                <Button onClick={() => handleAdd("user")} className="mb-1 mt-3" variant="primary">Dodaj użytkownika</Button>
                 </div>
             </div>
           ):(<div>Nieuprawniony dostęp</div>))}

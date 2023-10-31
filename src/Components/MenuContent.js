@@ -585,7 +585,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                   </tbody>
                 </Table>
                 {Rola == 'admin' && (
-                  <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Oryginal")}>
+                  <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Oryginal")}>
                     Dodaj pizze Oryginalną
                   </button>
                 )}
@@ -706,7 +706,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                   </tbody>
                 </Table>
                 {Rola == 'user' && (
-                  <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Custom")}>
+                  <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Custom")}>
                     Dodaj pizze Customową
                   </button>
                 )}
@@ -795,7 +795,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                   </tbody>
                 </Table>
                 {Rola == 'user' && (
-                  <button className="btn btn-primary mb-3 blueButton" onClick={() => handleAdd("Custom")}>
+                  <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Custom")}>
                     Dodaj pizze Customową
                   </button>
                 )}

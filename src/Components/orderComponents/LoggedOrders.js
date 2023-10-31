@@ -17,7 +17,7 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                   key={order.ID_Zamowienia}
                   className="col-11 col-md-4 col-xl-2 border border-5  rounded p-3 ms-3 mt-3 mb-3"
                   style={{
-                    background: "#303030",
+                    background: "#202020",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -75,7 +75,7 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                   key={order.ID_Zamowienia}
                   className="col-11 col-md-4 col-xl-2 border border-5 rounded p-3 ms-3 mt-3 mb-3"
                   style={{
-                    background: "#303030",
+                    background: "#202020",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -132,7 +132,7 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                   key={order.ID_Zamowienia}
                   className="col-11 col-md-4 col-xl-2 border border-5 rounded p-3 ms-3 mt-3 mb-3"
                   style={{
-                    background: "#303030",
+                    background: "#202020",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",

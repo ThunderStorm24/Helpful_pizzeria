@@ -34,7 +34,7 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
       </Modal.Header>
       <Modal.Body>{description}
         {disable ? null : (
-          <Button className="mt-2" variant={buttonVariant} onClick={handleButtonClick}>
+          <Button className="mt-2 ms-2" variant={buttonVariant} onClick={handleButtonClick}>
             {buttonText}
           </Button>
         )}
@@ -43,7 +43,7 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
           <Form>
             <Form.Control
               as="textarea"
-              className="col-6"
+              className="col-6 ms"
               placeholder="Tu wpisz komentarz"
               style={{
                 height: "150px",

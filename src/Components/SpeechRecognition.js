@@ -10,6 +10,12 @@ function MySpeechRecognition() {
   const [orderData, setOrderData] = useState([]);
   const [selectedPizza, setSelectedPizza] = useState([]);
 
+  const [microphone, setMicrophone] = useState(true);
+  const [volume, setVolume] = useState(true);
+
+  const maxFontSize = 30;
+  const [fontSize, setFontSize] = useState(16);
+
   const [imie, setImie] = useState('');
   const [nazwisko, setNazwisko] = useState('');
   const [numerTelefonu, setNumerTelefonu] = useState('');
@@ -20,6 +26,7 @@ function MySpeechRecognition() {
   const [message, setMessage] = useState('');
   const [userMessage, setUserMessage] = useState('...');
 
+  const [showListeningModal, setShowListeningModal] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [browser, setBrowser] = useState(true);
 
@@ -170,16 +177,16 @@ function MySpeechRecognition() {
           { label: 'Kod pocztowy', value: kodPocztowy },
           { label: 'Telefon', value: numerTelefonu },
         ];
-    
+
         const message = (
           <div>Twoje dane osobowe to:
-          <ul>
-            {data.map((item) => 
-              <li key={item.label}>
-                {item.label}: {item.value ? item.value : 'Nie podano'}
-              </li>
-            )}
-          </ul>
+            <ul>
+              {data.map((item) =>
+                <li key={item.label}>
+                  {item.label}: {item.value ? item.value : 'Nie podano'}
+                </li>
+              )}
+            </ul>
           </div>
         );
 
@@ -320,11 +327,11 @@ function MySpeechRecognition() {
 
             const pizzaList = (
               <div>Dodaję pizzę {pizza.Nazwa} (rozmiar Mała) do wybranych.
-              <ol>
-                {updatedSelectedPizza.map((item, index) => 
-                  <li key={index}>{item.pizza} - {item.rozmiar}</li>
-                )}
-              </ol>
+                <ol>
+                  {updatedSelectedPizza.map((item, index) =>
+                    <li key={index}>{item.pizza} - {item.rozmiar}</li>
+                  )}
+                </ol>
               </div>
             );
 
@@ -393,12 +400,12 @@ function MySpeechRecognition() {
           const skladnikiArray = pizza.Skladniki.split(', '); // Przekształć ciąg na tablicę składników
           const skladnikiList = (
             <div> Składniki pizzy {pizza.Nazwa} to
-          <ul>
-            {skladnikiArray.map((skladnik, index) => 
-              <li key={index}>{skladnik}</li>
-            )}
-          </ul>
-          </div>
+              <ul>
+                {skladnikiArray.map((skladnik, index) =>
+                  <li key={index}>{skladnik}</li>
+                )}
+              </ul>
+            </div>
           );
 
           resetTranscript();
@@ -424,12 +431,12 @@ function MySpeechRecognition() {
 
           const message = (
             <ul>
-              {sizes.map((size, index) => 
+              {sizes.map((size, index) =>
                 <li key={size}>{size} pizza: {ceny[index]} złoty</li>
               )}
             </ul>
           );
-          
+
           speak(cenaMessage);
           setMessage(message);
         },
@@ -444,13 +451,13 @@ function MySpeechRecognition() {
         setUserMessage(`${transcript}`)
         const message = (
           <div>Aby zobaczyć komendy powiedz:
-          <ol>
-            <li>komendy menu.</li>
-            <li>komendy zamówienia.</li>
-            <li>komendy wybranych pizzy.</li>
-            <li>komendy danych osobowych.</li>
-          </ol>
-          Jeżeli potrzebujesz pomocy powiedz pomoc.
+            <ol>
+              <li>komendy menu.</li>
+              <li>komendy zamówienia.</li>
+              <li>komendy wybranych pizzy.</li>
+              <li>komendy danych osobowych.</li>
+            </ol>
+            Jeżeli potrzebujesz pomocy powiedz pomoc.
           </div>
         );
 
@@ -482,14 +489,14 @@ function MySpeechRecognition() {
         setUserMessage(`${transcript}`)
         const message = (
           <div>Aby dowiedzieć się o swoich podanych danych to powiedz:
-          <ol>
-            <li>Moje dane osobowe.</li>
-            <li>Moje imię.</li>
-            <li>Moję nazwisko.</li>
-            <li>Mój adres.</li>
-            <li>Mój kod pocztowy.</li>
-            <li>Mój numer telefonu.</li>
-          </ol>
+            <ol>
+              <li>Moje dane osobowe.</li>
+              <li>Moje imię.</li>
+              <li>Moję nazwisko.</li>
+              <li>Mój adres.</li>
+              <li>Mój kod pocztowy.</li>
+              <li>Mój numer telefonu.</li>
+            </ol>
           </div>
         );
 
@@ -510,11 +517,11 @@ function MySpeechRecognition() {
         setUserMessage(`${transcript}`)
         const message = (
           <div>Aby dowiedzieć się o pizzach to powiedz:
-          <ol>
-            <li>menu.</li>
-            <li>składniki [Nazwa pizzy]</li>
-            <li>cena [Nazwa pizzy]</li>
-          </ol>
+            <ol>
+              <li>menu.</li>
+              <li>składniki [Nazwa pizzy]</li>
+              <li>cena [Nazwa pizzy]</li>
+            </ol>
           </div>
         );
 
@@ -532,14 +539,14 @@ function MySpeechRecognition() {
         setUserMessage(`${transcript}`)
         const message = (
           <div>Aby złożyć zamówienie to:
-          <ol>
-            <li>Imię [Twoje imię].</li>
-            <li>Nazwisko [Twoje nazwisko].</li>
-            <li>Adres [Twój adres].</li>
-            <li>Kod pocztowy [Twój kod pocztowy]</li>
-            <li>Numer telefonu [Twój numer telefonu]</li>
-            <li>dodaj [Nazwa pizzy].</li>
-          </ol>
+            <ol>
+              <li>Imię [Twoje imię].</li>
+              <li>Nazwisko [Twoje nazwisko].</li>
+              <li>Adres [Twój adres].</li>
+              <li>Kod pocztowy [Twój kod pocztowy]</li>
+              <li>Numer telefonu [Twój numer telefonu]</li>
+              <li>dodaj [Nazwa pizzy].</li>
+            </ol>
           </div>
         );
 
@@ -561,10 +568,10 @@ function MySpeechRecognition() {
         setUserMessage(`${transcript}`)
         const message = (
           <div>Nasz numer telefonu to:
-          <ol>
-            <li>Telefon komórkowy: +48 632 532 123.</li>
-            <li>Telefon komórkowy: +48 332 232 723.</li>
-          </ol>
+            <ol>
+              <li>Telefon komórkowy: +48 632 532 123.</li>
+              <li>Telefon komórkowy: +48 332 232 723.</li>
+            </ol>
           </div>
         );
 
@@ -634,7 +641,7 @@ function MySpeechRecognition() {
           <div>
             Dostępne pizze to:
             <ul style={{ listStyleType: 'none', padding: '8px' }}>
-              {pizzaData.map((pizza) => 
+              {pizzaData.map((pizza) =>
                 <li key={pizza.ID_Pizzy}>{pizza.ID_Pizzy}. {pizza.Nazwa}</li>
               )}
             </ul>
@@ -657,13 +664,13 @@ function MySpeechRecognition() {
 
           const message = (
             <div>Wybrałeś:
-            <ol>
-              {selectedPizza.map((pizza, index) => 
-                <li key={index}>
-                  {pizza.pizza} (rozmiar {pizza.rozmiar}) (cena {pizza.cena}).
-                </li>
-              )}
-            </ol>
+              <ol>
+                {selectedPizza.map((pizza, index) =>
+                  <li key={index}>
+                    {pizza.pizza} (rozmiar {pizza.rozmiar}) (cena {pizza.cena}).
+                  </li>
+                )}
+              </ol>
             </div>
           );
 
@@ -724,7 +731,7 @@ function MySpeechRecognition() {
       }
     },
     {
-      command: [ 'pomoc', 'pomóż'],
+      command: ['pomoc', 'pomóż'],
       callback: () => {
         setUserMessage(`${transcript}`)
         resetTranscript();
@@ -745,7 +752,7 @@ function MySpeechRecognition() {
     {
       command: ['wyczyść', 'odśwież', 'zresetuj',
         'clear', 'reset', 'refresh'],
-      callback: ({ resetTranscript}) => {
+      callback: ({ resetTranscript }) => {
         setMessage('Witaj w obsłudze głosowej, Powiedz pomoc lub komendy')
         setUserMessage('...')
         resetTranscript();
@@ -759,6 +766,7 @@ function MySpeechRecognition() {
         resetTranscript();
         speak();
         setIsListening(false);
+        setShowListeningModal(false);
         SpeechRecognition.stopListening()
       }
     },
@@ -766,14 +774,29 @@ function MySpeechRecognition() {
     ...pizzaCommands
   ]
 
-  const toggleListening = () => {
-    if (isListening) {
+  useEffect(() => {
+    if (!microphone && showListeningModal) {
+      // Jeżeli mikrofon jest wyłączony i nasłuchiwanie trwa, to zatrzymaj nasłuchiwanie
       SpeechRecognition.stopListening();
       setIsListening(false);
+    }
+    if (microphone && showListeningModal){
+      SpeechRecognition.startListening({ continuous: true });
+      setIsListening(true);
+    }
+  }, [microphone, isListening]);
+
+  const toggleListening = () => {
+
+    if (!microphone) {
+      SpeechRecognition.stopListening();
+      setIsListening(false);
+      setShowListeningModal(true);
     } else {
       speak("Witaj w obsłudze głosowej, Powiedz pomoc lub komendy")
       setMessage("Witaj w obsłudze głoswoej, Powiedz pomoc lub komendy")
       SpeechRecognition.startListening({ continuous: true });
+      setShowListeningModal(true);
       setIsListening(true);
     }
   }
@@ -791,25 +814,34 @@ function MySpeechRecognition() {
     }
   }, [browserSupportsSpeechRecognition]);
 
+  useEffect(() => {
+    if (!volume) {
+      const synthesis = window.speechSynthesis;
+      synthesis.cancel();
+    }
+  }, [volume]);
+
   let sayTimeout = null;
 
   const speak = (text, rate = 1.0) => {
     const synthesis = window.speechSynthesis;
 
-    if (synthesis.speaking) {
-      synthesis.cancel();
+    if (volume) {
+      if (synthesis.speaking) {
+        synthesis.cancel();
 
-      if (sayTimeout !== null) {
-        clearTimeout(sayTimeout);
+        if (sayTimeout !== null) {
+          clearTimeout(sayTimeout);
+        }
+
+        sayTimeout = setTimeout(() => {
+          speak(text);
+        }, 100);
+      } else {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "pl-PL";
+        synthesis.speak(utterance);
       }
-
-      sayTimeout = setTimeout(() => {
-        speak(text);
-      }, 100);
-    } else {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "pl-PL";
-      synthesis.speak(utterance);
     }
   };
 
@@ -857,9 +889,10 @@ function MySpeechRecognition() {
       )}
 
       <Modal
-        show={isListening}
+        show={showListeningModal}
         onHide={() => {
-          setIsListening(false);
+          setIsListening(false)
+          setShowListeningModal(false);
           SpeechRecognition.stopListening();
         }}
         dialogClassName="modal-90w"
@@ -868,10 +901,46 @@ function MySpeechRecognition() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">
-            Co mówisz
+            <div className="d-flex">
+              <div>Co mówisz</div>
+            </div>
           </Modal.Title>
+          <button
+            style={{ marginInlineStart: "230px" }}
+            className={`col-1 btn ${microphone ? 'btn-outline-primary' : 'btn-outline-danger'}`}
+            onClick={() => setMicrophone(!microphone)}
+          >
+            {microphone ? (
+              <i className="fa fa-microphone" aria-hidden="true"></i>
+            ) : (
+              <i className="fa fa-microphone-slash" aria-hidden="true"></i>
+            )}
+          </button>
+          <button
+            className={`ms-2 col-1 btn ${volume ? 'btn-outline-primary' : 'btn-outline-danger'}`}
+            onClick={() => setVolume(!volume)}
+          >
+            {volume ? (
+              <i className="fa fa-volume-up" aria-hidden="true"></i>
+            ) : (
+              <i className="fa fa-volume-off" aria-hidden="true"></i>
+            )}
+          </button>
         </Modal.Header>
-        <Modal.Body style={{ backgroundColor: '#141414', color: 'white' }}>
+        <Modal.Body style={{ backgroundColor: '#141414', color: 'white', fontSize: `${fontSize}px` }}>
+          <div className="mb-1" style={{ fontSize: '20px' }}>Powiększenie: {fontSize}px</div>
+          <button
+            className="btn btn-outline-primary mb-3"
+            onClick={() => setFontSize(prevSize => Math.min(prevSize + 2, maxFontSize))}
+          >
+            <i class="fa fa-search-plus" aria-hidden="true"></i>
+          </button>
+          <button
+            className="ms-2 btn btn-outline-primary mb-3"
+            onClick={() => setFontSize(prevSize => Math.max(10, prevSize - 2))}
+          >
+            <i class="fa fa-search-minus" aria-hidden="true"></i>
+          </button>
           <div className="mb-4" style={{ height: '50px', maxHeight: '50px', overflowY: 'auto' }}>
             Twoja wypowiedź: {transcript}
           </div>
@@ -900,15 +969,15 @@ function MySpeechRecognition() {
             </div>
           </div>
           <Alert variant="dark" className="mt-3">
-          <div><div>Przydatne Komendy Informacyjne:</div>
-            <ul>
-              <li>kontakt</li>
-              <li>pomoc / komendy</li>
-              <li>menu</li>
-              <li>cena ...</li>
-              <li>składniki ...</li>
-              <li>Dane osobowe</li>
-            </ul>
+            <div><div>Przydatne Komendy Informacyjne:</div>
+              <ul>
+                <li>kontakt</li>
+                <li>pomoc / komendy</li>
+                <li>menu</li>
+                <li>cena ...</li>
+                <li>składniki ...</li>
+                <li>Dane osobowe</li>
+              </ul>
               <div>Komendy dodawania pizz do koszyka:</div>
               <ul>
                 <li>chcę pizzę ... / dodaj ...</li>
@@ -918,15 +987,15 @@ function MySpeechRecognition() {
               </ul>
               <div>Komendy danych osobowych:</div>
               <ul>
-              <li>Imię ... / Nazwisko ... / Adres ... </li>
-              <li>Kod Pocztowy ... / Telefon ... / Dostawa ...</li>
+                <li>Imię ... / Nazwisko ... / Adres ... </li>
+                <li>Kod Pocztowy ... / Telefon ... / Dostawa ...</li>
               </ul>
               <div>Aby zamówić</div>
               <ul>
                 <li>Wszystkie dane osobowe muszą być wypełnione (komenda 'Dane osobowe')</li>
                 <li>Conajmniej jedna pizza musi zostać wybrana</li>
-            </ul>
-          </div>
+              </ul>
+            </div>
           </Alert>
         </Modal.Body>
       </Modal>

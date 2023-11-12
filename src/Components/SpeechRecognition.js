@@ -933,13 +933,13 @@ function MySpeechRecognition() {
             className="btn btn-outline-primary mb-3"
             onClick={() => setFontSize(prevSize => Math.min(prevSize + 2, maxFontSize))}
           >
-            <i class="fa fa-search-plus" aria-hidden="true"></i>
+            <i className="fa fa-search-plus" aria-hidden="true"></i>
           </button>
           <button
             className="ms-2 btn btn-outline-primary mb-3"
             onClick={() => setFontSize(prevSize => Math.max(10, prevSize - 2))}
           >
-            <i class="fa fa-search-minus" aria-hidden="true"></i>
+            <i className="fa fa-search-minus" aria-hidden="true"></i>
           </button>
           <div className="mb-4" style={{ height: '50px', maxHeight: '50px', overflowY: 'auto' }}>
             Twoja wypowiedź: {transcript}

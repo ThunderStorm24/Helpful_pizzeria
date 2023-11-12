@@ -46,8 +46,6 @@ function App() {
     setIsLoading(false);
   }, []);
 
-  console.log(userSession)
-
   return (
     <div className="App">
       <SessionContext.Provider value={{ userSession, setUserSession }}>

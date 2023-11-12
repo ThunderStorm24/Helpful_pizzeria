@@ -88,7 +88,7 @@ function Mapa() {
   return (
     <div>
       <a id="Location"></a>
-      <iframe className="border border-5 border-dark mt-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d318.63388215331116!2d19.11811782231573!3d50.2906014506458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716d140ea66f70f%3A0x39db5fac3cd74e86!2sBistro%20Jab%C5%82ko%20i%20Cynamon!5e0!3m2!1spl!2spl!4v1669559422378!5m2!1spl!2spl" width="100%" height="600" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+      <iframe className="border border-5 border-dark mt-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d318.63388215331116!2d19.11811782231573!3d50.2906014506458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716d140ea66f70f%3A0x39db5fac3cd74e86!2sBistro%20Jab%C5%82ko%20i%20Cynamon!5e0!3m2!1spl!2spl!4v1669559422378!5m2!1spl!2spl" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{ borderRadius: '10px', width: '100%', height: '600px' }}></iframe>
     </div>
   );
 }

@@ -2,6 +2,12 @@
   text-align: center;
 }
 
+iframe {
+    border-radius: 5px;
+    width: 302px;
+    height: 76px;
+ }
+
 .fg--search {
   position: relative;
   font-size: 15px;

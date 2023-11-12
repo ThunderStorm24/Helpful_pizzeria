@@ -1,29 +1,50 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
 import { Container, Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Login({ setUserSession }) {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [recaptchaValue, setRecaptchaValue] = useState(null);
+    const [captchaText, setCaptchaText] = useState('');
 
     const [loginStatus, setLoginStatus] = useState("");
+
+    const recaptchaRef = useRef();
+    const key = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' //DO TESTOW
+    const handleRecaptchaChange = (value) => {
+      setCaptchaText('')
+      setRecaptchaValue(value);
+    };
 
     Axios.defaults.withCredentials = true;
 
     const login = () => {
+
+      if (!recaptchaValue) {
+        setCaptchaText("Udowodnij, że nie jesteś robotem.")
+        return;
+      }
+
         Axios.post('/login', {
             Login: username, 
             Password: password
-        }).then((response) => {
-                setUserSession(response.data)
-                navigate("/");
-                window.location.reload();
-        })
+          }).then((response) => {
+            setUserSession(response.data);
+            navigate("/");
+            window.location.reload();
+        }).catch((error) => {
+                setLoginStatus(error.response.data.error);
+                setRecaptchaValue(null);  
+                if (recaptchaRef.current) {
+                  recaptchaRef.current.reset();
+                }
+        });
     }
-
 
     return   <div style={{ minHeight: "100vh" }}>
     <NavbarE />
@@ -61,7 +82,19 @@ export default function Login({ setUserSession }) {
         </InputGroup>
       </Form.Group>
 
-      <Button onClick={login} className="btn btn-primary mt-5 w-100">
+      <div className="d-flex justify-content-center mt-2">
+      <ReCAPTCHA
+        className="recaptchaa"
+        ref={recaptchaRef}
+        sitekey='6LeqfAwpAAAAALFmnlMsOko8ext2FeVzkTE_N9Pt'
+        onChange={handleRecaptchaChange}
+        theme='dark'
+        size='normal'
+      />
+      </div>
+      <div className="text-danger">{captchaText}</div>
+
+      <Button onClick={login} className="btn btn-primary mt-4 w-100">
         Login
       </Button>
 

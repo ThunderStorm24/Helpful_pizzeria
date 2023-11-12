@@ -149,27 +149,29 @@ router.post("/login", (req, res) => {
     const Login = req.body.Login;
     const Password = req.body.Password;
 
-    connection.query("SELECT * FROM uzytkownicy WHERE Login = ?",
+    connection.query(
+        "SELECT * FROM uzytkownicy WHERE Login = ?",
         [Login],
         (err, result) => {
-            if (err) {
-                res.send({ err: err })
-            }
-
-            if (result.length > 0) {
-                bcrypt.compare(Password, result[0].Haslo, (error, response) => {
-                    if (response) {
-                        req.session.user = result;
-                        console.log(req.session.user);
-                        res.send(result)
-                    } else {
-                        res.send({ message: "Zła kombinacja loginu i hasła!" })
-                    }
-                })
-            } else {
-                res.send({ message: "Użytkownik nie istnieje" })
-            }
-        })
+          if (err) {
+            res.status(500).json({ error: "Błąd serwera" });
+          }
+      
+          if (result.length > 0) {
+            bcrypt.compare(Password, result[0].Haslo, (error, response) => {
+              if (response) {
+                req.session.user = result;
+                console.log(req.session.user);
+                res.json(result);
+              } else {
+                res.status(401).json({ error: "Zła kombinacja loginu i hasła!" });
+              }
+            });
+          } else {
+            res.status(404).json({ error: "Użytkownik nie istnieje" });
+          }
+        }
+      );
 
 })
 

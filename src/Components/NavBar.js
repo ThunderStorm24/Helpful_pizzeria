@@ -21,8 +21,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
   const userSession = useContext(SessionContext).userSession;
 
-   console.log(userSession);
-
   const navigate = useNavigate();
 
   const [rola, setRola] = useState ("");
@@ -40,7 +38,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
     'Lokalizacja',
     'Kontakt',
     'slowo',
-    // Dodaj więcej słów do słownika w razie potrzeby
   ];
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -149,7 +146,6 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
   const handleSuggestionClick = (suggestion) => {
     setMessage(suggestion); // Ustaw wybraną sugestię jako wartość w polu wyszukiwania
     setShowDropdown(false);
-    console.log('Aktualna wartość message:', message);
   };
 
   const handleInputBlur = () => {
@@ -233,7 +229,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
             onClick={handleInputClick}
             onBlur={handleInputBlur}
             onFocus={handleInputFocus} />
-          <Button className="col-2 col-md-2 ms-1" type="submit" style={{background: "transparent", border: "none"}}><i class="fa fa-search" aria-hidden="true"></i></Button>
+          <Button className="col-2 col-md-2 ms-1" type="submit" style={{background: "transparent", border: "none"}}><i className="fa fa-search" aria-hidden="true"></i></Button>
           </div>
         
           <Dropdown show={showDropdown && suggestions.length > 0} align="start" className="mt-1">
@@ -268,17 +264,17 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
             <Dropdown.Item href="/Menu"><i className="fa fa-cutlery" aria-hidden="true" style={{marginInlineEnd: "13px"}}></i>Pizze</Dropdown.Item>
             <Dropdown.Item href="/adminOrders">
               {TotalAdminOrders > 0 ? (
-                <strong><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</strong>
+                <strong><i className="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</strong>
               ) : (
-                <span><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</span>
+                <span><i className="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Zamówienia ({TotalAdminOrders})</span>
               )}
             </Dropdown.Item>
             <Dropdown.Item href="/Users"><i className="fa fa-users me-2" aria-hidden="true"></i>Użytkownicy</Dropdown.Item>
           </>
           ) : (
             <>
-              <Dropdown.Item href="/koszyk"><i class="fa fa-shopping-cart" aria-hidden="true" style={{marginInlineEnd: "11px"}}></i>Koszyk ({TotalItemsCart})</Dropdown.Item>
-              <Dropdown.Item href="/Orders"><i class="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Moje zamówienia ({TotalOrders})</Dropdown.Item>
+              <Dropdown.Item href="/koszyk"><i className="fa fa-shopping-cart" aria-hidden="true" style={{marginInlineEnd: "11px"}}></i>Koszyk ({TotalItemsCart})</Dropdown.Item>
+              <Dropdown.Item href="/Orders"><i className="fa fa-glass" aria-hidden="true" style={{marginInlineEnd: "10px"}}></i>Moje zamówienia ({TotalOrders})</Dropdown.Item>
             </>
           )}
           <Dropdown.Divider />

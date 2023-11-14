@@ -28,6 +28,14 @@ router.post("/UsunUzytkownika", async (req, res) => {
         const UserID = req.body.UserID;
         const NowLoggedInUserID = req.body.NowLoggedInUserID;
 
+        connection.query("DELETE FROM uzytkownicy WHERE ID_Uzytkownika = ?",
+            [UserID],
+            (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
 });
+})
 
 module.exports = router;

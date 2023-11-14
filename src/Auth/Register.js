@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
 import { Container, Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Login() {
     const navigate = useNavigate();
 
     const [logReg, setLogReg] = useState('');
     const [passReg, setPassReg] = useState('');
+    const [rePassReg, setRePassReg] = useState('');
     const [nameReg, setNameReg] = useState('');
     const [surnameReg, setSurnameReg] = useState('');
     const [addressReg, setAdressReg] = useState('');
@@ -20,6 +22,15 @@ export default function Login() {
 
     const [validated, setValidated] = useState(false);
 
+    const [recaptchaValue, setRecaptchaValue] = useState(null);
+    const [captchaText, setCaptchaText] = useState('');
+    const recaptchaRef = useRef();
+    const key = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' //DO TESTOW
+    const handleRecaptchaChange = (value) => {
+      setCaptchaText('')
+      setRecaptchaValue(value);
+    };
+
     Axios.defaults.withCredentials = true;
 
     const register = (event) => {
@@ -28,10 +39,15 @@ export default function Login() {
       const form = event.currentTarget;
 
     if (form.checkValidity() === true) {
-
+      setValidated(true);
     }
-    setValidated(true);
 
+    if (!recaptchaValue) {
+      setCaptchaText("Udowodnij, że nie jesteś robotem.")
+      return;
+    }
+
+    if(rePassReg === passReg){
         Axios.post('/register', {
             Name: nameReg, 
             Surname: surnameReg, 
@@ -48,7 +64,12 @@ export default function Login() {
         }).catch((error) => {
             console.log('error', error);
             setErrors(error.response.data.errors);
+            setRecaptchaValue(null);  
+                if (recaptchaRef.current) {
+                  recaptchaRef.current.reset();
+                }
     })
+  }
     }
     //Rejestracja do zrobienia, od strony serwera i frontendu
     return <div style={{ minHeight: "100vh" }}>
@@ -83,7 +104,7 @@ export default function Login() {
       </Form.Group>
 
       <Form.Group controlId="password" className="mt-3">
-        <Form.Label>Password:</Form.Label>
+        <Form.Label>Hasło:</Form.Label>
         <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1"><i className="fa fa-lock"></i></InputGroup.Text>
         <Form.Control
@@ -96,6 +117,25 @@ export default function Login() {
         />
         <Form.Control.Feedback type="invalid">
           Hasło musi mieć conajmniej 5 znaków!
+        </Form.Control.Feedback>
+        </InputGroup>
+      </Form.Group>
+
+      <Form.Group controlId="rePassword" className="mt-3">
+        <Form.Label>Powtórz hasło:</Form.Label>
+        <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><i className="fa fa-lock"></i></InputGroup.Text>
+        <Form.Control
+          required
+          maxLength="150"
+          minLength="5"
+          type="password"
+          value={rePassReg}
+          onChange={(e) => setRePassReg(e.target.value)}
+          isInvalid={passReg !== rePassReg}
+        />
+        <Form.Control.Feedback type="invalid">
+          Hasła muszą być takie same!
         </Form.Control.Feedback>
         </InputGroup>
       </Form.Group>
@@ -204,7 +244,19 @@ export default function Login() {
             <p className="mt-4 text-success">{message}</p>  
           )}
 
-      <Button onClick={register} className="mt-2" variant="primary">
+<div className="d-flex justify-content-center mt-2">
+      <ReCAPTCHA
+        className="recaptchaa"
+        ref={recaptchaRef}
+        sitekey='6LeqfAwpAAAAALFmnlMsOko8ext2FeVzkTE_N9Pt'
+        onChange={handleRecaptchaChange}
+        theme='dark'
+        size='normal'
+      />
+      </div>
+      <div className="text-danger">{captchaText}</div>
+
+      <Button onClick={register} className="mt-3" variant="primary">
         Zarejestruj
       </Button>
 

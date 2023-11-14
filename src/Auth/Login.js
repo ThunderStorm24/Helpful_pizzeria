@@ -70,7 +70,7 @@ export default function Login({ setUserSession }) {
       </Form.Group>
 
       <Form.Group className="mt-3">
-        <Form.Label htmlFor="password">Password:</Form.Label>
+        <Form.Label htmlFor="password">Hasło:</Form.Label>
         <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1"><i className="fa fa-lock ml-2"></i></InputGroup.Text>
         <Form.Control

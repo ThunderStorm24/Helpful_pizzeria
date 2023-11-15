@@ -345,20 +345,22 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       }
     }
 
-    // Dodaj nasłuchiwanie zmiany rozmiaru ekranu
+    // DODANIE nasłuchiwania zmiany rozmiaru ekranu
     window.addEventListener('resize', handleResize);
 
-    // Wywołaj handleResize po pierwszym renderowaniu
+    // WYWOŁANIE handleResize po pierwszym renderowaniu
     handleResize();
 
-    // Usuń nasłuchiwanie po odmontowaniu komponentu
+    // USUWANIE nasłuchiwanie po odmontowaniu komponentu
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+
   const [userLikes, setUserLikes] = useState([]);
 
+  // WCZYTANIE pizz z polubieniami na tak oraz polubienami na nie
   useEffect(() => {
     fetch('/pizzeLike')
       .then(response => response.json())
@@ -368,6 +370,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       .catch(error => console.error(error));
   }, []);
 
+  // POLUBIENIA I NIEPOLUBIENIA wystawione przez użytkowników
   useEffect(() => {
     fetch('/Likes')
       .then(response => response.json())
@@ -375,19 +378,22 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       .catch(error => console.error(error));
   }, []);
 
+
   const [likeButtonStates, setLikeButtonStates] = useState({});
 
+  //WYSTAWIENIE LIKE
   const handleLikeClick = (ID_Pizzy) => {
     console.log(ID_Pizzy)
     const existingLikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Tak');
     const existingDislikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Nie');
 
     if (existingLikeIndex !== -1) {
-      // Jeśli polubienie istnieje, usuń je z userLikes
+      // JEŚLI polubienie istnieje, to zostaje usuwane z userLikes
       const updatedLikes = [...userLikes];
       updatedLikes.splice(existingLikeIndex, 1);
       setUserLikes(updatedLikes);
     } else {
+      // JEŚLI polubienie nie istnieje, to zostaje dodawane do UserLikes
       const newLike = {
         ID_Pizzy: ID_Pizzy,
         ID_Uzytkownika: ID,
@@ -397,12 +403,12 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     }
 
     if (existingDislikeIndex !== -1) {
-      // Jeśli dislike istnieje, usuń je z userLikes
+      // JEŚLI dislike istnieje, to zostaje usuwany z userLikes
       const updatedLikes = [...userLikes];
       updatedLikes.splice(existingDislikeIndex, 1);
       setUserLikes(updatedLikes);
 
-      // Dodaj dislike
+      // DODAWANIE dislike
       const newLike = {
         ID_Pizzy: ID_Pizzy,
         ID_Uzytkownika: ID,
@@ -412,7 +418,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     }
 
 
-    // Jeśli polubienie nie istnieje, dodaj je
+    // JEŚLI polubienie nie istnieje,to zostaje dodane
     Axios.post('/UserLike', {
       ID_Pizzy: ID_Pizzy,
       ID_Uzytkownika: ID
@@ -422,22 +428,23 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       })
       .catch(error => {
         console.error('Błąd podczas wykonywania żądania do /UserLike', error);
-        // Tutaj możesz dodać kod obsługi błędu
       });
   };
 
   const [disLikeButtonStates, setDisLikeButtonStates] = useState({});
 
+  //WYSTAWIANIE dislike
   const handleDislikeClick = (ID_Pizzy) => {
     const existingLikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Tak');
     const existingDislikeIndex = userLikes.findIndex(like => like.ID_Pizzy === ID_Pizzy && like.ID_Uzytkownika === ID && like.Polubienie === 'Nie');
 
     if (existingDislikeIndex !== -1) {
-      // Jeśli dislike istnieje, usuń je z userLikes
+      // JEŚLI dislike istnieje, to zostaje usuwany z userLikes
       const updatedLikes = [...userLikes];
       updatedLikes.splice(existingDislikeIndex, 1);
       setUserLikes(updatedLikes);
     } else {
+      // JEŚLI dislike nie istnieje, to zostaje dodawany do UserLikes
       const newDislike = {
         ID_Pizzy: ID_Pizzy,
         ID_Uzytkownika: ID,
@@ -447,12 +454,12 @@ function Bookmarks({ props, updateItemsCount, actions }) {
     }
 
     if (existingLikeIndex !== -1) {
-      // Jeśli like istnieje, usuń je z userLikes
+      // JEŚLI like istnieje, to zostaje usuwany z userLikes
       const updatedLikes = [...userLikes];
       updatedLikes.splice(existingLikeIndex, 1);
       setUserLikes(updatedLikes);
 
-      // Dodaj dislike
+      // DODAWANIE dislike
       const newDislike = {
         ID_Pizzy: ID_Pizzy,
         ID_Uzytkownika: ID,
@@ -461,7 +468,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       setUserLikes([...updatedLikes, newDislike]);
     }
 
-    // Jeśli polubienie nie istnieje, dodaj je
+    // JEŚLI polubienie nie istnieje, to zostaje dodane
     Axios.post('/UserDisLike', {
       ID_Pizzy: ID_Pizzy,
       ID_Uzytkownika: ID
@@ -471,15 +478,12 @@ function Bookmarks({ props, updateItemsCount, actions }) {
       })
       .catch(error => {
         console.error('Błąd podczas wykonywania żądania do /UserLike', error);
-        // Tutaj możesz dodać kod obsługi błędu
       });
   }
 
   const showNotification = () => {
     setShowAlert(true);
   }
-
-  
 
   return (
     <div className="d-flex flex-wrap mt-2" style={{ minHeight: "90vh" }}>

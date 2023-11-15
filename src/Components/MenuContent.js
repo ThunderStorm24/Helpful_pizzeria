@@ -45,7 +45,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   const [currentPageC, setCurrentPageC] = useState(1);
   const [currentPageM, setCurrentPageM] = useState(1); // Dodane
   const [currentPageU, setCurrentPageU] = useState(1); // Dodane
-  const [pizzasPerPage, setPizzasPerPage] = useState(9);
+  const pizzasPerPage = 10;
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected + 1);
@@ -326,10 +326,10 @@ function Bookmarks({ props, updateItemsCount, actions }) {
 
   //OPERACJE dodawanie
   const handleAdd = (type) => {
-    if (type == "Oryginal") {
+    if (type === "Oryginal") {
       actions.showModal();
     }
-    if (type == "Custom") {
+    if (type === "Custom") {
       actions.customShowModal();
     }
   };
@@ -515,10 +515,10 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th scope="col">
                         Polubienia
                       </th>
-                      {Rola == 'admin' && (
+                      {Rola === 'admin' && (
                         <th className="col-2">Opcje</th>
                       )}
-                      {Rola == 'user' && (
+                      {Rola === 'user' && (
                         <th>Opcje</th>
                       )}
                     </tr>
@@ -567,7 +567,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                           Role={Rola}
                           showNotification={showNotification}
                         />
-                        {Rola == 'admin' && (
+                        {Rola === 'admin' && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
                               Edytuj
@@ -577,7 +577,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             </button>
                           </td>
                         )}
-                        {Rola == "user" && (
+                        {Rola === "user" && (
                           <td className="">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
                             Zamów
@@ -588,7 +588,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                     ))}
                   </tbody>
                 </Table>
-                {Rola == 'admin' && (
+                {Rola === 'admin' && (
                   <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Oryginal")}>
                     Dodaj pizze Oryginalną
                   </button>
@@ -634,10 +634,10 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th scope="col">
                         Polubienia
                       </th>
-                      {Rola == "admin" && (
+                      {Rola === "admin" && (
                         <th className="col-2">Opcje</th>
                       )}
-                      {Rola == 'user' && (
+                      {Rola === 'user' && (
                         <th className="col-2">Opcje</th>
                       )}
                     </tr>
@@ -688,7 +688,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             showNotification={showNotification}
                           />
                         </td>
-                        {Rola == "admin" && (
+                        {Rola === "admin" && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleEdit(pizza)}>
                               Edytuj
@@ -698,7 +698,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             </button>
                           </td>
                         )}
-                        {Rola == "user" && (
+                        {Rola === "user" && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
                               Zamów
@@ -709,7 +709,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                     ))}
                   </tbody>
                 </Table>
-                {Rola == 'user' && (
+                {Rola === 'user' && (
                   <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Custom")}>
                     Dodaj pizze Customową
                   </button>
@@ -718,7 +718,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
             )}
             <ReactPaginate
               pageCount={Math.ceil(pizzeC.length / pizzasPerPage)}
-              onPageChange={handlePageChangeM}
+              onPageChange={handlePageChangeC}
               containerClassName="pagination"
               activeClassName="active"
               pageClassName="page-item"
@@ -751,7 +751,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th scope="col">
                         Polubienia
                       </th>
-                      {Rola == 'user' && (
+                      {Rola === 'user' && (
                         <th className="col-2">Opcje</th>
                       )}
                     </tr>
@@ -787,7 +787,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             showNotification={showNotification}
                           />
                         </td>
-                        {Rola == "user" && (
+                        {Rola === "user" && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
                               Zamów
@@ -798,7 +798,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                     ))}
                   </tbody>
                 </Table>
-                {Rola == 'user' && (
+                {Rola === 'user' && (
                   <button className="btn btn-primary mb-3 blueButton mt-3" onClick={() => handleAdd("Custom")}>
                     Dodaj pizze Customową
                   </button>
@@ -806,7 +806,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
               </div>
               <ReactPaginate
                 pageCount={Math.ceil(pizzeM.length / pizzasPerPage)}
-                onPageChange={handlePageChange}
+                onPageChange={handlePageChangeM}
                 containerClassName="pagination"
                 activeClassName="active"
                 pageClassName="page-item"
@@ -836,7 +836,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th className="col-3" scope="col">
                         Cena (M/Ś/D/G)
                       </th>
-                      {Rola == "admin" && (
+                      {Rola === "admin" && (
                         <th className="col-2">Opcje</th>
                       )}
                     </tr>
@@ -848,7 +848,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                         <td className="col-2">{pizza.Nazwa}</td>
                         <td className="col-4">{pizza.Skladniki}</td>
                         <td className="col-3">{pizza.Cena} zł</td>
-                        {Rola == "admin" && (
+                        {Rola === "admin" && (
                           <td className="col-2">
                             <button className="btn btn-success m-1" onClick={() => handleAccept(pizza)}>
                               Zatwierdź
@@ -886,7 +886,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th className="col-3" scope="col">
                         Stan
                       </th>
-                      {Rola == 'user' && (
+                      {Rola === 'user' && (
                         <th className="col-2">Opcje</th>
                       )}
                     </tr>
@@ -954,7 +954,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                       <th scope="col">
                         Polubienia
                       </th>
-                      {Rola == 'user' && (
+                      {Rola === 'user' && (
                         <th className="col-2">Opcje</th>
                       )}
                     </tr>
@@ -990,7 +990,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             showNotification={showNotification}
                           />
                         </td>
-                        {Rola == "user" && (
+                        {Rola === "user" && (
                           <td className="col-2">
                             <button className="btn btn-danger m-1" onClick={() => handleOrder(pizza)}>
                               Zamów

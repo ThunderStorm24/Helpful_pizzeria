@@ -167,12 +167,15 @@ function Bookmarks({ props, updateItemsCount, actions }) {
   const filteredPizzeM = filterPizze(pizzeM, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
 
   // Użycie funkcji do filtrowania pizz serii U
-  const filteredPizzeU = filterPizze(pizzeU, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
+  useEffect(() => {
+    const filteredPizzeU = filterPizze(pizzeU, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy);
+    setCurrentPizzasU(filteredPizzeU.slice(indexOfFirstPizzaU, indexOfLastPizzaU));
+  }, [indexOfFirstPizzaU, indexOfLastPizzaU, pizzeU, ulubioneChecked, nieUlubioneChecked, searchTerm, sortBy]);
 
   const currentPizzas = filteredPizze.slice(indexOfFirstPizza, indexOfLastPizza);
   const currentPizzasC = filteredPizzeC.slice(indexOfFirstPizzaC, indexOfLastPizza);
   const currentPizzasM = filteredPizzeM.slice(indexOfFirstPizzaM, indexOfLastPizzaM);
-  const currentPizzasU = filteredPizzeU.slice(indexOfFirstPizzaU, indexOfLastPizzaU);
+  const [currentPizzasU, setCurrentPizzasU]=useState([])
 
   //WYŚWIETLANIE ulubionych
   useEffect(() => {
@@ -181,26 +184,28 @@ function Bookmarks({ props, updateItemsCount, actions }) {
         .catch(error => console.error(error));
   }, [ID]);
 
-  const handleCheckboxChange = (pizzaID) => {
-    const isChecked = ulubione.some(item => item.ID_Pizzy === pizzaID);
+  const handleCheckboxChange = (pizza) => {
+    const isChecked = ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy);
 
     if (!isChecked) {
       // Usuń relację z bazy danych
-      Axios.delete(`/usunRelacje/${ID}/${pizzaID}`)
+      Axios.delete(`/usunRelacje/${ID}/${pizza.ID_Pizzy}`)
         .then(response => {
           // Po udanym usunięciu odśwież stan lub inne odpowiednie działania
           if (response.status === 200) {
-            setUlubione(prevUlubione => [...prevUlubione, { ID_Pizzy: pizzaID }]);
+            setUlubione(prevUlubione => [...prevUlubione, { ID_Pizzy: pizza.ID_Pizzy }]);
+            setPizzeU(prevPizzeU => [...prevPizzeU, pizza]);
           }
         })
         .catch(error => console.error(error));
     } else {
       // Dodaj relację do bazy danych
-      Axios.post(`/dodajRelacje/${ID}/${pizzaID}`)
+      Axios.post(`/dodajRelacje/${ID}/${pizza.ID_Pizzy}`)
         .then(response => {
           // Po udanym dodaniu odśwież stan lub inne odpowiednie działania
           if (response.status === 200) {
-            setUlubione(prevUlubione => prevUlubione.filter(item => item.ID_Pizzy !== pizzaID));
+            setUlubione(prevUlubione => prevUlubione.filter(item => item.ID_Pizzy !== pizza.ID_Pizzy));
+            setPizzeU(prevPizzas => prevPizzas.filter(item => item.ID_Pizzy !== pizza.ID_Pizzy));
           }
         })
         .catch(error => console.error(error));
@@ -534,7 +539,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                               name={`rate${pizza.ID_Pizzy}`}
                               value="1"
                               checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
-                              onChange={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                              onChange={() => handleCheckboxChange(pizza)}
                             />
                             <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
                           </td>
@@ -653,7 +658,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                               name={`rate${pizza.ID_Pizzy}`}
                               value="1"
                               checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
-                              onChange={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                              onChange={() => handleCheckboxChange(pizza)}
                             />
                             <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
                           </td>
@@ -766,7 +771,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             name={`rate${pizza.ID_Pizzy}`}
                             value="1"
                             checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
-                            onChange={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                            onChange={() => handleCheckboxChange(pizza)}
                           />
                           <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
                         </td>
@@ -969,7 +974,7 @@ function Bookmarks({ props, updateItemsCount, actions }) {
                             name={`rate${pizza.ID_Pizzy}`}
                             value="1"
                             checked={ulubione.some(item => item.ID_Pizzy === pizza.ID_Pizzy)}
-                            onChange={() => handleCheckboxChange(pizza.ID_Pizzy)}
+                            onChange={() => handleCheckboxChange(pizza)}
                           />
                           <label htmlFor={`star${pizza.ID_Pizzy}`} title="Dodaj do ulubionych!">stars</label>
                         </td>

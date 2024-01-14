@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import NavbarE from './../Components/NavBar.js';
 import Bookmarks from "./../Components/MenuContent.js";
 import PizzaModal from "./../Components/WindowModal/AddModal";

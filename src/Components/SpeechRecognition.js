@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { Button, Modal, Alert } from 'react-bootstrap';
-import { Navigate, useNavigate } from "react-router-dom";
+import { Modal, Alert } from 'react-bootstrap';
 import Axios from 'axios';
 import { SessionContext } from '../SessionContext/Session.js';
 
 function MySpeechRecognition() {
 
   const [pizzaData, setPizzaData] = useState([]);
-  const [orderData, setOrderData] = useState([]);
   const [selectedPizza, setSelectedPizza] = useState([]);
 
   const [microphone, setMicrophone] = useState(true);

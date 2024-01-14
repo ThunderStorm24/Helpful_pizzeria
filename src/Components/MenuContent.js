@@ -11,7 +11,7 @@ import PizzaFilter from './menuComponents/PizzaFilter';
 import AlertLog from './smallComponents/Alert'; 
 import { SessionContext } from '../SessionContext/Session.js';
 
-function Bookmarks({ props, updateItemsCount, actions }) {
+function Bookmarks({ updateItemsCount, actions }) {
 
   const userSession = useContext(SessionContext).userSession;
 

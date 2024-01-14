@@ -1,6 +1,5 @@
 import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import EditModal from "../Components/WindowModal/EditUserModal.js"
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,14 +14,10 @@ export default function Profil() {
   const [editModal, setEditModal] = useState(false);
   const [added, setAdded] = useState(false);
 
-  const navigate = useNavigate();
-  const [user, setUser] = useState({});
-
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState([]);
 
   const [skladniki, setSkladniki] = useState([]);
-  const [ulubione, setUlubione] = useState([]);
   const [colors, setColors] = useState({});
   const [initialColors, setInitialColors] = useState({});
   const [change, setChange] = useState(false);
@@ -108,7 +103,6 @@ export default function Profil() {
           });
           setColors(colorsObject);
           setInitialColors(initialColors);
-          setUlubione(data);
         })
         .catch(error => console.error(error));
   }, [userSession?.ID_Uzytkownika]);

@@ -1,7 +1,4 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Navbar from 'react-bootstrap/Navbar';
 import CardPhoto from './smallComponents/CardPhoto'
 import CardText from './smallComponents/CardText'
 

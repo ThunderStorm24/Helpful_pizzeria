@@ -1,6 +1,5 @@
 import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 import Axios from 'axios';
 import { Button } from "react-bootstrap";
@@ -9,8 +8,6 @@ import { SessionContext } from '../SessionContext/Session.js';
 export default function Orders() {
 
     const [loading, setLoading] = useState(true);
-
-    const navigate = useNavigate();
 
     const [orders, setOrders] = useState([]);
 

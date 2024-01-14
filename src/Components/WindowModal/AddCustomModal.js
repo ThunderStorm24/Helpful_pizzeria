@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Form, FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Button from "react-bootstrap/Button";
-
 
 const CustomPizzaModal = ({ customShow, customOnHide, customOnSubmit, customMessage, customMessageAdd, customShowButton, Added }) => {
 

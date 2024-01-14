@@ -1,10 +1,8 @@
 import NavbarE from '../Components/NavBar.js';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
 import { Spinner, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import ConfirmModal from '../Components/WindowModal/ConfirmCancelModal.js'
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import NotLogOrders from '../Components/orderComponents/NotLoggedOrders';
 import { SessionContext } from '../SessionContext/Session.js';
 
@@ -20,8 +18,6 @@ export default function AdminOrders() {
       setFinishModal(false);
       setDeleteModal(false);
 };
-
-    const navigate = useNavigate();
 
     const [orders, setOrders] = useState([]);
     const [orderID, setOrderID] = useState('');

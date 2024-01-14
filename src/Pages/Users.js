@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'; 
 import Axios from 'axios';
 import NavbarE from './../Components/NavBar.js';
-import { Navigate, useNavigate } from "react-router-dom";
 import ConfirmCancelModal from "../Components/WindowModal/ConfirmCancelModal.js"
 import EditModal from "../Components/WindowModal/EditUserModal.js"
 import AddUser from "../Components/WindowModal/AddUser.js"
-import { Container, Form, Button, Alert, Table, Spinner, Row, Col } from 'react-bootstrap';
+import { Form, Button, Alert, Table, Spinner, Row, Col } from 'react-bootstrap';
 import { SessionContext } from '../SessionContext/Session.js';
 
 function Users() {
-
-    const navigate = useNavigate();
 
     const [cancelModal, setCancelModal] = useState(false);
     const [editModal, setEditModal] = useState(false);

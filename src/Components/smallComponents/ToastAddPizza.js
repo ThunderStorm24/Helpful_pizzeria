@@ -1,7 +1,3 @@
-import { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Navbar from 'react-bootstrap/Navbar';
 import { Toast, ToastContainer} from 'react-bootstrap';
 
 export default function ToastAddPizza({title, describe, background, time, show, hide}) {

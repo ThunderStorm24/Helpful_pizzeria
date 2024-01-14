@@ -1,6 +1,5 @@
 import NavbarE from './../Components/NavBar.js';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
 import { SessionContext } from '../SessionContext/Session.js';
@@ -8,8 +7,6 @@ import { SessionContext } from '../SessionContext/Session.js';
 export default function Koszyk() {
 
     const [loading, setLoading] = useState(true);
-
-    const navigate = useNavigate();
 
     const [KoszykID, setKoszykID] = useState(null); // Początkowo ustawiamy na null, ponieważ ID_Koszyka może być null, jeśli koszyk jest pusty
     const [koszyk, setKoszyk] = useState([]);

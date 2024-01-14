@@ -1,10 +1,8 @@
 import NavbarE from '../Components/NavBar.js';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
 import { Spinner, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import ConfirmModal from '../Components/WindowModal/ConfirmCancelModal.js'
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import LogOrders from '../Components/orderComponents/LoggedOrders';
 import { SessionContext } from '../SessionContext/Session.js';
 
@@ -21,10 +19,7 @@ export default function AdminOrders() {
       setDeleteModal(false);
 };
 
-    const navigate = useNavigate();
-
     const [orders, setOrders] = useState([]);
-    const [ordersNotLogged, setOrdersNotLogged] = useState([]);
     const [orderID, setOrderID] = useState('');
     const [orderPizza, setOrderPizza] = useState([])
 
@@ -40,15 +35,6 @@ export default function AdminOrders() {
             })
             .catch(error => console.error(error));
     }, []);
-
-    useEffect(() => {
-      Axios.get(`/ZamowieniaAdminNiezalogowani`)
-          .then(response => {
-              setOrdersNotLogged(response.data);
-              setLoading(false); // zmiana stanu loading na false
-          })
-          .catch(error => console.error(error));
-  }, []);
 
     //Zmiana na gotowe zamowienie
     const handleReady = (order) => {

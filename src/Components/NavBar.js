@@ -1,5 +1,4 @@
 import React from "react";
-import { ReactDOM } from "react";
 import { useState, useEffect, useRef, useContext } from 'react';
 import Axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -8,11 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import  Modal  from "react-bootstrap/Modal";
-import { Link } from "react-router-dom";
-import { Navigate, useNavigate } from "react-router-dom";
-import { DropdownButton, Dropdown } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import { Dropdown } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import MySpeechRecognition from './SpeechRecognition';
 import { SessionContext } from '../SessionContext/Session.js';
@@ -23,9 +19,7 @@ const NavbarE = ({addItemsCart, subtractItemsCart}) => {
 
   const navigate = useNavigate();
 
-  const [rola, setRola] = useState ("");
   const [loading, setLoading] = useState(true);
-  const [browser, setBrowser] = useState(true);
 
   const [message, setMessage] = useState('');
 

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
+import { SessionContext } from '../SessionContext/Session.js';
 
 function MySpeechRecognition() {
 
@@ -29,6 +30,20 @@ function MySpeechRecognition() {
   const [showListeningModal, setShowListeningModal] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [browser, setBrowser] = useState(true);
+
+  const userSession = useContext(SessionContext).userSession;
+
+  useEffect(() => {
+    if(userSession){
+    console.log("Jestem tu")
+    setImie(userSession?.Imie)
+    setNazwisko(userSession?.Nazwisko)
+    setAdres(userSession?.Adres)
+    setKodPocztowy(userSession?.Kod_Pocztowy)
+    setNumerTelefonu(userSession?.Telefon)
+    setDostawa('Tak')
+    }
+  }, [userSession]);
 
   useEffect(() => {
     Axios.get('/pizze')

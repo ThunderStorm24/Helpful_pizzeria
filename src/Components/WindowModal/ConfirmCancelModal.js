@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Form, FormControl, Alert } from 'react-bootstrap';
+import { Form, Alert } from 'react-bootstrap';
 import Button from "react-bootstrap/Button";
-import Axios from 'axios';
-
 
 const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDanger, description, title, disable, message, errors }) => {
 
@@ -49,8 +47,6 @@ const ConfirmCancelModal = ({ show, onHide, operation, buttonSuccess, buttonDang
                 height: "150px",
                 padding: "5px",
                 marginTop: "15px",
-                background: "white",
-                color: "black"
               }}
               value={comment} 
               onChange={(e) => setComment(e.target.value)} 

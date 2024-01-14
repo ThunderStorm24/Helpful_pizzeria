@@ -52,7 +52,7 @@ router.post('/ZamowPizze', (req, res) => {
 router.get("/Zamowienia/:ID_Uzytkownika", (req, res) => {
   const { ID_Uzytkownika } = req.params;
   connection.query(
-      "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, zamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE zamowienia.ID_Uzytkownika = ? GROUP BY zamowienia.ID_Zamowienia;",
+      "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, DATE_FORMAT(zamowienia.Data_Zlozenia, '%d.%m.%Y') AS Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE zamowienia.ID_Uzytkownika = ? GROUP BY zamowienia.ID_Zamowienia;",
       [ID_Uzytkownika],
       (error, results, fields) => {
           if (error) throw error;
@@ -64,7 +64,7 @@ router.get("/Zamowienia/:ID_Uzytkownika", (req, res) => {
 router.get("/glosowezamowienia/:Telefon", (req, res) => {
   const { Telefon } = req.params;
   connection.query(
-    "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, glosowezamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE glosowezamowienia.telefon = ? GROUP BY glosowezamowienia.ID_Zamowienia;",
+    "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, DATE_FORMAT(glosowezamowienia.Data_Zlozenia, '%d.%m.%Y') AS Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy WHERE glosowezamowienia.telefon = ? GROUP BY glosowezamowienia.ID_Zamowienia;",
     [Telefon],
     (error, results, fields) => {
       if (error) throw error;
@@ -76,7 +76,7 @@ router.get("/glosowezamowienia/:Telefon", (req, res) => {
 //Wszystie zamówienia dla pizzeri
 router.get("/ZamowieniaAdmin", (req, res) => {
   connection.query(
-      "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, zamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY zamowienia.ID_Zamowienia;",
+    "SELECT zamowienia.ID_Zamowienia, zamowienia.ID_Uzytkownika, uzytkownicy.telefon, uzytkownicy.imie, uzytkownicy.nazwisko, uzytkownicy.adres, uzytkownicy.kod_pocztowy, zamowienia.Cena, zamowienia.Dostawa, zamowienia.Status, DATE_FORMAT(zamowienia.Data_Zlozenia, '%d.%m.%Y') AS Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', zamowienia_pizza.Rozmiar_Pizzy, ') - ', zamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM Zamowienia JOIN Zamowienia_pizza ON zamowienia.ID_Zamowienia = zamowienia_pizza.ID_Zamowienia JOIN Pizze ON zamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy JOIN Uzytkownicy ON zamowienia.ID_Uzytkownika = uzytkownicy.ID_Uzytkownika GROUP BY zamowienia.ID_Zamowienia;",
       (error, results, fields) => {
           if (error) throw error;
           res.json(results);
@@ -86,7 +86,7 @@ router.get("/ZamowieniaAdmin", (req, res) => {
 
 router.get("/ZamowieniaAdminNiezalogowani", (req, res) => {
   connection.query(
-      "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.telefon, glosowezamowienia.imie, glosowezamowienia.nazwisko, glosowezamowienia.adres, glosowezamowienia.kod_pocztowy, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, glosowezamowienia.Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY glosowezamowienia.ID_Zamowienia;",
+      "SELECT glosowezamowienia.ID_Zamowienia, glosowezamowienia.telefon, glosowezamowienia.imie, glosowezamowienia.nazwisko, glosowezamowienia.adres, glosowezamowienia.kod_pocztowy, glosowezamowienia.Cena, glosowezamowienia.Dostawa, glosowezamowienia.Status, DATE_FORMAT(glosowezamowienia.Data_Zlozenia, '%d.%m.%Y') AS Data_Zlozenia, GROUP_CONCAT(pizze.Nazwa, ' (', glosowezamowienia_pizza.Rozmiar_Pizzy, ') - ', glosowezamowienia_pizza.Cena, ' PLN') AS Pizze_z_cenami FROM glosowezamowienia JOIN glosowezamowienia_pizza ON glosowezamowienia.ID_Zamowienia = glosowezamowienia_pizza.ID_Zamowienia JOIN Pizze ON glosowezamowienia_pizza.ID_Pizzy = pizze.ID_Pizzy GROUP BY glosowezamowienia.ID_Zamowienia;",
       (error, results, fields) => {
           if (error) throw error;
           res.json(results);

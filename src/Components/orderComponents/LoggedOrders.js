@@ -9,13 +9,13 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
         <div className="d-flex justify-content-center">
           <h1 className="col-10 col-md-4 border border-3 mt-4 p-3 rounded" style={{ background: "#df3400" }}>Zamówione</h1>
         </div>
-        <div className="d-flex flex-wrap justify-content-left">
+        <div className="d-flex flex-wrap justify-content-center"> 
           {orders.map((order) => {
             if (order.Status === "Zamówiono") {
               return (
                 <div
                   key={order.ID_Zamowienia}
-                  className="col-11 col-md-4 col-xl-2 border border-5  rounded p-3 ms-3 mt-3 mb-3"
+                  className="col-11 col-md-5 col-xl-3 border border-5  rounded p-3 ms-3 me-3 mt-3 mb-3"
                   style={{
                     background: "#202020",
                     display: "flex",
@@ -25,13 +25,16 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                   }}
                 >
                   <h2>ID Zamówienia: {order.ID_Zamowienia}</h2>
-                  <div className="d-flex flex-wrap" style={{textAlign: "left"}}>
+                  <div className="d-flex flex-column flex-wrap" style={{textAlign: "left"}}>
+                    <div>Imię i Nazwisko: {order.imie} {order.nazwisko}</div>
+                    <div>Telefon: {order.telefon}</div>
+                    <div>Adres: {order.adres} {order.kod_pocztowy}</div>
                     <div>Dostawa: {order.Dostawa}</div>
                     <div>Data złożenia: {order.Data_Zlozenia}</div>
                     <p>Cena całego zamówienia: {order.Cena} PLN</p>
                   </div>
                   <h3>Opis zamówienia:</h3>
-                  <ul className="d-flex flex-wrap" style={{ overflowY: 'scroll', maxHeight: '100px' }}>
+                  <ul className="d-flex flex-column" style={{ overflowY: 'scroll', maxHeight: '100px', textAlign: "left" }}>
                     {order.Pizze_z_cenami.split(",").map((pizza) => (
                       <li className="me-2" key={pizza}>{pizza}</li>
                     ))}
@@ -67,13 +70,13 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
         <div className="d-flex justify-content-center">
           <h1 className="col-10 col-md-4 border border-3 mt-4 p-3 rounded" style={{ background: "#287745" }}>Gotowe</h1>
         </div>
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap justify-content-center">
           {orders.map((order) => {
             if (order.Status === "Gotowe") {
               return (
                 <div
                   key={order.ID_Zamowienia}
-                  className="col-11 col-md-4 col-xl-2 border border-5 rounded p-3 ms-3 mt-3 mb-3"
+                  className="col-11 col-md-5 col-xl-3 border border-5  rounded p-3 ms-3 me-3 mt-3 mb-3"
                   style={{
                     background: "#202020",
                     display: "flex",
@@ -82,13 +85,16 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                     height: "500px",
                   }}>
                   <h2>ID Zamówienia: {order.ID_Zamowienia}</h2>
-                  <div className="d-flex flex-wrap" style={{textAlign: "left"}}>
+                  <div className="d-flex flex-column" style={{textAlign: "left"}}>
+                    <div>Imię i Nazwisko: {order.imie} {order.nazwisko}</div>
+                    <div>Telefon: {order.telefon}</div>
+                    <div>Adres: {order.adres} {order.kod_pocztowy}</div>
                     <div>Dostawa: {order.Dostawa}</div>
                     <div>Data złożenia: {order.Data_Zlozenia}</div>
                     <p>Cena całego zamówienia: {order.Cena} PLN</p>
                   </div>
                   <h3>Opis zamówienia:</h3>
-                  <ul className="d-flex flex-wrap" style={{ overflowY: 'scroll', maxHeight: '100px' }}>
+                  <ul className="d-flex flex-column" style={{ overflowY: 'scroll', maxHeight: '100px', textAlign: "left" }}>
                     {order.Pizze_z_cenami.split(",").map((pizza) => (
                       <li key={pizza}>{pizza}</li>
                     ))}
@@ -124,13 +130,13 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
         <div className="d-flex justify-content-center">
           <h1 className="col-10 col-md-4 border border-3 mt-4 p-3 rounded" style={{ background: "#dc3545" }}>Historia zamówień</h1>
         </div>
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap justify-content-center">
           {orders.map((order) => {
             if (order.Status === "Zakończone") {
               return (
                 <div
                   key={order.ID_Zamowienia}
-                  className="col-11 col-md-4 col-xl-2 border border-5 rounded p-3 ms-3 mt-3 mb-3"
+                  className="col-11 col-md-5 col-xl-3 border border-5  rounded p-3 ms-3 me-3 mt-3 mb-3"
                   style={{
                     background: "#202020",
                     display: "flex",
@@ -139,13 +145,16 @@ function Orderslogged({ orders, handleReady, handleFinish, handleDelete }) {
                     height: "500px",
                   }}>
                   <h2>ID Zamówienia: {order.ID_Zamowienia}</h2>
-                  <div className="d-flex flex-wrap" style={{textAlign: "left"}}>
+                  <div className="d-flex flex-column flex-wrap" style={{textAlign: "left"}}>
+                    <div>Imię i Nazwisko: {order.imie} {order.nazwisko}</div>
+                    <div>Telefon: {order.telefon}</div>
+                    <div>Adres: {order.adres} {order.kod_pocztowy}</div>
                     <div>Dostawa: {order.Dostawa}</div>
                     <div>Data złożenia: {order.Data_Zlozenia}</div>
                     <p>Cena całego zamówienia: {order.Cena} PLN</p>
                   </div>
                   <h3>Opis zamówienia:</h3>
-                  <ul className="d-flex flex-wrap" style={{ overflowY: 'scroll', maxHeight: '100px' }}>
+                  <ul className="d-flex flex-column" style={{ overflowY: 'scroll', maxHeight: '100px', textAlign: "left" }}>
                     {order.Pizze_z_cenami.split(",").map((pizza) => (
                       <li key={pizza}>{pizza}</li>
                     ))}

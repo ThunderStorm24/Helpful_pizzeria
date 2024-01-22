@@ -989,14 +989,14 @@ function MySpeechRecognition() {
                 <li>menu</li>
                 <li>cena ...</li>
                 <li>składniki ...</li>
-                <li>Dane osobowe</li>
+                <li>dane osobowe</li>
               </ul>
               <div>Komendy dodawania pizz do koszyka:</div>
               <ul>
                 <li>chcę pizzę ... / dodaj ...</li>
                 <li>rozmiar ... ... (gdzie 'nazwa' 'rozmiar')</li>
                 <li>moje pizze</li>
-                <li>Zamów</li>
+                <li>zamów</li>
               </ul>
               <div>Komendy danych osobowych:</div>
               <ul>
@@ -1005,8 +1005,8 @@ function MySpeechRecognition() {
               </ul>
               <div>Aby zamówić</div>
               <ul>
-                <li>Wszystkie dane osobowe muszą być wypełnione (komenda 'Dane osobowe')</li>
-                <li>Conajmniej jedna pizza musi zostać wybrana</li>
+                <li>Wszystkie dane osobowe muszą być wypełnione (komenda 'dane osobowe')</li>
+                <li>Co najmniej jedna pizza musi zostać wybrana</li>
               </ul>
             </div>
           </Alert>

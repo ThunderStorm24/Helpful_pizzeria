@@ -54,3 +54,31 @@ Here's how it works:
 
 
 The figure at the top presents a graphical representation of the function placed in the user's profile, allowing the marking of favorite, disliked, and neutral pizza ingredients. Ingredients marked as favorite are displayed as a green block, disliked ingredients are displayed as a red block, while neutral ingredients do not have any distinguishing color.
+
+<ol>
+
+<li>Menu for Unregistered Users – For unregistered users, the menu subpage only allows browsing information about available pizzas. They can see the names, ingredients, prices, and number of likes, and use the filtering function to quickly find a pizza that meets their expectations. Figure below shows the menu for unregistered users.</li>
+
+<div align="center">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/PhotoReadMe/MenuNoLogged.png" alt="Tekst alternatywny" width="50%" height="auto">
+</div>
+
+When an unregistered user hovers the mouse cursor over the star in the "Favorites" column, they will be informed that they cannot add a favorite pizza, as shown in Figure below.
+
+<div align="center">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/PhotoReadMe/MenuFavourite.png" alt="Tekst alternatywny" width="50%" height="auto">
+</div>
+
+The same applies to the liking function in the "Likes" column, as clicking the button will display a window informing the user that they need to be logged in. This is shown in Figure below.
+
+<div align="center">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/PhotoReadMe/MenuLikes.png" alt="Tekst alternatywny" width="50%" height="auto">
+</div>
+
+<li>Menu for Logged-In Users – Figure below presents the interface for logged-in users, where the application menu offers a broader range of options. In addition to browsing information about pizzas, users can also add pizzas to the cart for later ordering. They have the ability to like pizzas, add pizzas to their favorites list, and create their own dish compositions. Furthermore, logged-in users can filter pizzas according to their favorite ingredients, which they have saved in their user profile as liked and disliked.</li>
+
+<div align="center">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/PhotoReadMe/MenuLogged.png" alt="Tekst alternatywny" width="50%" height="auto">
+</div>
+
+</ol>

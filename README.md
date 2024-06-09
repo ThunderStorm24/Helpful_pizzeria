@@ -24,35 +24,33 @@ Open [http://localhost:5000](http://localhost:5000) to view the server in action
 This is necessary to perform backend operations and interact with the database.\
 
 
+## The most important Features
+
+Here are the three most important features:
+
+<ol>
+<li>Voice-Activated Navigation:</li>
+The service will feature voice-operated navigation, enabling users to move between pages, access information, and perform actions within the system more easily and quickly. This feature is especially beneficial for visually impaired users.
+<li>Custom Pizza Composition:</li>
+Users can create their own pizza compositions, which will be stored in a database after approval by an administrator. These compositions can be used later to place orders online or by phone, using the pizza identifier or name.
+<li>User Ingredient Preferences:</li>
+Users can set their ingredient preferences, selecting favorite ingredients to see only pizzas containing those, and disliked ingredients to filter out pizzas containing them. These options can be toggled independently or used together, showing only pizzas with favorite ingredients and excluding those with disliked ones.
+</ol>
+
 ## How it works?
 
+Here's how it works:
 
-## Learn More
+<ul>
+<li>To mark an ingredient as a favorite, the user must click on the button with the ingredient's name. After clicking, the button changes color to green, indicating that the ingredient is liked by the user.</li>
+<li> If the user wants to exclude an ingredient that is already marked as liked, they must click the button again. After the second click, the button changes color to red, indicating that the ingredient is now considered disliked by the user.</li>
+<li>If the user wants to remove preferences and unmark the ingredient as favorite or disliked, they must click the red button again. The button will then return to its original state, which is black, indicating that the ingredient is neutral and neither liked nor disliked.</li>
+<li>After making changes, the ingredients must be saved by clicking the "Save Ingredients" button.</li>
+</ul>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<div align="center">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/Ingredients.jpg" alt="Tekst alternatywny" width="50%" height="auto">
+</div>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The figure at the top presents a graphical representation of the function placed in the user's profile, allowing the marking of favorite, disliked, and neutral pizza ingredients. Ingredients marked as favorite are displayed as a green block, disliked ingredients are displayed as a red block, while neutral ingredients do not have any distinguishing color.

@@ -49,7 +49,7 @@ Here's how it works:
 </ul>
 
 <div align="center">
-<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/Ingredients.jpg" alt="Tekst alternatywny" width="50%" height="auto">
+<img src="https://github.com/ThunderStorm24/Helpful_pizzeria/blob/thunder/PhotoReadMe/Ingredients.png" alt="Tekst alternatywny" width="50%" height="auto">
 </div>
 
 
